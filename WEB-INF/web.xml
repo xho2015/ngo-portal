@@ -22,9 +22,22 @@
   version="3.1"
   metadata-complete="true">
 
-  <display-name>Welcome to Tomcat</display-name>
-  <description>
-     Welcome to Tomcat
+  <display-name>NGO Application</display-name>
+  <description>NGO online education applications.
   </description>
+
+
+  <error-page>
+    <error-code>401</error-code>
+    <location>/WEB-INF/jsp/401.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>403</error-code>
+    <location>/WEB-INF/jsp/403.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/WEB-INF/jsp/404.jsp</location>
+  </error-page>
 
 </web-app>

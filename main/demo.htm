@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<title>Just Ware</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#oldie { background-color: #ddd !important }
+
+			#gui{
+			  position: absolute;
+			  top: 2px;
+			  left: 2px;
+			}
+		</style>
+	</head>
+	<body>
+		<!--script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/87/three.min.js"></script-->
+		<script src="../lib/three.min.js"></script>
+		<script src="../lib/dat.gui.min.js"></script>
+		<script src="../lib/common.js"></script>
+
+		<canvas id="pannelCanvas"  style="position:absolute; left:0px; top:0px;width:1200px;height:800px; background-color: #1d0F0F">
+		</canvas>
+
+		<div id="screen3d" style="position:absolute; left:0px; top:0px;width:600px;height:500px; background-color: #0eF1FF">
+            </div>
+
+		<div id="gui_container"></div>
+		<script src="demo1.js"></script>
+		<script>
+			
+			if (!Detector.webgl) {
+			    var warning = Detector.getWebGLErrorMessage();
+			    alert(warning);
+			}
+		</script>
+		
+	</body>
+</html>
