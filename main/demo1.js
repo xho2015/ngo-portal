@@ -66,14 +66,14 @@ function initPannel()
 	pannel.onmousemove = OnMove;
 
 	//load background image
-	/*
+	
 	var context = pannel.getContext('2d');
 	var imageObj = new Image();
 	  imageObj.onload = function() {
 	    context.drawImage(imageObj, 0, 0, imageObj.width,    imageObj.height,  0, 0, pannel.width, pannel.height); 
 	  };
 	  imageObj.src = 'skydome1.jpg';
-	*/
+	
 }
 
  var offsetX = 0;
@@ -172,7 +172,7 @@ function init3d() {
 	
 	// grid
 	var gridHelper = new THREE.GridHelper( 1000, 20 );
-	//scene.add( gridHelper );
+	scene.add( gridHelper );
 	
 	//raycaster
 	raycaster = new THREE.Raycaster();
@@ -197,11 +197,11 @@ function init3d() {
 	container3d.appendChild( renderer.domElement );
 
 	//event register
-	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-	document.addEventListener( 'keydown', onDocumentKeyDown, false );
-	document.addEventListener( 'keyup', onDocumentKeyUp, false );
-	window.addEventListener( 'resize', onWindowResize, false );
+	container3d.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	container3d.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	container3d.addEventListener( 'keydown', onDocumentKeyDown, false );
+	container3d.addEventListener( 'keyup', onDocumentKeyUp, false );
+	container3d.addEventListener( 'resize', onWindowResize, false );
 }
 
 function onWindowResize() {
