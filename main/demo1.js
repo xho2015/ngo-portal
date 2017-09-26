@@ -1,12 +1,11 @@
 
-
-initGUI()
-
-//gui sample
-//https://github.com/dataarts/dat.gui/blob/master/example.html
+var gui, params;
+initGUI();
+//gui sample  https://github.com/dataarts/dat.gui/blob/master/example.html
 function initGUI() {
-	var params = {
-    	interation: 5000, width:600,height:500, 
+	params = {
+    	width:600,
+    	height:500, 
     	fullScreen:function() {
 			fullscreen1(document.documentElement); 
     	},
@@ -19,15 +18,19 @@ function initGUI() {
     	},
     	show3d:function() {
 			container3d.style.visibility = 'visible';     // Show
+    	},
+    	resize:function() {
+			onWindowResize();
     	}
 	};
-	var gui = new dat.gui.GUI({ autoPlace: false });
-	gui.add(params, 'width').min(500).max(800).step(10);
-	gui.add(params, 'height').min(400).max(700).step(10);
+	gui = new dat.gui.GUI({ autoPlace: false });
+	gui.add(params, 'width').min(500).max(1902).step(10).listen();
+	gui.add(params, 'height').min(400).max(1080).step(10).listen();
 	gui.add(params, 'fullScreen');
 	gui.add(params, 'exitfullScreen');
 	gui.add(params, 'hide3d');
 	gui.add(params, 'show3d');
+	gui.add(params, 'resize');
 	gui.domElement.id = 'gui';
     var gui_container = document.getElementById("gui_container");
 	gui_container.appendChild(gui.domElement);
@@ -56,11 +59,13 @@ function exitFullscreen() {
 }
 
 
+var pannel;
+
 initPannel();
 
 function initPannel()
 {
-	var pannel = document.getElementById("pannelCanvas");
+	pannel = document.getElementById("pannelCanvas");
 	pannel.onmousedown = OnDown;
 	pannel.onmouseup = OnUp;
 	pannel.onmousemove = OnMove;
@@ -131,12 +136,13 @@ var objects = [];
 init3d();
 
 animate();
-
+var w3d, h3d;
 function init3d() {
 	container3d = document.getElementById( 'screen3d' );
-	
+	w3d = container3d.clientWidth;
+	h3d = container3d.clientHeight;
 	//camera
-	camera = new THREE.PerspectiveCamera( 50, 600 / 500, 1, 12000 );
+	camera = new THREE.PerspectiveCamera( 50, w3d / h3d, 1, 12000 );
 	camera.position.set( 0, 1000, 1000 );
 	camera.lookAt( new THREE.Vector3() );
 	
@@ -193,7 +199,7 @@ function init3d() {
 	//render
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize(600, 500);
+	renderer.setSize(w3d, h3d);
 	container3d.appendChild( renderer.domElement );
 
 	//event register
@@ -201,18 +207,29 @@ function init3d() {
 	container3d.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	container3d.addEventListener( 'keydown', onDocumentKeyDown, false );
 	container3d.addEventListener( 'keyup', onDocumentKeyUp, false );
-	container3d.addEventListener( 'resize', onWindowResize, false );
+	window.addEventListener( 'resize', onWindowResize, false );
 }
 
 function onWindowResize() {
-	camera.aspect = 600 / 500;
+    pannel.width = window.innerWidth;
+	pannel.height = window.innerHeight;
+
+	params.width = pannel.width;
+	params.height = pannel.height;
+
+	container3d = document.getElementById( 'screen3d' );
+	w3d = container3d.clientWidth;
+	h3d = container3d.clientHeight;
+
+	camera.aspect = w3d / h3d;
 	camera.updateProjectionMatrix();
-	renderer.setSize( 600, 500 );
+	renderer.setSize( w3d, h3d );
+	animate();
 }
 
 function onDocumentMouseMove( event ) {
 	event.preventDefault();
-	mouse.set( ( event.clientX / 600 ) * 2 - 1, - ( event.clientY / 500 ) * 2 + 1 );
+	mouse.set( ( event.clientX / w3d ) * 2 - 1, - ( event.clientY / h3d ) * 2 + 1 );
 	raycaster.setFromCamera( mouse, camera );
 	var intersects = raycaster.intersectObjects( objects );
 	if ( intersects.length > 0 ) {
@@ -225,7 +242,7 @@ function onDocumentMouseMove( event ) {
 
 function onDocumentMouseDown( event ) {
 	event.preventDefault();
-	mouse.set( ( event.clientX / 600 ) * 2 - 1, - ( event.clientY / 500 ) * 2 + 1 );
+	mouse.set( ( event.clientX / w3d ) * 2 - 1, - ( event.clientY / h3d ) * 2 + 1 );
 	raycaster.setFromCamera( mouse, camera );
 	var intersects = raycaster.intersectObjects( objects );
 	if ( intersects.length > 0 ) {
