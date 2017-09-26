@@ -65,24 +65,36 @@ initPannel();
 
 function initPannel()
 {
-	pannel = document.getElementById("pannelCanvas");
+	pannel = document.getElementById("panelCanvas");
 	pannel.onmousedown = OnDown;
 	pannel.onmouseup = OnUp;
 	pannel.onmousemove = OnMove;
 
 	//load background image
-	
+	/*
 	var context = pannel.getContext('2d');
 	var imageObj = new Image();
 	  imageObj.onload = function() {
 	    context.drawImage(imageObj, 0, 0, imageObj.width,    imageObj.height,  0, 0, pannel.width, pannel.height); 
 	  };
 	  imageObj.src = 'skydome1.jpg';
-	
+	*/
+	drawPanelBG();
 }
 
- var offsetX = 0;
- var offsetY = 0;
+function drawPanelBG()
+{
+	pannel = document.getElementById("panelCanvas");
+	var ctx = pannel.getContext('2d');
+	var lGradient = ctx.createLinearGradient(0, 0, 0, 250);
+	lGradient.addColorStop(0, '#000');
+	lGradient.addColorStop(1, '#fff');
+	ctx.fillStyle = lGradient;
+	ctx.fillRect(0, 0, 500, 250);
+}
+
+ var offsetX = 20;
+ var offsetY = 20;
 
 function OnDown(e) {
 	// tell the browser we're handling this mouse event
@@ -136,19 +148,20 @@ var objects = [];
 init3d();
 
 animate();
-var w3d, h3d;
+var WIDTH_3D, HEIGHT_3D;
+
 function init3d() {
 	container3d = document.getElementById( 'screen3d' );
-	w3d = container3d.clientWidth;
-	h3d = container3d.clientHeight;
+	WIDTH_3D = container3d.clientWidth;
+	HEIGHT_3D = container3d.clientHeight;
 	//camera
-	camera = new THREE.PerspectiveCamera( 50, w3d / h3d, 1, 12000 );
+	camera = new THREE.PerspectiveCamera( 50, WIDTH_3D / HEIGHT_3D, 1, 12000 );
 	camera.position.set( 0, 1000, 1000 );
 	camera.lookAt( new THREE.Vector3() );
 	
 	//scene
 	scene = new THREE.Scene();
-	scene.background = new THREE.Color( 0x000000 );
+	//scene.background = new THREE.Color( 0x000000 );
 
 
 	//skydome
@@ -174,7 +187,7 @@ function init3d() {
 
 	// cubes
 	cubeGeo = new THREE.BoxGeometry( 50, 50, 50 );
-	cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( "https://threejs.org/examples/textures/square-outline-textured.png" ) } );
+	cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( "../rs/square-outline-textured.png" ) } );
 	
 	// grid
 	var gridHelper = new THREE.GridHelper( 1000, 20 );
@@ -197,9 +210,10 @@ function init3d() {
 	scene.add( directionalLight );
 
 	//render
-	renderer = new THREE.WebGLRenderer( { antialias: true } );
+	renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true  } );
+	renderer.setClearColor( 0x000000, 0 );
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize(w3d, h3d);
+	renderer.setSize(WIDTH_3D, HEIGHT_3D);
 	container3d.appendChild( renderer.domElement );
 
 	//event register
@@ -211,25 +225,23 @@ function init3d() {
 }
 
 function onWindowResize() {
-    pannel.width = window.innerWidth;
-	pannel.height = window.innerHeight;
 
-	params.width = pannel.width;
-	params.height = pannel.height;
+	params.width = window.innerWidth;;
+	params.height = window.innerHeight;
 
 	container3d = document.getElementById( 'screen3d' );
-	w3d = container3d.clientWidth;
-	h3d = container3d.clientHeight;
+	WIDTH_3D = container3d.clientWidth;
+	HEIGHT_3D = container3d.clientHeight;
 
-	camera.aspect = w3d / h3d;
+	camera.aspect = WIDTH_3D / HEIGHT_3D;
 	camera.updateProjectionMatrix();
-	renderer.setSize( w3d, h3d );
+	renderer.setSize( WIDTH_3D, HEIGHT_3D );
 	animate();
 }
 
 function onDocumentMouseMove( event ) {
 	event.preventDefault();
-	mouse.set( ( event.clientX / w3d ) * 2 - 1, - ( event.clientY / h3d ) * 2 + 1 );
+	mouse.set( ( event.clientX / WIDTH_3D ) * 2 - 1, - ( event.clientY / HEIGHT_3D ) * 2 + 1 );
 	raycaster.setFromCamera( mouse, camera );
 	var intersects = raycaster.intersectObjects( objects );
 	if ( intersects.length > 0 ) {
@@ -242,7 +254,7 @@ function onDocumentMouseMove( event ) {
 
 function onDocumentMouseDown( event ) {
 	event.preventDefault();
-	mouse.set( ( event.clientX / w3d ) * 2 - 1, - ( event.clientY / h3d ) * 2 + 1 );
+	mouse.set( ( event.clientX / WIDTH_3D ) * 2 - 1, - ( event.clientY / HEIGHT_3D ) * 2 + 1 );
 	raycaster.setFromCamera( mouse, camera );
 	var intersects = raycaster.intersectObjects( objects );
 	if ( intersects.length > 0 ) {

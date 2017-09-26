@@ -13,9 +13,13 @@
 			#oldie { background-color: #ddd !important }
 
 			#gui{
-			  position: absolute;
-			  top: 2px;
-			  left: 2px;
+			  position: absolute;  top: 20px;  left: 20px;
+			}
+			#panelCanvas{
+			  position:absolute; left:0px; top:0px; width:100%;height:100%;
+			}
+			#screen3d{
+			  position:absolute; left:20px; top:20px;width:70%;height:60%; background-color:transparent;border-style:dashed; 
 			}
 		</style>
 	</head>
@@ -25,13 +29,10 @@
 		<script src="../lib/dat.gui.min.js"></script>
 		<script src="../lib/common.js"></script>
 
-		<canvas id="pannelCanvas"  style="position:absolute; left:0px; top:0px;background-color: #1d0F0F">
-		</canvas>
-
-		<div id="screen3d" style="position:absolute; left:0px; top:0px;width:75%;height:70%; background-color: #0eF1FF">
-            </div>
-
+		<canvas id="panelCanvas"></canvas>
+		<div id="screen3d"></div>
 		<div id="gui_container"></div>
+
 		<script src="demo1.js"></script>
 		<script>
 			
