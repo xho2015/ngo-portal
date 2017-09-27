@@ -71,14 +71,14 @@ function initPannel()
 	pannel.onmousemove = OnMove;
 
 	//load background image
-	/*
-	var context = pannel.getContext('2d');
-	var imageObj = new Image();
-	  imageObj.onload = function() {
-	    context.drawImage(imageObj, 0, 0, imageObj.width,    imageObj.height,  0, 0, pannel.width, pannel.height); 
-	  };
-	  imageObj.src = 'skydome1.jpg';
-	*/
+	
+	//var context = pannel.getContext('2d');
+	//var imageObj = new Image();
+	//imageObj.onload = function() {
+	//	context.drawImage(imageObj, 0, 0, imageObj.width,    imageObj.height,  0, 0, pannel.width, pannel.height); 
+	//};
+	//imageObj.src = 'skydome1.jpg';
+	
 	drawPanelBG();
 }
 
@@ -166,7 +166,7 @@ function init3d() {
 
 	//skydome
 	var skyGeo = new THREE.SphereGeometry(100000, 25, 25); 
-	var loader  = new THREE.TextureLoader(), texturesky = loader.load( "skydome1.jpg" );
+	var loader  = new THREE.TextureLoader(), texturesky = loader.load( "../rs/skydome1.jpg" );
 	var material = new THREE.MeshPhongMaterial({ 
 	        map: texturesky,
 	});
@@ -241,7 +241,7 @@ function onWindowResize() {
 
 function onDocumentMouseMove( event ) {
 	event.preventDefault();
-	mouse.set( ( event.clientX / WIDTH_3D ) * 2 - 1, - ( event.clientY / HEIGHT_3D ) * 2 + 1 );
+	mouse.set( ( (event.clientX - offsetX) / WIDTH_3D ) * 2 - 1, - ( (event.clientY - offsetY) / HEIGHT_3D ) * 2 + 1 );
 	raycaster.setFromCamera( mouse, camera );
 	var intersects = raycaster.intersectObjects( objects );
 	if ( intersects.length > 0 ) {
@@ -254,7 +254,7 @@ function onDocumentMouseMove( event ) {
 
 function onDocumentMouseDown( event ) {
 	event.preventDefault();
-	mouse.set( ( event.clientX / WIDTH_3D ) * 2 - 1, - ( event.clientY / HEIGHT_3D ) * 2 + 1 );
+	mouse.set( ( (event.clientX - offsetX) / WIDTH_3D ) * 2 - 1, - ( (event.clientY - offsetY) / HEIGHT_3D ) * 2 + 1 );
 	raycaster.setFromCamera( mouse, camera );
 	var intersects = raycaster.intersectObjects( objects );
 	if ( intersects.length > 0 ) {
