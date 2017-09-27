@@ -14,3 +14,6 @@ git push -u origin master
 
 --yui compressor
 http://yui.github.io/yuicompressor/
+
+--dynamic load js
+https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file

@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Just Ware</title>
+		<title>NGO Ware</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
@@ -23,19 +23,21 @@
 			}
 		</style>
 	</head>
-	<body>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/87/three.min.js"></script>
-		<script src="../lib/dat.gui.min.js"></script>
-		<script src="../lib/common.js"></script>
-
+	<body>	
 		<canvas id="panelCanvas"></canvas>
 		<div id="screen3d"></div>
 		<div id="gui_container"></div>
 
-		<script src="demo1.js"></script>
+
+		<script src="bootstrap.js"></script>
 		<script>
-			
-		</script>
-		
+			/*
+			if (!Detector.webgl) {
+			    var warning = Detector.getWebGLErrorMessage();
+			    alert(warning);
+			}
+			onWindowResize();
+			*/
+		</script>	
 	</body>
 </html>

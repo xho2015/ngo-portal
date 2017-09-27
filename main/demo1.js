@@ -1,8 +1,42 @@
-
 var gui, params;
+var pannel;
+var offsetX = 20;
+var offsetY = 20;
+var container3d;
+var camera, scene, renderer;
+var plane, cube;
+var mouse, raycaster, isShiftDown = false;
+var rollOverMesh, rollOverMaterial;
+var cubeGeo, cubeMaterial;
+var objects = [];
+var WIDTH_3D, HEIGHT_3D;
+
 initGUI();
+
+function initGUI()
+{
+	
+	if (!Detector.webgl) {
+	    var warning = Detector.getWebGLErrorMessage();
+	    alert(warning);
+	    return;
+	}
+			
+
+	initDatUI();
+	initPannel();
+	init3d();
+
+	onWindowResize();
+
+	animate();
+}
+
+
+
+
 //gui sample  https://github.com/dataarts/dat.gui/blob/master/example.html
-function initGUI() {
+function initDatUI() {
 	params = {
     	width:600,
     	height:500, 
@@ -59,9 +93,6 @@ function exitFullscreen() {
 }
 
 
-var pannel;
-
-initPannel();
 
 function initPannel()
 {
@@ -93,8 +124,7 @@ function drawPanelBG()
 	ctx.fillRect(0, 0, 500, 250);
 }
 
- var offsetX = 20;
- var offsetY = 20;
+
 
 function OnDown(e) {
 	// tell the browser we're handling this mouse event
@@ -137,18 +167,6 @@ function OnMove(e) {
 }
 
 
-var container3d;
-var camera, scene, renderer;
-var plane, cube;
-var mouse, raycaster, isShiftDown = false;
-var rollOverMesh, rollOverMaterial;
-var cubeGeo, cubeMaterial;
-var objects = [];
-
-init3d();
-
-animate();
-var WIDTH_3D, HEIGHT_3D;
 
 function init3d() {
 	container3d = document.getElementById( 'screen3d' );
