@@ -30,8 +30,6 @@ function initDependency()
 /*
 HTML5 local storage
 https://stackoverflow.com/questions/5523140/html5-local-storage-vs-session-storage
-
-https://en.wikipedia.org/wiki/Data_URI_scheme
 */
 function loadLocal(rs, type)
 {

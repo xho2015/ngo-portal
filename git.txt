@@ -17,3 +17,19 @@ http://yui.github.io/yuicompressor/
 
 --dynamic load js
 https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file
+
+--0928
+. cache file in mem by tomcat
+	https://stackoverflow.com/questions/22778293/elegant-way-to-serve-static-resources-from-memory-in-spring-servlet-tomcat
+
+. no zipping setting from client
+		https://stackoverflow.com/questions/7988947/ajax-post-i-want-to-change-the-accept-encoding-header-value
+
+. no zipping setting from tomcat
+
+. un-zip from client
+
+. paring element by client
+	https://en.wikipedia.org/wiki/Data_URI_scheme
+
+. tomcat static resource download control filter

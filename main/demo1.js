@@ -209,7 +209,7 @@ function init3d() {
 	
 	// grid
 	var gridHelper = new THREE.GridHelper( 1000, 20 );
-	scene.add( gridHelper );
+	//scene.add( gridHelper );
 	
 	//raycaster
 	raycaster = new THREE.Raycaster();
