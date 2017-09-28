@@ -19,13 +19,19 @@ http://yui.github.io/yuicompressor/
 https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file
 
 --0928
-. cache file in mem by tomcat
+. caching static file in memory by tomcat 8
 	https://stackoverflow.com/questions/22778293/elegant-way-to-serve-static-resources-from-memory-in-spring-servlet-tomcat
+	https://tomcat.apache.org/tomcat-8.0-doc/config/resources.html
+	http://blog.csdn.net/yzf913214/article/details/54429041
+	http://tomcat.apache.org/tomcat-7.0-doc/config/filter.html#Expires_Filter
+
+. tomcat JMX setup
 
 . no zipping setting from client
 		https://stackoverflow.com/questions/7988947/ajax-post-i-want-to-change-the-accept-encoding-header-value
 
-. no zipping setting from tomcat
+. disable GZIP setting from tomcat
+		https://tomcat.apache.org/tomcat-8.0-doc/config/index.html
 
 . un-zip from client
 
@@ -33,3 +39,6 @@ https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in
 	https://en.wikipedia.org/wiki/Data_URI_scheme
 
 . tomcat static resource download control filter
+
+. tomcat performance monitor javamelody
+	https://github.com/javamelody/javamelody/wiki/UserGuide#2-webxml-file

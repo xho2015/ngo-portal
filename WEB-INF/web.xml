@@ -27,6 +27,22 @@
   </description>
 
 
+  <filter>
+  <filter-name>javamelody</filter-name>
+  <filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+  <async-supported>true</async-supported>
+</filter>
+<filter-mapping>
+  <filter-name>javamelody</filter-name>
+  <url-pattern>/*</url-pattern>
+  <dispatcher>REQUEST</dispatcher>
+  <dispatcher>ASYNC</dispatcher>
+</filter-mapping>
+<listener>
+  <listener-class>net.bull.javamelody.SessionListener</listener-class>
+</listener>
+
+
   <error-page>
     <error-code>401</error-code>
     <location>/WEB-INF/jsp/401.jsp</location>
