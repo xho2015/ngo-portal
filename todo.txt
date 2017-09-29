@@ -1,0 +1,16 @@
+--0929.2
+JMX integration
+	[ref]https://visualvm.github.io/pluginscenters.html
+	. downloaded MBean & GC plugins
+	. JMX only allow connect locally.
+	. TODO: if remote connection required. authentication needs to be enabled.
+
+Resources expiration filter
+	. expiration strategy
+		a. html & jsp always expire
+		b. js, css, mp3 never expire
+	. expiration filter setting
+		[ref]http://tomcat.apache.org/tomcat-8.0-doc/config/filter.html#Expires_Filter
+		
+
+Force reload js from client 
