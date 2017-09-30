@@ -1,15 +1,20 @@
 <!-- 
 	$author: badqiu(badqiu@gmail.com)
- -->
+-->
 <html>
 <head>
-<script src="prototype.ngjs" type="text/javascript"></script>
+	<script src="prototype.ngjs?3" type="text/javascript"></script>
 </head>
 <body>
 	<input id="username" name="username" value="badqiu"/><br />
 	<input id="email" value="badqiu@gmail.com"/>
-<script>
-	alert($F('username'))
-</script>
+	<script>
+		document.write('<p>html change v.5</p>');
+		
+		document.write('<p> v1.7 fbv.3<br> ');
+		document.write($F('username'));
+		document.write('</p>');
+
+	</script>
 </body>
 </html>
