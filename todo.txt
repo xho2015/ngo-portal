@@ -5,12 +5,25 @@ JMX integration
 	. JMX only allow connect locally.
 	. TODO: if remote connection required. authentication needs to be enabled.
 
-Resources expiration filter
+Change in conf/web.xml migrate to ROOT web.xml
+	. moved DefaultServlet mapping from conf/web.xml to ROOT/web.xml
+	. moved mime setting for nsjs to ROOT web.xml
+
+Resources expiration filter setup
 	. expiration strategy
-		a. html & jsp always expire
-		b. js, css, mp3 never expire
+		a. html always expire
+		b. jsp & servlet always expire (this can be implemented by jsp and servlet themselfs)
+		c. ngjs, ngcss, ngmp3 never expire
 	. expiration filter setting
 		[ref]http://tomcat.apache.org/tomcat-8.0-doc/config/filter.html#Expires_Filter
-		
+	. 
 
-Force reload js from client 
+Force reload js from client
+	. append "?<vernum>" to the ngjs url, which browser treat it as new resource but tomcat treat it as same one.
+
+		[note]: this approach does not change resource name from server end, therefore will not introduce 
+				impact to server cache system. when deploy new version, only recover the old one with the new verison.
+				tomcat will do the resource revalidation and place the new one into memory when invalidation detected.
+
+ngjs, ngcss, ngmp3 resource updating strategy
+	. html or jsp no-cache resource has the responsibility to update the new version NG reources.

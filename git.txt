@@ -26,6 +26,7 @@ https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in
 	http://tomcat.apache.org/tomcat-7.0-doc/config/filter.html#Expires_Filter
 
 . tomcat JMX setup
+	https://visualvm.github.io/pluginscenters.html
 
 . no zipping setting from client
 		https://stackoverflow.com/questions/7988947/ajax-post-i-want-to-change-the-accept-encoding-header-value
