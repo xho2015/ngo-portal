@@ -11,7 +11,7 @@ Change in conf/web.xml migrate to ROOT web.xml
 
 Resources expiration filter setup
 	. expiration strategy
-		a. html always expire
+		a. htm always expire
 		b. jsp & servlet always expire (this can be implemented by jsp and servlet themselfs)
 		c. ngjs, ngcss, ngmp3 never expire
 	. expiration filter setting
@@ -26,4 +26,33 @@ Force reload js from client
 				tomcat will do the resource revalidation and place the new one into memory when invalidation detected.
 
 ngjs, ngcss, ngmp3 resource updating strategy
-	. html or jsp no-cache resource has the responsibility to update the new version NG reources.
+	. html or jsp which are no-cache resource has the ability to update the new version NG reources.
+	. a bom of current version for NG resources should be hold from server end. e.g. database
+			and web client always try to sync the lastest verison of this bom
+	. an new version publish action from tomcat server should be made by a process like below
+		a. a file uploading page showing up in a dedicated jsp.
+		b. give a content type in the page before uploading. e.g. ngjs, ngcss, ngmp3,etc.
+		c. jsp put the ng content in the desinated folder based on content type
+		d. jsp update the bom in database by increasing version number by 1
+		e. jsp generate new a bom.js then gzip into bom.ngjs and placed into resouce folder.
+
+		1. web client always request bom.ngjs from server each time a htm or jsp loaded.
+		2. web client load the ng resouce by the version given by bom.ngjs
+
+
+MYSQL5.6.34 database server setup
+	[ref]https://dev.mysql.com/doc/refman/5.6/en/resetting-permissions.html
+	. root password reset to "root:Qwer!234l"
+	. added a new mysql db user for ngo web "ngow:nG@F0rmW#b"
+	
+
+Tomcat datasource setup
+	[ref]http://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html
+	[TODO]http://commons.apache.org/proper/commons-dbcp/configuration.html
+	. added a datasource resource to context
+	. added resource-ref in web.xml
+	. connectorj6 have timezone issue, fixed it by change mysql database timezon to 
+		
+		mysql>show variables like '%time_zone%';
+		mysql>set global time_zone='+8:00';
+	

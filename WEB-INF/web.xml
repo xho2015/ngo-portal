@@ -55,8 +55,13 @@
 <filter>
     <filter-name>ExpiresFilter</filter-name>
     <filter-class>org.apache.catalina.filters.ExpiresFilter</filter-class>
+    <!--HXY: TODO remember change the expiration peroid-->
     <init-param>
         <param-name>ExpiresByType application/javascript</param-name>
+        <param-value>access plus 30 days</param-value>
+    </init-param>
+    <init-param>
+        <param-name>ExpiresByType audio/mpeg</param-name>
         <param-value>access plus 30 days</param-value>
     </init-param>
     <init-param>
@@ -151,5 +156,12 @@
     <extension>ngmp3</extension>
     <mime-type>audio/mpeg</mime-type>
 </mime-mapping>
+
+<resource-ref>
+      <description>NGO DB Connection</description>
+      <res-ref-name>jdbc/NGODB</res-ref-name>
+      <res-type>javax.sql.DataSource</res-type>
+      <res-auth>Container</res-auth>
+  </resource-ref>
 
 </web-app>
