@@ -51,8 +51,7 @@ Tomcat datasource setup
 	[TODO]http://commons.apache.org/proper/commons-dbcp/configuration.html
 	. added a datasource resource to context
 	. added resource-ref in web.xml
-	. connectorj6 have timezone issue, fixed it by change mysql database timezon to 
-		
-		mysql>show variables like '%time_zone%';
-		mysql>set global time_zone='+8:00';
+	. connectorj6 have timezone issue, fixed it by change mysql database timezon to +8 
+		add below to my.conf 
+			default-time_zone = '+8:00'
 	

@@ -31,7 +31,7 @@ ResultSet rs = statement.executeQuery(sql);
 ResultSetMetaData rmeta = rs.getMetaData(); 
 
 int numColumns=rmeta.getColumnCount(); 
-
+out.print("timestamp="+new java.util.Date()); 
 out.print("id"); 
 out.print("|"); 
 out.print("num"); 

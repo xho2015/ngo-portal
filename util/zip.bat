@@ -11,7 +11,7 @@ IF [%2] == [] GOTO argNotValid
 SET GZIP_HOME=D:\Km\NOC\apache-tomcat-8.0.46\webapps\ROOT\util
 
 
-%GZIP_HOME%\gzip1.exe -c  %1 > %2
+%GZIP_HOME%\gzip.exe -c  %1 > %2
 
 goto end
 
