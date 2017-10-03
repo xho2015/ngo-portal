@@ -74,8 +74,9 @@ NGO application deployment strategy.
 
 [T0] context.xml isolation
 	[ref]https://tomcat.apache.org/tomcat-8.0-doc/config/context.html#Defining_a_context
-	1. move caching & resource of datasource into context.xml in NGO application META-INFO folder
-	2. [TODO] disable auto "reloadable", it requires significant runtime overhead and is not recommended for use on production
+	1. move caching & resource of datasource into context.xml in NGO application META-INFO folder [done]
+	2. [TODO] disable auto "reloadable", it requires significant runtime overhead and is 
+				not recommended for use on production
 	
 
 [T1] Ant task for deployment automation.

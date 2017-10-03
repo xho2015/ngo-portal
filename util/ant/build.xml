@@ -1,0 +1,56 @@
+<project name="NGO Web" default="compile" basedir=".">
+
+	<property name="tomcat1.home" value="D:/neverstop/apache-tomcat-8.0.46" />
+
+	<!-- Configure the directory into which the web application is built -->
+	<property name="build" value="${basedir}/ROOT/WEB-INF/classes" />
+	<property name="dist.dir" value="${basedir}/dist" />
+
+	<!-- Configure the context path for this application -->
+	<property name="path" value="/ROOT" />
+
+	<!-- Configure properties to access the Manager application -->
+	<property name="url" value="http://127.0.0.1:9080/manager/text" />
+	<property name="username" value="ngoweba" />
+	<property name="password" value="NeverSt9p!" />
+
+	<path id="catalina-ant-classpath1">
+		<fileset dir="${tomcat1.home}/lib">
+			<include name="catalina-ant.jar" />
+			<include name="tomcat-coyote.jar" />
+			<include name="tomcat-util.jar" />
+		</fileset>
+		<fileset dir="${tomcat1.home}/bin">
+			<include name="tomcat-juli.jar" />
+		</fileset>
+	</path>
+
+	<taskdef file="tomcatTasks.properties">
+		<classpath refid="catalina-ant-classpath1" />
+	</taskdef>
+
+
+	<!-- Executable Targets -->
+	<target name="compile" description="compile files">
+		<mkdir dir="${dist.dir}" />
+		<war destfile="${dist.dir}/ROOT.war" webxml="ROOT/WEB-INF/web.xml">
+			<classes dir="ROOT/WEB-INF/classes" />
+			<fileset dir="ROOT" excludes="WEB-INF/**" />
+			<lib dir="ROOT/WEB-INF/lib" />
+		</war>
+	</target>
+
+	<target name="deploy" description="Install web application" depends="compile">
+		<deploy url="${url}" username="${username}" password="${password}" path="${path}" war="${dist.dir}/ROOT.war" />
+	</target>
+
+	<target name="reload" description="Reload web application" depends="compile">
+		<reload url="${url}" username="${username}" password="${password}" path="${path}" />
+	</target>
+
+	<target name="undeploy" description="Remove web application">
+		<undeploy url="${url}" username="${username}" password="${password}" path="${path}" />
+	</target>
+
+
+</project>
