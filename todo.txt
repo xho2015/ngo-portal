@@ -70,6 +70,11 @@ NGO application deployment strategy.
 		f. trigger NGO manager initBom ant task
 		g. trigger NGO manager validateBom ant task
 		
+
+
+[T0] context.xml isolation
+	1. move caching & resource of datasource into context.xml in NGO application META-INFO folder
+
 	
 
 [T1] Ant task for deployment automation.
