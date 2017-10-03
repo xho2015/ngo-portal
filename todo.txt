@@ -55,4 +55,13 @@ Tomcat datasource setup
 	. connectorj6 have timezone issue, fixed it by change mysql database timezon to +8 
 		add below to my.conf 
 			default-time_zone = '+8:00'
+			
+			
+			
+			
+Enable both HTTP and HTTPS in Tomcat 
+	[ref]https://stackoverflow.com/questions/41819962/how-to-enable-both-http-and-https-in-tomcat-without-redirect
+	
+	. enable HTTPS in Tomcat [pending] until registered domain name take into effect
+
 	

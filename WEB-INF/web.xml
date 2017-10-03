@@ -113,23 +113,9 @@
 <servlet-mapping>  
     <servlet-name>default</servlet-name>  
     <url-pattern>*.htm</url-pattern>  
-</servlet-mapping>  
-<servlet-mapping>  
-    <servlet-name>default</servlet-name>  
     <url-pattern>*.ngjs</url-pattern>  
-</servlet-mapping>
-<!--HXY: TODO: remote below js when go PROD-->
-<servlet-mapping>  
-    <servlet-name>default</servlet-name>  
-    <url-pattern>*.js</url-pattern>  
-</servlet-mapping>
-
-<servlet-mapping>  
-    <servlet-name>default</servlet-name>  
-    <url-pattern>*.ngmp3</url-pattern>  
-</servlet-mapping>
-<servlet-mapping>  
-    <servlet-name>default</servlet-name>  
+    <url-pattern>*.js</url-pattern>   <!--HXY: TODO: remote js when go PROD-->
+    <url-pattern>*.ngmp3</url-pattern>   
     <url-pattern>/monitoring</url-pattern>  
 </servlet-mapping>
 
