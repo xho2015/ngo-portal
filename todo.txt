@@ -26,19 +26,10 @@ Force reload js from client
 				impact to server cache system. when deploy new version, only recover the old one with the new verison.
 				tomcat will do the resource revalidation and place the new one into memory when invalidation detected.
 
-ngjs, ngcss, ngmp3 resource updating strategy
-	. html or jsp which are no-cache resource has the ability to update the new version NG reources.
-	. a bom of current version for NG resources should be hold from server end. e.g. database
-			and web client always try to sync the lastest verison of this bom
-	. an new version publish action from tomcat server should be made by a process like below
-		a. a file uploading page showing up in a dedicated jsp.
-		b. give a content type in the page before uploading. e.g. ngjs, ngcss, ngmp3,etc.
-		c. jsp put the ng content in the desinated folder based on content type
-		d. jsp update the bom in database by increasing version number by 1
-		e. jsp generate new a bom.js then gzip into bom.ngjs and placed into resouce folder.
-
-		1. web client always request/refresh bom.ngjs from server each time a htm or jsp loaded.
-		2. web client load the ng resouce by the version given by bom.ngjs
+NG resource client updating strategy
+	. html or jsp which are no-cache resource has the ability to update the new version NG resources.
+	. web client load the NG resources by the version given by bom object from server
+	. bom is a JSON formated object which holding NG resources URL and its version
 
 
 MYSQL5.6.34 database server setup
@@ -57,11 +48,59 @@ Tomcat datasource setup
 			default-time_zone = '+8:00'
 			
 			
+
+
+--10.03
+NGO application deployment strategy.
+	. static content deployment
+		a. package ngjs by confusion & gzip raw js (ngcss only do gzip, ngmp3 do nothing)
+		b. generate package bom with path + file name + md5 checksum
+		c. ftp all static content to server application ROOT folder
+		d. trigger NGO manager initBom ant task
+		e. trigger NGO manager validateBom ant task
+	. dynamic content deployment
+		a. ftp all content under WEB-INF to application WEB-INF folder
+		b. trigger tomcat manager reload ant task
+	. whole war deployment
+		a. do a + b of static content deployment
+		b. build war package
+		c. ftp war to tomcat server.
+		d. trigger tomcat undeploy ant task 
+		e. trigger tomcat deploy task
+		f. trigger NGO manager initBom ant task
+		g. trigger NGO manager validateBom ant task
+		
+	
+
+[T1] Ant task for deployment automation.
+	1. task for js confusion.
+	
+	2. task for gzip (js, css)
+	
+	3. task for generate md5 checksum
+	
+	4. task for generate bom file
+	
+	5. task for SCH ftp uploading
+	
+	6. tasks for tomcat manager (deploy, reload, undeploy)
+
+	7. task for NGO manager text (initBom, validateBom)
+	
+	
+[T2] NGO manager text interface
+	[ref] tomcat manager
+	1. initBom
+	
+	2. validateBom
+	
+	3. security constraint
+
+
 			
-			
-Enable both HTTP and HTTPS in Tomcat 
+[T3] Enable both HTTP and HTTPS in Tomcat 
 	[ref]https://stackoverflow.com/questions/41819962/how-to-enable-both-http-and-https-in-tomcat-without-redirect
 	
-	. enable HTTPS in Tomcat [pending] until registered domain name take into effect
+	1. enable HTTPS in Tomcat [pending] until registered domain name take into effect
 
 	
