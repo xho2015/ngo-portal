@@ -4,6 +4,7 @@ JMX integration
 	. downloaded MBean & GC plugins
 	. JMX only allow connect locally.
 	. TODO: if remote connection required. authentication needs to be enabled.
+			but if server firewall enabled, it seems not possible to let JMX client passby.
 
 Change in conf/web.xml migrate to ROOT web.xml
 	. moved DefaultServlet mapping from conf/web.xml to ROOT/web.xml
@@ -36,7 +37,7 @@ ngjs, ngcss, ngmp3 resource updating strategy
 		d. jsp update the bom in database by increasing version number by 1
 		e. jsp generate new a bom.js then gzip into bom.ngjs and placed into resouce folder.
 
-		1. web client always request bom.ngjs from server each time a htm or jsp loaded.
+		1. web client always request/refresh bom.ngjs from server each time a htm or jsp loaded.
 		2. web client load the ng resouce by the version given by bom.ngjs
 
 
