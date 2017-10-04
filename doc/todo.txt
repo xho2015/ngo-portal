@@ -80,6 +80,7 @@ NGO application deployment strategy.
 	
 
 [T1] Ant task for deployment automation.
+	[ref]https://ant.apache.org/manual-1.9.x/index.html
 	1. task for js confusion.
 	
 	2. task for gzip (js, css)

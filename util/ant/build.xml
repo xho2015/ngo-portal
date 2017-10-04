@@ -1,10 +1,10 @@
-<project name="NGO Web" default="compile" basedir=".">
+<project name="NGO Web Deployment Ant Utility" default="compile" basedir="D:/Km/NOC/apache-tomcat-8.0.46/webapps/ROOT">
 
-	<property name="tomcat1.home" value="D:/neverstop/apache-tomcat-8.0.46" />
+	<property name="tomcat.home" value="D:/Km/NOC/apache-tomcat-8.0.46" />
 
 	<!-- Configure the directory into which the web application is built -->
-	<property name="build" value="${basedir}/ROOT/WEB-INF/classes" />
-	<property name="dist.dir" value="${basedir}/dist" />
+	<property name="build" value="${basedir}/WEB-INF/classes" />
+	<property name="dist.dir" value="D:/Km/NOC/upload/web" />
 
 	<!-- Configure the context path for this application -->
 	<property name="path" value="/ROOT" />
@@ -14,32 +14,61 @@
 	<property name="username" value="ngoweba" />
 	<property name="password" value="NeverSt9p!" />
 
-	<path id="catalina-ant-classpath1">
-		<fileset dir="${tomcat1.home}/lib">
+	<path id="catalina-ant-classpath">
+		<fileset dir="${tomcat.home}/lib">
 			<include name="catalina-ant.jar" />
 			<include name="tomcat-coyote.jar" />
 			<include name="tomcat-util.jar" />
 		</fileset>
-		<fileset dir="${tomcat1.home}/bin">
+		<fileset dir="${tomcat.home}/bin">
 			<include name="tomcat-juli.jar" />
 		</fileset>
 	</path>
-
-	<taskdef file="tomcatTasks.properties">
-		<classpath refid="catalina-ant-classpath1" />
+	<taskdef file="${basedir}/util/ant/tomcatTasks.properties">
+		<classpath refid="catalina-ant-classpath" />
 	</taskdef>
 
 
-	<!-- Executable Targets -->
-	<target name="compile" description="compile files">
+	<path id="ngo-ant-classpath">
+		<fileset dir="${basedir}/util/ant/lib">
+			<include name="ngotask.jar" />
+		</fileset>
+		<fileset dir="${basedir}/util/jsc">
+			<include name="yuicompressor-2.4.8.jar" />
+			<include name="commons-io-2.5.jar" />					
+		</fileset>
+	</path>
+	<taskdef file="${basedir}/util/ant/ngoTasks.properties">
+		<classpath refid="ngo-ant-classpath" />
+	</taskdef>
+
+
+	<!-- basic targets -->
+	<target name="clean">
+		<delete dir="${dest.dir}" />
+		<echo message="File folder ${dist.dir} cleaned" />
+	</target>
+
+
+	<target name="compile" description="compile files" depends="clean">
 		<mkdir dir="${dist.dir}" />
-		<war destfile="${dist.dir}/ROOT.war" webxml="ROOT/WEB-INF/web.xml">
-			<classes dir="ROOT/WEB-INF/classes" />
-			<fileset dir="ROOT" excludes="WEB-INF/**" />
-			<lib dir="ROOT/WEB-INF/lib" />
+		<war destfile="${dist.dir}/ROOT.war" webxml="WEB-INF/web.xml">
+			<classes dir="WEB-INF/classes" />
+			<fileset dir="." excludes="WEB-INF/**" />
+			<lib dir="WEB-INF/lib" />
 		</war>
 	</target>
 
+	<!-- NGO resource package -->
+	<target name="JsConfusion" description="Javascript confusion">
+		<confusion include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${basedir}" />
+	</target>
+
+
+	<!-- NGO web manager interface -->
+
+
+	<!-- Tomcat manager interface -->
 	<target name="deploy" description="Install web application" depends="compile">
 		<deploy url="${url}" username="${username}" password="${password}" path="${path}" war="${dist.dir}/ROOT.war" />
 	</target>
