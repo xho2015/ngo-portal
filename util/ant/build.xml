@@ -35,7 +35,10 @@
 		</fileset>
 		<fileset dir="${basedir}/util/jsc">
 			<include name="yuicompressor-2.4.8.jar" />
-			<include name="commons-io-2.5.jar" />					
+			<include name="commons-io-2.5.jar" />
+		</fileset>
+		<fileset dir="${basedir}/util/gzip">
+			<include name="commons-compress-1.14.jar" />
 		</fileset>
 	</path>
 	<taskdef file="${basedir}/util/ant/ngoTasks.properties">
@@ -60,10 +63,19 @@
 	</target>
 
 	<!-- NGO resource package -->
-	<target name="JsConfusion" description="Javascript confusion">
+	<target name="JsConfusion" description="Javascript compression">
 		<confusion include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${basedir}" />
 	</target>
 
+	<target name="JsGzip" description="Confusion and Gzip for javascript " depends="JsConfusion">
+			<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${basedir}" executable="common-compression" />
+	</target>
+	
+	<!--This task is only for DEV debug purpose only-->
+	<target name="JsGzip-NO-Confusion" description="Javascript Gzip with raw javascript">
+		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${basedir}" executable="common-compression" />
+	</target>
+	
 
 	<!-- NGO web manager interface -->
 

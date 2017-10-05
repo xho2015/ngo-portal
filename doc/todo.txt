@@ -73,28 +73,28 @@ NGO application deployment strategy.
 
 
 [T0] context.xml isolation
-	[ref]https://tomcat.apache.org/tomcat-8.0-doc/config/context.html#Defining_a_context
-	1. move caching & resource of datasource into context.xml in NGO application META-INFO folder [done]
-	2. [TODO] disable auto "reloadable", it requires significant runtime overhead and is 
+	https://tomcat.apache.org/tomcat-8.0-doc/config/context.html#Defining_a_context
+	[done] 1. move caching & resource of datasource into context.xml in NGO application META-INFO folder 
+	[TODO] 2.  disable auto "reloadable", it requires significant runtime overhead and is 
 				not recommended for use on production
 	
 
 [T1] Ant task for deployment automation.
-	[ref]https://ant.apache.org/manual-1.9.x/index.html
-	1. task for js confusion.
+	https://ant.apache.org/manual-1.9.x/index.html
+ [done] 1. task for js confusion.
+				implemented by /util/ant/task/ngo/deploy/tools/ConfusionTask.java
+ [done] 2. task for gzip (js, css).
+				implemented by /util/ant/task/ngo/deploy/tools/GzipTask.java	
+		3. task for generate md5 checksum
+		
+		4. task for generate bom file
+		
+		5. task for SCH ftp uploading
+		
+		6. tasks for tomcat manager (deploy, reload, undeploy)
 	
-	2. task for gzip (js, css)
-	
-	3. task for generate md5 checksum
-	
-	4. task for generate bom file
-	
-	5. task for SCH ftp uploading
-	
-	6. tasks for tomcat manager (deploy, reload, undeploy)
-
-	7. task for NGO manager text (initBom, validateBom)
-	
+		7. task for NGO manager text (initBom, validateBom)
+		
 	
 [T2] NGO manager text interface
 	[ref] tomcat manager

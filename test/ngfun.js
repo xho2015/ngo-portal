@@ -1,7 +1,7 @@
 
 function getver()
 {
-	return "gnfun v1.1";
+	return "gnfun v1.6 dev debugable js";
 }
 
 function ngfun1(a, b)
