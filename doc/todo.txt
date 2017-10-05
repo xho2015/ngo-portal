@@ -94,7 +94,11 @@ NGO application deployment strategy.
 		6. tasks for tomcat manager (deploy, reload, undeploy)
 	
 		7. task for NGO manager text (initBom, validateBom)
-		
+
+
+		. ant build properties refactor
+			http://www.cnblogs.com/greywolf/archive/2013/04/22/3035520.html
+					
 	
 [T2] NGO manager text interface
 	[ref] tomcat manager

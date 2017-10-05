@@ -1,18 +1,6 @@
-<project name="NGO Web Deployment Ant Utility" default="compile" basedir="D:/Km/NOC/apache-tomcat-8.0.46/webapps/ROOT">
+<project name="NGO Web Deployment Ant Utility" default="ngoEcho" basedir=".">
 
-	<property name="tomcat.home" value="D:/Km/NOC/apache-tomcat-8.0.46" />
-
-	<!-- Configure the directory into which the web application is built -->
-	<property name="build" value="${basedir}/WEB-INF/classes" />
-	<property name="dist.dir" value="D:/Km/NOC/upload/web" />
-
-	<!-- Configure the context path for this application -->
-	<property name="path" value="/ROOT" />
-
-	<!-- Configure properties to access the Manager application -->
-	<property name="url" value="http://127.0.0.1:9080/manager/text" />
-	<property name="username" value="ngoweba" />
-	<property name="password" value="NeverSt9p!" />
+	<property file="build.properties" />
 
 	<path id="catalina-ant-classpath">
 		<fileset dir="${tomcat.home}/lib">
@@ -24,68 +12,79 @@
 			<include name="tomcat-juli.jar" />
 		</fileset>
 	</path>
-	<taskdef file="${basedir}/util/ant/tomcatTasks.properties">
+	<taskdef file="${project.root}/util/ant/tomcatTasks.properties">
 		<classpath refid="catalina-ant-classpath" />
 	</taskdef>
 
 
 	<path id="ngo-ant-classpath">
-		<fileset dir="${basedir}/util/ant/lib">
+		<fileset dir="${project.root}/util/ant/lib">
 			<include name="ngotask.jar" />
 		</fileset>
-		<fileset dir="${basedir}/util/jsc">
+		<fileset dir="${project.root}/util/jsc">
 			<include name="yuicompressor-2.4.8.jar" />
 			<include name="commons-io-2.5.jar" />
 		</fileset>
-		<fileset dir="${basedir}/util/gzip">
+		<fileset dir="${project.root}/util/gzip">
 			<include name="commons-compress-1.14.jar" />
 		</fileset>
 	</path>
-	<taskdef file="${basedir}/util/ant/ngoTasks.properties">
+	<taskdef file="${project.root}/util/ant/ngoTasks.properties">
 		<classpath refid="ngo-ant-classpath" />
 	</taskdef>
 
+	<target name="ngoEcho">
+		<echo message="NGO web deployment tool v1.0" />
+	</target>
+	
 
 	<!-- basic targets -->
 	<target name="clean">
 		<delete dir="${dest.dir}" />
-		<echo message="File folder ${dist.dir} cleaned" />
 	</target>
 
 
-	<target name="compile" description="compile files" depends="clean">
+	<target name="war" description="build war" depends="clean">
 		<mkdir dir="${dist.dir}" />
-		<war destfile="${dist.dir}/ROOT.war" webxml="WEB-INF/web.xml">
-			<classes dir="WEB-INF/classes" />
-			<fileset dir="." excludes="WEB-INF/**" />
-			<lib dir="WEB-INF/lib" />
+		<war destfile="${dist.dir}/ROOT.war" webxml="${project.root}/WEB-INF/web.xml">
+			<classes dir="${project.root}/WEB-INF/classes" />
+			<fileset dir="${project.root}">
+				<exclude name="WEB-INF/web.xml" />
+				<exclude name="WEB-INF/classes/**" />
+				<exclude name="WEB-INF/lib/**" />
+				<exclude name="WEB-INF/src/**" />
+				<exclude name="**/*.js" />
+				<exclude name="doc/**" />
+				<exclude name="util/**" />								
+			</fileset>
+			<lib dir="${project.root}/WEB-INF/lib" />
 		</war>
 	</target>
 
 	<!-- NGO resource package -->
-	<target name="JsConfusion" description="Javascript compression">
+	<target name="JsConfusion" description="Javascript Confusion">
 		<confusion include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${basedir}" />
 	</target>
 
 	<target name="JsGzip" description="Confusion and Gzip for javascript " depends="JsConfusion">
-			<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${basedir}" executable="common-compression" />
+		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${basedir}" executable="common-compression" />
 	</target>
-	
+
 	<!--This task is only for DEV debug purpose only-->
 	<target name="JsGzip-NO-Confusion" description="Javascript Gzip with raw javascript">
 		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${basedir}" executable="common-compression" />
 	</target>
-	
+
 
 	<!-- NGO web manager interface -->
 
 
 	<!-- Tomcat manager interface -->
-	<target name="deploy" description="Install web application" depends="compile">
+	<target name="deploy" description="Install web application" depends="">
 		<deploy url="${url}" username="${username}" password="${password}" path="${path}" war="${dist.dir}/ROOT.war" />
 	</target>
 
-	<target name="reload" description="Reload web application" depends="compile">
+	<target name="reload" description="Reload web application" depends="">
 		<reload url="${url}" username="${username}" password="${password}" path="${path}" />
 	</target>
 
