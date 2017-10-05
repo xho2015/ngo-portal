@@ -38,7 +38,7 @@
 
 	<!--default-->
 	<target name="ngoEcho">
-		<echo message="NGO web deployment tool v1.0, basedir=${basedir}" />
+		<echo message="NGO.km Ant deployment tool v1.0,  basedir=${basedir}, project.root=${project.root}" />
 	</target>
 
 
@@ -73,15 +73,19 @@
 	<target name="jsGzip" description="Confusion and Gzip for javascript " depends="jsConfusion">
 		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}" />
 	</target>
+	
+	<target name="cssGzip" description="Gzip for css">
+			<ngzip include=".*\.css" exclude="__NOMATCH__" fileExtension="ngcss" path="${project.root}" />
+		</target>
 
 	<!--This task is only for DEV debug purpose only-->
 	<target name="jsGzip-DEV" description="Javascript Gzip with raw javascript">
 		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${project.root}" />
 	</target>
 
-	<!--This task is only for DEV debug purpose only-->
-	<target name="ngoMD5" description="generate md5 checksum for NGO resource and dump to file">
-		<ngmd5 include=".*\.ngjs" exclude="__NOMATCH__" outFile="/bom/ngo.bom" path="${project.root}"  spliter="|"/>
+	<!--new NG resouce needs to be registered in include-->
+	<target name="ngoMd5" description="generate md5 checksum for NGO resource and dump to file">
+		<ngmd5 include=".*\.ng(js|css)" exclude="__NOMATCH__" outFile="/bom/ngo.bom" path="${project.root}"  spliter="|"/>
 	</target>
 
 
