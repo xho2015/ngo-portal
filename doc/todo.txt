@@ -124,5 +124,13 @@ NGO application deployment strategy.
 
 
 [T?] Tomcat security setup
-		1. change manager context to another one 
+		1. change manager context to another one
+		
+		
+[T?] Tomcat connector settings
+	https://stackoverflow.com/questions/5388210/measuring-the-number-of-queued-requests-for-tomcat/5391417#5391417
+
+
+[T?] Tomcat QoS filter
+	https://www.eclipse.org/jetty/documentation/current/qos-filter.html
 	
