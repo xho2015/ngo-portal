@@ -28,15 +28,19 @@
 		<fileset dir="${project.root}/util/gzip">
 			<include name="commons-compress-1.14.jar" />
 		</fileset>
+		<fileset dir="${project.root}/util/md5">
+			<include name="commons-codec-1.10.jar" />
+		</fileset>
 	</path>
 	<taskdef file="${project.root}/util/ant/ngoTasks.properties">
 		<classpath refid="ngo-ant-classpath" />
 	</taskdef>
 
+	<!--default-->
 	<target name="ngoEcho">
-		<echo message="NGO web deployment tool v1.0" />
+		<echo message="NGO web deployment tool v1.0, basedir=${basedir}" />
 	</target>
-	
+
 
 	<!-- basic targets -->
 	<target name="clean">
@@ -55,24 +59,29 @@
 				<exclude name="WEB-INF/src/**" />
 				<exclude name="**/*.js" />
 				<exclude name="doc/**" />
-				<exclude name="util/**" />								
+				<exclude name="util/**" />
 			</fileset>
 			<lib dir="${project.root}/WEB-INF/lib" />
 		</war>
 	</target>
 
 	<!-- NGO resource package -->
-	<target name="JsConfusion" description="Javascript Confusion">
-		<confusion include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${basedir}" />
+	<target name="jsConfusion" description="Javascript Confusion">
+		<confusion include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
 	</target>
 
-	<target name="JsGzip" description="Confusion and Gzip for javascript " depends="JsConfusion">
-		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${basedir}" executable="common-compression" />
+	<target name="jsGzip" description="Confusion and Gzip for javascript " depends="jsConfusion">
+		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}" />
 	</target>
 
 	<!--This task is only for DEV debug purpose only-->
-	<target name="JsGzip-NO-Confusion" description="Javascript Gzip with raw javascript">
-		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${basedir}" executable="common-compression" />
+	<target name="jsGzip-DEV" description="Javascript Gzip with raw javascript">
+		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${project.root}" />
+	</target>
+
+	<!--This task is only for DEV debug purpose only-->
+	<target name="ngoMD5" description="generate md5 checksum for NGO resource and dump to file">
+		<ngmd5 include=".*\.ngjs" exclude="__NOMATCH__" outFile="/bom/ngo.bom" path="${project.root}"  spliter="|"/>
 	</target>
 
 

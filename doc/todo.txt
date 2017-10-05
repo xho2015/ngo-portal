@@ -96,8 +96,11 @@ NGO application deployment strategy.
 		7. task for NGO manager text (initBom, validateBom)
 
 
-		. ant build properties refactor
+ [done]	. ant build.xml & properties refactor
 			http://www.cnblogs.com/greywolf/archive/2013/04/22/3035520.html
+ [done]	. removed unnecessary resources from building war by "excludes" of fileset
+			http://ant.apache.org/manual/Types/fileset.html
+			 
 					
 	
 [T2] NGO manager text interface
