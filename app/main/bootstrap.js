@@ -1,7 +1,6 @@
 
-var dependency1 = function() {
-   	//TODO: exception handling
-	initDependency();
+var mainCallback = function() {
+   	initDependency();
 };
 
 function scriptExist(sid)
@@ -46,4 +45,4 @@ function loadScript(sid, url, callback)
     	return 0;
 }
 
-loadScript("resource", "dependency.js", dependency1);
+loadScript("mainlibs", "dependency.min.ngjs", mainCallback);

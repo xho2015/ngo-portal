@@ -183,13 +183,13 @@ function init3d() {
 
 
 	//skydome
-	var skyGeo = new THREE.SphereGeometry(100000, 25, 25); 
-	var loader  = new THREE.TextureLoader(), texturesky = loader.load( "../rs/skydome1.jpg" );
-	var material = new THREE.MeshPhongMaterial({ 
-	        map: texturesky,
-	});
-	var sky = new THREE.Mesh(skyGeo, material);
-    sky.material.side = THREE.BackSide;
+	//var skyGeo = new THREE.SphereGeometry(100000, 25, 25); 
+	//var loader  = new THREE.TextureLoader(), texturesky = loader.load( "/app/rs/skydome1.jpg" );
+	//var material = new THREE.MeshPhongMaterial({ 
+	//        map: texturesky,
+	//});
+	//var sky = new THREE.Mesh(skyGeo, material);
+    //sky.material.side = THREE.BackSide;
     //scene.add(sky);
 	
     //Axes
@@ -205,7 +205,7 @@ function init3d() {
 
 	// cubes
 	cubeGeo = new THREE.BoxGeometry( 50, 50, 50 );
-	cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( "../rs/square-outline-textured.png" ) } );
+	cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( "/app/rs/square-outline-textured.ngpng" ) } );
 	
 	// grid
 	var gridHelper = new THREE.GridHelper( 1000, 20 );

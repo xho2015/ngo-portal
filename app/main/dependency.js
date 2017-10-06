@@ -4,9 +4,9 @@ function initDependency()
 				    "resource": [
 				        //{"tid":"3", "load":"l|n",  "name":"media2.2","url":"media1.zip"},
 				        {"tid":"1", "load":"l|c|n", "name":"threeminjs","url":"https://cdnjs.cloudflare.com/ajax/libs/three.js/87/three.min.js"},
-				        {"tid":"1", "load":"l|n",  "name":"datgui","url":"../lib/dat.gui.min.js"},
-				        {"tid":"1", "load":"l|n",  "name":"common1", "url":"../lib/common.js"},
-				        {"tid":"1", "load":"l|n",  "name":"demo1","url":"demo1.js"}
+				        {"tid":"1", "load":"l|n",  "name":"datgui","url":"/app/lib/dat.gui.min.ngjs"},
+				        {"tid":"1", "load":"l|n",  "name":"common1", "url":"/app/lib/common.min.ngjs"},
+				        {"tid":"1", "load":"l|n",  "name":"demo1","url":"demo1.min.ngjs"}
 				    ]
 				};
 
