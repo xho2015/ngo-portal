@@ -134,3 +134,7 @@ NGO application deployment strategy.
 [T?] Tomcat QoS filter
 	https://www.eclipse.org/jetty/documentation/current/qos-filter.html
 	
+[T?] Javascript memory management (avoid leak) 
+	https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/
+	https://addyosmani.com/resources/essentialjsdesignpatterns/book/#constructorpatternjavascript
+	
