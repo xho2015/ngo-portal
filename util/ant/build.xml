@@ -1,4 +1,4 @@
-<project name="NGO Web Deployment Ant Utility" default="ngoEcho" basedir=".">
+<project name="NGO.km Ant Deployment Utility" default="ngoEcho" basedir=".">
 
 	<property file="build.properties" />
 
@@ -38,7 +38,7 @@
 
 	<!--default-->
 	<target name="ngoEcho">
-		<echo message="NGO.km Ant deployment tool v1.0,  basedir=${basedir}, project.root=${project.root}" />
+		<echo message="${project.name} ${project.ver},  basedir=${basedir}, project.root=${project.root}" />
 	</target>
 
 

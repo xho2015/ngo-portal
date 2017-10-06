@@ -13,9 +13,9 @@
 
 
 	<!--HXY: 0929-4, enable caching -->
-	<!--HXY: TODO, increase cacheTtl=12000 before go PROD -->
+	<!--HXY: TODO, increase cacheTtl t0 120000 before go PROD -->
 	<Resources cacheMaxSize="122880" cacheObjectMaxSize="6144"
-		cacheTtl="20000" cachingAllowed="true" />
+		cacheTtl="2000" cachingAllowed="true" />
 
 
 	<!-- maxTotal: Maximum number of database connections in pool. Make sure 
