@@ -46,8 +46,8 @@ html, body {
 			my.newPrintModuleMethod = function() {
 				privatePrintMethod();
 			};
-			
-			my.init= function() {
+
+			my.init = function() {
 				console.log("AExtMODULE.init");
 			};
 
@@ -76,15 +76,35 @@ html, body {
 			init = function() {
 				console.log("myLibrary.init");
 			};
-		
+
 			return {
-				init: init
+				init : init
 			};
 		}());
-		
+
 		library(AExtMODULE);
+
+		console.log("s3. done");
+	</script>
+
+	<script>
+		var ACloneMODULE = (function(old) {
+			var my = Object.create(old);
+
+			var super_printModuleMethod = old.printModuleMethod;
+			my.printModuleMethod = function() {
+				console.log("override printModuleMethod, then call super");
+				super_printModuleMethod();
+			};
+			return my;
+			
+		}(ANGOMODULE));
+
+		ACloneMODULE.moduleProperty++;
+
+		console.log(ACloneMODULE.printModuleMethod());
 		
-		console.log("done");
+		console.log("s4. done");
 	</script>
 </body>
 </html>
