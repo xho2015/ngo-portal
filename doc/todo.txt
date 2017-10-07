@@ -138,3 +138,7 @@ NGO application deployment strategy.
 	https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/
 	https://addyosmani.com/resources/essentialjsdesignpatterns/book/#constructorpatternjavascript
 	
+	
+[T?] jQuery cdn in china
+	https://www.huoduan.com/jquery-cdn.html	
+	

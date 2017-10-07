@@ -1,0 +1,90 @@
+<html>
+<head>
+<title>javacript module pattern</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<style>
+html, body {
+	width: 100%;
+	height: 100%;
+	font-family: Monospace;
+	background-color: #f0f0f0;
+	margin: 0px;
+	overflow: hidden;
+}
+</style>
+<script src="../lib/jquery-1.9.1.min.ngjs" type="text/javascript"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var ANGOMODULE = (function() {
+			var my = {}, privateVar = 1;
+
+			function privatePrintMethod() {
+				console.log("privateVar=" + privateVar + ",moduleProperty="
+						+ my.moduleProperty);
+			}
+
+			my.moduleProperty = 1;
+			my.printModuleMethod = function() {
+				privatePrintMethod();
+			};
+
+			return my;
+		}());
+
+		ANGOMODULE.moduleProperty++;
+
+		console.log(ANGOMODULE.printModuleMethod());
+	</script>
+
+	<script type="text/javascript">
+		var AExtMODULE = (function(my) {
+
+			my.newModuleProperty = 11;
+			my.newPrintModuleMethod = function() {
+				privatePrintMethod();
+			};
+			
+			my.init= function() {
+				console.log("AExtMODULE.init");
+			};
+
+			return my;
+		}(ANGOMODULE));
+
+		AExtMODULE.moduleProperty++;
+
+		console.log(AExtMODULE.printModuleMethod());
+	</script>
+
+	<script type="text/javascript">
+		function library(module) {
+
+			$(function() {
+				if (module.init) {
+					module.init();
+				}
+			});
+
+			return module;
+		};
+
+		var myLibrary = library(function() {
+
+			init = function() {
+				console.log("myLibrary.init");
+			};
+		
+			return {
+				init: init
+			};
+		}());
+		
+		library(AExtMODULE);
+		
+		console.log("done");
+	</script>
+</body>
+</html>

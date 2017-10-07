@@ -1,5 +1,13 @@
-var mainAppModule = (function() {
+var AppMainModule = ngolibrary (function() {
+	
+	var ready = function() {
+		AppModuleDemo1.init();
+	};
 
+	var error = function() {
+		alert("load script for mainAppModule error");		
+	};
+	
 	function init() {
 		var dependency = {
 			"resource" : [
@@ -7,7 +15,7 @@ var mainAppModule = (function() {
 						"tid" : "1",
 						"load" : "cdn|ngo",
 						"name" : "threeminjs",
-						"url" : "https://cdnjs.cloudflare.com/ajax/libs/three.js/87/three1.min.js|/app/lib/three.min.ngjs"
+						"url" : "https://cdnjs.cloudflare.com/ajax/libs/three.js/87/three.min.js"
 					}, {
 						"tid" : "1",
 						"load" : "ngo",
@@ -26,24 +34,11 @@ var mainAppModule = (function() {
 					} ]
 		};
 
-		var resource = dependency.resource;
-		for ( var i in resource) {
-			var loads = resource[i].load.split('|');
-			var ok = -1;
-			for ( var l in loads) {
-				if (loads[l] == 'cdn' && ok == -1)
-					ok = mainBootstrap.loadScript(resource[i].name,
-							resource[i].url);
-				if (loads[l] == 'ngo' && ok == -1)
-					ok = mainBootstrap.loadScript(resource[i].name,
-							resource[i].url);
-			}
-		}
-	}
-	;
+		AppBootstrap.loadScripts(dependency, ready, error);
+	};
 
 	return {
 		init : init
 	};
 
-})();
+}());
