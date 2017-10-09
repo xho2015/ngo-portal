@@ -1,43 +1,38 @@
-function ngolibrary(module) {
-	$(function() {
-		if (module.init) {
-			module.init();
-		}
-	});
-	return module;
-};
+$.extend({ngoModule: function(module) {
+		$(function() {
+			if (module.init) {	module.init();	}
+		});
+		return module;}
+});
 
-		
-var AppBootstrap = ngolibrary(function() {
+
+
+var AppBootstrap = $.ngoModule(function() {
 	
 	function init() {
 		loadScript("mainlibs", "main.min.ngjs");
 	};
 
-	var OkCallback = function() {
-		//mainAppModule.init();
+	var ok = function() {
+		//do things when script loaded
 	};
 	
-	var FailCallback = function() {
-		alert("resource loading failed!");
-	};
-
-	
-	//-----retry & callback
-	var retry = {
-		Url : "",
-		Id : ""
+	var fail = function() {
+		alert("load resource failed!");
 	};
 	
-	var RetryCallback = function() {
+	var retry = function() {
 		alert("load script error, retry="+retryUrl);
-		if (retryUrl) {
-			var tempUrl = retryUrl;
-			retryUrl = null;
-			loadScript1(retryId, tempUrl, OkCallback, FailCallback);
+		if (retryInfo.Url) {
+			var tempUrl = retryInfo.Url;
+			retryInfo.Url = null;
+			loadScript1(retryInfo.Id, tempUrl, ok, fail);
 		}
 	};
-	
+	var retryInfo = {
+		Url : null,
+		Id : null
+	};	
 
 	function scriptExist(sid) {
 		// validate existence
@@ -59,27 +54,27 @@ var AppBootstrap = ngolibrary(function() {
 		return script;
 	};
 
-	function loadScript(sid, url, ok, fail) {
+	function loadScript(sid, url, okcb, failcb) {
 		var array = url.split('|');
 		if (array.length > 1){
-			retry.Url = array[1]; retry.Id = sid + ".retry";
-			loadScript1(sid, array[0], ok == null? OkCallback : ok, fail == null ? RetrtyCallback : fail);
+			retryInfo.Url = array[1]; retryInfo.Id = sid + ".retry";
+			loadScript1(sid, array[0], okcb == null? ok : okcb, failcb == null ? fail : failcb);
 		} else {
-			loadScript1(sid, url, ok == null? OkCallback : ok, fail == null ? FailCallback : fail);	
+			loadScript1(sid, url, okcb == null? ok : okcb, failcb == null ? fail : failcb);	
 		}
 	};
 
 
-	function loadScript1(sid, url, callback, errorCallback) {
+	function loadScript1(sid, url, ok, error) {
 		var script = createScript(sid);
 		script.src = url;
 		script.async = false;
 
 		// Then bind the event to the callback function.
 		// There are several events for cross browser compatibility.
-		script.onreadystatechange = callback;
-		script.onload = callback;
-		script.onerror = errorCallback;
+		script.onreadystatechange = ok;
+		script.onload = ok;
+		script.onerror = error;
 
 		// Fire the loading
 		var head = document.getElementsByTagName('head')[0];
@@ -87,43 +82,39 @@ var AppBootstrap = ngolibrary(function() {
 	};
 
 	
-	//-------below for loading whole bunch of scripts
+	// -------below for loading  bunch of scripts
 	var bunchState = {
 		remains: 0,
 		ok : null,
 		fail : null
 	};
 	
-	var okBunchCallback = function() {
+	var okBunch = function() {
 		bunchState.remains--;
 		if (bunchState.remains == 0)
 			bunchState.ok();
 	};
 	
-	var errorBunchCallback = function() {
+	var errorBunch = function() {
 		alert("bunch load script error, state="+bunchState);
 		bunchState.fail();
 	};
 	
-	
-	function loadScriptBunch(json, ok, error) {
-		var resource = json.resource;
+	function loadBunchScript(json, ok, error) {
+		var resource = json.links;
 		bunchState.ok = ok;
-		bunchState.fail = error;
-		
+		bunchState.fail = error;	
 		for (var r in resource) {
 			bunchState.remains++;
 		}
-
 		for (var r in resource) {
-			loadScript(resource[r].name, resource[r].url, okBunchCallback, errorBunchCallback);
+			loadScript(resource[r].name, resource[r].url+"?"+resource[r].version, okBunch, errorBunch);
 		}		
 	};
 	
 	return {
 		init : init,
 		loadScript : loadScript,
-		loadScripts: loadScriptBunch
+		loadBunchScript: loadBunchScript
 	};
-
 }());

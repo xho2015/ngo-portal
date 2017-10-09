@@ -71,6 +71,21 @@
   <listener>
     <listener-class>net.bull.javamelody.SessionListener</listener-class>
   </listener>
+  
+  <servlet>
+    <servlet-name>spring-dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>WEB-INF/spring/dispatcher-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>spring-dispatcher</servlet-name>
+    <url-pattern>/json/bom</url-pattern>
+  </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>*.htm</url-pattern>
@@ -78,8 +93,10 @@
     <url-pattern>*.ngcss</url-pattern>
     <url-pattern>*.ngmp3</url-pattern>
     <url-pattern>*.ngpng</url-pattern>
-    <url-pattern>/monitoring</url-pattern>
+    <url-pattern>/monitoring</url-pattern> 
   </servlet-mapping>
+  
+  
   <error-page>
     <error-code>401</error-code>
     <location>/WEB-INF/jsp/401.jsp</location>
