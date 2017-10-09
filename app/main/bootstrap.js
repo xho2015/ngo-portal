@@ -54,13 +54,13 @@ var AppBootstrap = $.ngoModule(function() {
 		return script;
 	};
 
-	function loadScript(sid, url, okcb, failcb) {
+	function loadScript(sid, url, cbo, cbf) {
 		var array = url.split('|');
 		if (array.length > 1){
 			retryInfo.Url = array[1]; retryInfo.Id = sid + ".retry";
-			loadScript1(sid, array[0], okcb == null? ok : okcb, failcb == null ? fail : failcb);
+			loadScript1(sid, array[0], cbo == null? ok : cbo, cbf == null ? fail : cbf);
 		} else {
-			loadScript1(sid, url, okcb == null? ok : okcb, failcb == null ? fail : failcb);	
+			loadScript1(sid, url, cbo == null? ok : cbo, cbf == null ? fail : cbf);	
 		}
 	};
 
@@ -103,7 +103,8 @@ var AppBootstrap = $.ngoModule(function() {
 	function loadBunchScript(json, ok, error) {
 		var resource = json.links;
 		bunchState.ok = ok;
-		bunchState.fail = error;	
+		bunchState.fail = error;
+		bunchState.remains = 0;
 		for (var r in resource) {
 			bunchState.remains++;
 		}
