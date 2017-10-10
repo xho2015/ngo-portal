@@ -144,7 +144,13 @@ NGO application deployment strategy.
 	https://www.huoduan.com/jquery-cdn.html	
 	
 	
-[T?] server jar library, spring MVC + mybitis + json parser 
+[T?] server jar library, spring MVC + mybitis + Json parser 
 	http://repo.spring.io/release/org/springframework/spring/
 	https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-core-asl/1.9.13
+	
+	
+
+
+[T?] Java In-Memory cache
+	https://github.com/google/guava/wiki/CachesExplained
 	

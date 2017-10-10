@@ -109,7 +109,7 @@ var AppBootstrap = $.ngoModule(function() {
 			bunchState.remains++;
 		}
 		for (var r in resource) {
-			loadScript(resource[r].name, resource[r].url+"?"+resource[r].version, okBunch, errorBunch);
+			loadScript(resource[r].name, resource[r].url+"?"+resource[r].ver, okBunch, errorBunch);
 		}		
 	};
 	

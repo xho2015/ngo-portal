@@ -53,7 +53,7 @@
     </init-param>
   </filter>
   <filter-mapping>
-    <filter-name>NGzipHeaderFilter</filter-name>
+    <filter-name>GzipHeaderFilter</filter-name>
     <url-pattern>*.ngjs</url-pattern>
     <url-pattern>*.ngcss</url-pattern>
   </filter-mapping>
@@ -96,7 +96,14 @@
     <url-pattern>/monitoring</url-pattern> 
   </servlet-mapping>
   
-  
+  <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/spring/applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
   <error-page>
     <error-code>401</error-code>
     <location>/WEB-INF/jsp/401.jsp</location>

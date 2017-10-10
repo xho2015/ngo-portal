@@ -7,54 +7,38 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import ngo.front.web.service.BomService;
  
 /*
- * 
- {
-	"version" : "1",
-	"name" : "threeminjs",
-	"url" : "/app/lib/three.min.ngjs"
-}, {
-	"version" : "1",
-	"name" : "datgui",
-	"url" : "/app/lib/dat.gui.min.ngjs"
-}, {
-	"version" : "1",
-	"name" : "common1",
-	"url" : "/app/lib/common.min.ngjs"
-}, {
-	"version" : "1",
-	"name" : "demo1",
-	"url" : "demo1.min.ngjs"
-} 
 		 
  **/
 @Controller
 public class BomControler {
  
-	private ObjectMapper mapper = new ObjectMapper();
+	@Autowired
+    private BomService bomService;
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
     
     @RequestMapping(value = "/json/bom", method = RequestMethod.GET)
-    public @ResponseBody String bom() {
+    public ResponseEntity<String> bom(@RequestParam("module") String moduleId, @RequestParam("token") String token) {
         try {
-        	Resource resource = new Resource();
-        	List<Bom> links = new ArrayList<Bom>();
-        	resource.setLinks(links);
-        	links.add(new Bom("threeminjs","1","/app/lib/three.min.ngjs"));
-        	links.add(new Bom("datgui","1","/app/lib/dat.gui.min.ngjs"));
-        	links.add(new Bom("common1","1","/app/lib/common.min.ngjs"));
-        	links.add(new Bom("demo1","1","demo1.min.ngjs"));
-            return mapper.writeValueAsString(resource);
+        	//it's not necessary do request param validity as spring framework will handle it
+        	String json = bomService.getModuleBom(moduleId, token);
+        	return ResponseEntity.ok(json);
         } catch (Exception e) {
         	logger.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        return null;
     }   
 }
 

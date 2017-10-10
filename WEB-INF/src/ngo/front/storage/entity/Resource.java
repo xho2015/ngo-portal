@@ -1,4 +1,4 @@
-package ngo.front.web.json;
+package ngo.front.storage.entity;
 
 import java.util.ArrayList;
 import java.util.List;
