@@ -149,6 +149,8 @@ NGO application deployment strategy.
 	https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-core-asl/1.9.13
 	
 	
+[T?] MyBatis 3
+	http://www.mybatis.org/mybatis-3/zh/configuration.html
 
 
 [T?] Java In-Memory cache

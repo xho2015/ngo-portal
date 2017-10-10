@@ -11,10 +11,10 @@ public class Bom {
 	private String url;
 	private String md5;
 	
-	public Bom(String n, String v, String u)
+	public Bom()
 	{
-		this.name = n; this.ver = v; this.url = u;
 	}
+	
 	public String getName() {
 		return name;
 	}
@@ -58,6 +58,8 @@ public class Bom {
 	public void setMd5(String md5) {
 		this.md5 = md5;
 	}
+	
+	@Override
 	public String toString() {
 		return new StringBuffer(this.name).append(",").append(this.ver).append(",").append(url).toString();
 	}
