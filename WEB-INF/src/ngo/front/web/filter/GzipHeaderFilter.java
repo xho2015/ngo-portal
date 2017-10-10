@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author badqiu(badqiu@gmail.com)
  */
-public class NGzipHeaderFilter implements Filter {
+public class GzipHeaderFilter implements Filter {
 	Map headers = new HashMap();
 	
 	public void destroy() {
