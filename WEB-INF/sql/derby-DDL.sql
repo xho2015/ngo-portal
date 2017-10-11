@@ -7,6 +7,7 @@ expiration DATE,
 grade  VARCHAR(4),
 module  VARCHAR(4),
 category  VARCHAR(4),
+md5  VARCHAR(40),
 PRIMARY KEY (rid)
 )
 

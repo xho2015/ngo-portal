@@ -110,7 +110,7 @@ NGO application deployment strategy.
 				b. added in controller 
 				c. added in BomService
 				d. changed mapping path in web.xml
-			3. add local cache statistic interface
+	[done]	3. add local cache statistic interface
 				a. add to cache service
 				b. cache controller isolation
 			
@@ -167,6 +167,7 @@ NGO application deployment strategy.
 [T?] server jar library, spring MVC + mybitis + Json parser 
 	http://repo.spring.io/release/org/springframework/spring/
 	https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-core-asl/1.9.13
+	https://docs.spring.io/spring/docs/4.1.x/spring-framework-reference/html/
 	
 	
 [T?] MyBatis 3

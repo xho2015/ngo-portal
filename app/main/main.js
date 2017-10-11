@@ -1,11 +1,12 @@
-var AppMainModule = $.ngoModule(function() {
+var AppMain = $.ngoModule(function() {
 
 	var ready = function() {
-		AppModuleDemo1.init();
+		initUI();
+		AppG1M1Demo1.init();	
 	};
 
 	var error = function() {
-		alert("load script for mainAppModule error");
+		alert("load script for main AppModule error");
 	};
 
 	function init() {
@@ -20,7 +21,21 @@ var AppMainModule = $.ngoModule(function() {
 				alert(error.status );
 			}
 		});
-		AppBootstrap.loadBunchScript(dependency, ready, error);
+		AppBootstrap.loadBulkScript(dependency, ready, error);
+	};
+	
+	function initUI()
+	{
+		var canvas = $('<canvas id="panel_canvas">')
+		.css({position: 'absolute', left: 0, top: 0, width: '100%', height: '100%'})
+		.attr({width: $('#panel_screen').width(), height: $('#panel_screen').height()})
+		.prependTo($('#panel_screen'));
+		
+		$('#panel_screen').starfield({
+            starDensity: 0.07,
+            mouseScale: 0.1,
+            seedMovement: true
+        });
 	};
 
 	return {

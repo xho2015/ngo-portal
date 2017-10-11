@@ -82,40 +82,40 @@ var AppBootstrap = $.ngoModule(function() {
 	};
 
 	
-	// -------below for loading  bunch of scripts
-	var bunchState = {
+	// -------below for loading  Bulk of scripts
+	var bulkState = {
 		remains: 0,
 		ok : null,
 		fail : null
 	};
 	
-	var okBunch = function() {
-		bunchState.remains--;
-		if (bunchState.remains == 0)
-			bunchState.ok();
+	var okBulk = function() {
+		bulkState.remains--;
+		if (bulkState.remains == 0)
+			bulkState.ok();
 	};
 	
-	var errorBunch = function() {
-		alert("bunch load script error, state="+bunchState);
-		bunchState.fail();
+	var errorBulk = function() {
+		alert("bulk load script error, state="+bulkState);
+		bulkState.fail();
 	};
 	
-	function loadBunchScript(json, ok, error) {
+	function loadBulkScript(json, ok, error) {
 		var resource = json.links;
-		bunchState.ok = ok;
-		bunchState.fail = error;
-		bunchState.remains = 0;
+		bulkState.ok = ok;
+		bulkState.fail = error;
+		bulkState.remains = 0;
 		for (var r in resource) {
-			bunchState.remains++;
+			bulkState.remains++;
 		}
 		for (var r in resource) {
-			loadScript(resource[r].name, resource[r].url+"?"+resource[r].ver, okBunch, errorBunch);
+			loadScript(resource[r].name, resource[r].url+"?"+resource[r].ver, okBulk, errorBulk);
 		}		
 	};
 	
 	return {
 		init : init,
 		loadScript : loadScript,
-		loadBunchScript: loadBunchScript
+		loadBulkScript: loadBulkScript
 	};
 }());
