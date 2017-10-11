@@ -1,16 +1,12 @@
 package ngo.front.web.json;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +35,18 @@ public class BomControler {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-    }   
+    }
+    
+    @RequestMapping(value = "/json/bomrefresh", method = RequestMethod.GET)
+    public ResponseEntity<String> bomRefresh(@RequestParam("token") String token) {
+        try {
+        	//TODO: validate token here
+        	bomService.refreshBom();
+        	return ResponseEntity.ok("done");
+        } catch (Exception e) {
+        	logger.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    } 
 }
 

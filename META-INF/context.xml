@@ -31,11 +31,7 @@
 	<!-- driverClassName: Class name for the old mm.mysql JDBC driver is org.gjt.mm.mysql.Driver 
 		- we recommend using Connector/J though. Class name for the official MySQL 
 		Connector/J driver is com.mysql.jdbc.Driver. -->
-	<!-- url: The JDBC connection url for connecting to your MySQL database. -->
-	<Resource auth="Container" driverClassName="com.mysql.jdbc.Driver"
-		maxIdle="30" maxTotal="100" maxWaitMillis="15000" name="jdbc/NGODB"
-		password="nG@F0rmW#b" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/ngodev"
-		username="ngow" />
+	
 
 
 	<!-- Uncomment this to disable session persistence across Tomcat restarts -->

@@ -6,7 +6,7 @@
 	</select>
 	
 	<select id="getAllBom" resultType="ngo.front.storage.entity.Bom">
-		select * from bom
+		select name,ver,url,md5,grade,module,category from bom
 	</select>
 	
 </mapper>

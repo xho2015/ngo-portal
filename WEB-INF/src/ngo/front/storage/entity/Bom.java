@@ -1,14 +1,21 @@
 package ngo.front.storage.entity;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 public class Bom {
 	
+	@JsonIgnore
 	private String grade;
+	@JsonIgnore
 	private String module;
+	@JsonIgnore
 	private String category;
 	
 	private String name;
 	private String ver;
 	private String url;
+	
+	@JsonIgnore
 	private String md5;
 	
 	public Bom()
