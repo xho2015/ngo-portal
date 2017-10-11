@@ -100,7 +100,27 @@ NGO application deployment strategy.
 				http://www.cnblogs.com/greywolf/archive/2013/04/22/3035520.html
  	[done]	. removed unnecessary resources from building war by "excludes" of fileset
 				http://ant.apache.org/manual/Types/fileset.html
-			 
+
+--10.11
+	
+[T1] Local cache enhancement
+	[done]	1. loader registration
+	[done]	2. add cache key removal interface
+				a. added interface in cache service
+				b. added in controller 
+				c. added in BomService
+				d. changed mapping path in web.xml
+			3. add local cache statistic interface
+				a. add to cache service
+				b. cache controller isolation
+			
+			
+			
+[T2] reset servlet & filter mapping
+	http://www.itkeyword.com/doc/2982016808646446543/liste-filter-servlet
+	[done]	1. change Expire filter mapping from /* to suffix matching			
+			
+			  			 
 					
 	
 [T2] NGO ManagerServlet text interface

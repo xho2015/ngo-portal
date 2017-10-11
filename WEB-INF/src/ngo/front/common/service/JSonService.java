@@ -2,10 +2,12 @@ package ngo.front.common.service;
 
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@Scope("singleton")
 public class JSonService {
 
 	private final ObjectMapper mapper = new ObjectMapper();

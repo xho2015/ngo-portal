@@ -2,37 +2,53 @@ package ngo.front.web.service;
 
 import org.springframework.stereotype.Service;
 
-import ngo.front.storage.entity.Bom;
+import ngo.front.common.service.JSonService;
+import ngo.front.common.service.LocalCache;
 import ngo.front.storage.entity.Resource;
-import ngo.front.storage.service.LocalCache;
+import ngo.front.storage.orm.BomDAO;
 
+import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
-public class BomService {
+public class BomService implements LocalCache.CachingLoader{
 	
+	private final Logger logger = Logger.getLogger(this.getClass());
 	
+	private static final String CACHE_KEY = "bom";
 	@Autowired
 	private LocalCache localCache;
 	
+	@Autowired
+	private BomDAO bomDAO;
+	
+	@Autowired
+	private JSonService jsonService;
+	
+	@PostConstruct
+	public void init()
+	{
+		localCache.register(CACHE_KEY, this);
+		logger.info("BomService registered as caching loader for ["+CACHE_KEY+"]");				
+	}
+	
 	public String getModuleBom(String moduleId, String token)
 	{
-		/*
-		Resource resource = new Resource();
-    	List<Bom> links = new ArrayList<Bom>();
-    	resource.setLinks(links);
-    	links.add(new Bom("three-min-js","1","/app/lib/three.min.ngjs"));
-    	links.add(new Bom("dat-gui","1","/app/lib/dat.gui.min.ngjs"));
-    	links.add(new Bom("common1","1","/app/lib/common.min.ngjs"));
-    	links.add(new Bom("demo1","1","demo1.min.ngjs"));
-    	*/
+    	return (String)localCache.getObject(CACHE_KEY);	
+	}
 
-    	return (String)localCache.getObject("bom");	
+	@Override
+	public Object loadCacheObject(String key)  {
+		if (key.equals(CACHE_KEY))
+		{
+			Resource resource = new Resource();
+			resource.setLinks(bomDAO.getAllBom());			
+			String json = jsonService.toJson(resource);			
+			logger.info("Localcache: key ["+key+"] loaded from database");			
+			return (Object)json;
+		}
+		return null;
 	}
-	
-	public void refreshBom(){
-		localCache.refreshObject("bom");
-	}
-	
 }

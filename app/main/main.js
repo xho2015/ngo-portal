@@ -11,7 +11,7 @@ var AppMainModule = $.ngoModule(function() {
 	function init() {
 		var dependency;
 		$.ajax({type: "GET", async: false, cache: false, dataType: "json",
-			url: "/json/bom",	
+			url: "/json/bom/list",	
 			data: { token: "usersessioncode", module: "main" },
 			success: function (json) {
 				dependency = json;
