@@ -16,8 +16,8 @@ var AppG1M1Demo1 = (function() {
 	
 	function init()
 	{	
-		if (!Detector.webgl) {
-		    var warning = Detector.getWebGLErrorMessage();
+		if (!AppCommon.Detector.webgl) {
+		    var warning = AppCommon.Detector.getWebGLErrorMessage();
 		    alert(warning);
 		    return;
 		}
