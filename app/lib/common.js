@@ -1,115 +1,115 @@
-/*
-Limit the frame rate
-https://gist.github.com/addyosmani/5434533
-*/
-var limitLoop = function (fn, fps) {
- 
-    // Use var then = Date.now(); if you
-    // don't care about targetting < IE9
-    var then = new Date().getTime();
+var AppCommon = (function() {
+	/*
+	 * Limit the frame rate https://gist.github.com/addyosmani/5434533
+	 */
+	var limitLoop = function(fn, fps) {
 
-    // custom fps, otherwise fallback to 60
-    fps = fps || 60;
-    var interval = 1000 / fps;
- 
-    return (function loop(time){
-        requestAnimationFrame(loop);
- 
-        // again, Date.now() if it's available
-        var now = new Date().getTime();
-        var delta = now - then;
- 
-        if (delta > interval) {
-            // Update time
-            // now - (delta % interval) is an improvement over just 
-            // using then = now, which can end up lowering overall fps
-            then = now - (delta % interval);
- 
-            // call the fn
-            fn();
-        }
-    }(0));
-};
+		// Use var then = Date.now(); if you
+		// don't care about targetting < IE9
+		var then = new Date().getTime();
 
+		// custom fps, otherwise fallback to 60
+		fps = fps || 60;
+		var interval = 1000 / fps;
 
+		return (function loop(time) {
+			requestAnimationFrame(loop);
 
+			// again, Date.now() if it's available
+			var now = new Date().getTime();
+			var delta = now - then;
 
+			if (delta > interval) {
+				// Update time
+				// now - (delta % interval) is an improvement over just
+				// using then = now, which can end up lowering overall fps
+				then = now - (delta % interval);
 
-/**
- * @author alteredq / http://alteredqualia.com/
- * @author mr.doob / http://mrdoob.com/
- */
+				// call the fn
+				fn();
+			}
+		}(0));
+	};
 
-var Detector = {
+	/**
+	 * @author alteredq / http://alteredqualia.com/
+	 * @author mr.doob / http://mrdoob.com/
+	 */
 
-    canvas: !! window.CanvasRenderingContext2D,
-    webgl: ( function () {
+	var Detector = {
 
-        try {
+		canvas : !!window.CanvasRenderingContext2D,
+		webgl : (function() {
+			try {
 
-            var canvas = document.createElement( 'canvas' ); return !! ( window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ) );
+				var canvas = document.createElement('canvas');
+				return !!(window.WebGLRenderingContext && (canvas
+						.getContext('webgl') || canvas
+						.getContext('experimental-webgl')));
+			} catch (e) {
+				return false;
+			}
+		})(),
+		workers : !!window.Worker,
+		fileapi : window.File && window.FileReader && window.FileList
+				&& window.Blob,
 
-        } catch ( e ) {
+		getWebGLErrorMessage : function() {
+			var element = document.createElement('div');
+			element.id = 'webgl-error-message';
+			element.style.fontFamily = 'monospace';
+			element.style.fontSize = '13px';
+			element.style.fontWeight = 'normal';
+			element.style.textAlign = 'center';
+			element.style.background = '#fff';
+			element.style.color = '#000';
+			element.style.padding = '1.5em';
+			element.style.width = '400px';
+			element.style.margin = '5em auto 0';
 
-            return false;
+			if (!this.webgl) {
 
-        }
+				element.innerHTML = window.WebGLRenderingContext ? [
+						'Your graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br />',
+						'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.' ]
+						.join('\n')
+						: [
+								'Your browser does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br/>',
+								'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.' ]
+								.join('\n');
 
-    } )(),
-    workers: !! window.Worker,
-    fileapi: window.File && window.FileReader && window.FileList && window.Blob,
+			}
 
-    getWebGLErrorMessage: function () {
+			return element;
 
-        var element = document.createElement( 'div' );
-        element.id = 'webgl-error-message';
-        element.style.fontFamily = 'monospace';
-        element.style.fontSize = '13px';
-        element.style.fontWeight = 'normal';
-        element.style.textAlign = 'center';
-        element.style.background = '#fff';
-        element.style.color = '#000';
-        element.style.padding = '1.5em';
-        element.style.width = '400px';
-        element.style.margin = '5em auto 0';
+		},
 
-        if ( ! this.webgl ) {
+		addGetWebGLMessage : function(parameters) {
 
-            element.innerHTML = window.WebGLRenderingContext ? [
-                'Your graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br />',
-                'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.'
-            ].join( '\n' ) : [
-                'Your browser does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br/>',
-                'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.'
-            ].join( '\n' );
+			var parent, id, element;
 
-        }
+			parameters = parameters || {};
 
-        return element;
+			parent = parameters.parent !== undefined ? parameters.parent
+					: document.body;
+			id = parameters.id !== undefined ? parameters.id : 'oldie';
 
-    },
+			element = Detector.getWebGLErrorMessage();
+			element.id = id;
 
-    addGetWebGLMessage: function ( parameters ) {
+			parent.appendChild(element);
+		}
+	};
 
-        var parent, id, element;
+	// browserify support
+	//if (typeof module === 'object') {
 
-        parameters = parameters || {};
+	//	module.exports = Detector;
+	//}
+	
+	return {
+		limitLoop : limitLoop,
+		Detector : Detector
+	};
 
-        parent = parameters.parent !== undefined ? parameters.parent : document.body;
-        id = parameters.id !== undefined ? parameters.id : 'oldie';
-
-        element = Detector.getWebGLErrorMessage();
-        element.id = id;
-
-        parent.appendChild( element );
-
-    }
-
-};
-
-// browserify support
-if ( typeof module === 'object' ) {
-
-    module.exports = Detector;
-
-}
+})();

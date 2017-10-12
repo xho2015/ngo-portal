@@ -120,6 +120,8 @@
 		<url-pattern>*.ngcss</url-pattern>
 		<url-pattern>*.ngmp3</url-pattern>
 		<url-pattern>*.ngpng</url-pattern>
+		<!-- remove js when go PROD -->
+		<url-pattern>*.js</url-pattern>
 		<url-pattern>/monitoring</url-pattern> 
 	</servlet-mapping>
   

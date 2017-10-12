@@ -67,7 +67,10 @@ var AppBootstrap = $.ngoModule(function() {
 
 	function loadScript1(sid, url, ok, error) {
 		var script = createScript(sid);
-		script.src = url;
+		
+		//TODO: remove this debug mode
+		var debugUrl = AppSettings.debug ? url.replace('min.ngjs', 'js') : url;
+		script.src = debugUrl;
 		script.async = false;
 
 		// Then bind the event to the callback function.

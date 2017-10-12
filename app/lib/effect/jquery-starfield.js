@@ -139,11 +139,13 @@
 
 	var Starfield = [];
 
-	$.fn.starfield = function (options) {
+	$.fn.starfield = function (options, canvasId) {
 
 		var settings = $.extend({
+			looprate: 24,
 			starDensity: 1.0,
 			mouseScale: 1.0,
+			background: '#000000',
 			seedMovement: true
 		}, options);
 
@@ -162,9 +164,7 @@
 		} else {
 			var deltaX = 0;
 			var deltaY = 0;
-		}
-
-		
+		}		
 
 		for (var i = 0; i < numStars; i++) {
 			Starfield.push(StarFactory.getRandomStar());
@@ -188,7 +188,7 @@
 
 		var draw = function () {
 			//get raw DOM element
-			var canvas = document.getElementById('panel_canvas');
+			var canvas = document.getElementById(canvasId);
 			var width = canvas.width;
 			var height = canvas.height;
 
@@ -200,7 +200,7 @@
 
 				// clear canvas
 				ctx.clearRect(0, 0, width, height);
-				ctx.fillStyle = "black";
+				ctx.fillStyle = settings.background;
 				ctx.fillRect(0, 0, width, height);
 
 				// iterate stars and draw them
@@ -218,25 +218,30 @@
 		$this.mousemove(
 			function (e) {
 				var $this = $(this);
-
 				var offset = $this.offset();
-
 				var centerX = width / 2;
 				var centerY = height / 2;
-
 				var distanceX = ((e.pageX - offset.left) - centerX);
 				var distanceY = ((e.pageY - offset.top) - centerY);
-
 				deltaX = Math.round(settings.mouseScale * (distanceX / 40));
 				deltaY = Math.round(settings.mouseScale * (distanceY / 40));
 			}
 		);
-		 */
+		 
 		(function animloop() {
 			requestAnimationFrame(animloop);
 			recalcMovement();
 			draw();
 		})();
+		*/
+		
+		function animate() {
+			recalcMovement();
+			draw();
+		}
+		
+		//AppMainUI.joinloop(animate);
+		AppCommon.limitLoop(animate, 40);
 
 		return this;
 	};
