@@ -55,9 +55,9 @@ var AppMainUI = (function() {
 	rects.push({
 	    x: 475,
 	    y: 50 - 15,
-	    width: 90,
+	    width: 120,
 	    height: 60,
-	    fill: "#444F44",
+	    fill: "#040F44",
 	    isDragging: false
 	});
 	
@@ -103,6 +103,8 @@ var AppMainUI = (function() {
 	    // get the current mouse position
 	    var mx = parseInt(e.clientX - offsetX);
 	    var my = parseInt(e.clientY - offsetY);
+	    
+	    console.log("main.ui myDown  x="+mx+",y="+my);
 
 	    // test each rect to see if mouse is inside
 	    dragok = false;
@@ -146,6 +148,8 @@ var AppMainUI = (function() {
 	        // get the current mouse position
 	        var mx = parseInt(e.clientX - offsetX);
 	        var my = parseInt(e.clientY - offsetY);
+	        
+	        console.log("main.ui myMove  x="+mx+",y="+my);
 
 	        // calculate the distance the mouse has moved
 	        // since the last mousemove

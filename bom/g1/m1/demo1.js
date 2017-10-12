@@ -91,9 +91,9 @@ var AppG1M1Demo1 = (function() {
 	function initPannel()
 	{
 		pannel = document.getElementById("panel_canvas");
-		pannel.onmousedown = OnDown;
-		pannel.onmouseup = OnUp;
-		pannel.onmousemove = OnMove;
+		//pannel.onmousedown = OnDown;
+		//pannel.onmouseup = OnUp;
+		//pannel.onmousemove = OnMove;
 	
 		// load background image
 		
@@ -124,8 +124,8 @@ var AppG1M1Demo1 = (function() {
 	
 	function OnDown(e) {
 		// tell the browser we're handling this mouse event
-	        e.preventDefault();
-	        e.stopPropagation();
+	        //e.preventDefault();
+	        //e.stopPropagation();
 	
 	        clickOk = 1;
 	
@@ -133,14 +133,14 @@ var AppG1M1Demo1 = (function() {
 	        var mx = parseInt(e.clientX - offsetX);
 	        var my = parseInt(e.clientY - offsetY);
 	
-		console.log("onDown  x="+mx+",y="+my);
+		//console.log("onDown  x="+mx+",y="+my);
 	};
 	
 	
 	function OnUp(e) {
 		// tell the browser we're handling this mouse event
-	        e.preventDefault();
-	        e.stopPropagation();
+	        //e.preventDefault();
+	        //e.stopPropagation();
 	
 	        clickOk = 1;
 	
@@ -148,14 +148,14 @@ var AppG1M1Demo1 = (function() {
 	        var mx = parseInt(e.clientX - offsetX);
 	        var my = parseInt(e.clientY - offsetY);
 	
-		console.log("OnUp  x="+mx+",y="+my);
+		//console.log("OnUp  x="+mx+",y="+my);
 	};
 	
 	
 	function OnMove(e) {
 		// tell the browser we're handling this mouse event
-	        e.preventDefault();
-	        e.stopPropagation();
+	        //e.preventDefault();
+	       // e.stopPropagation();
 	
 	        clickOk = 1;
 	
@@ -163,7 +163,7 @@ var AppG1M1Demo1 = (function() {
 	        var mx = parseInt(e.clientX - offsetX);
 	        var my = parseInt(e.clientY - offsetY);
 	
-		console.log("OnMove  x="+mx+",y="+my);
+		
 	};
 	
 	function init3d() {

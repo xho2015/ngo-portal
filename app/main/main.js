@@ -1,8 +1,7 @@
 var AppMain = $.ngoModule(function() {
 
 	var ready = function() {
-		initUI();
-		//AppG1M1Demo1.init();
+		initUI();		
 	};
 
 	var error = function() {
@@ -53,6 +52,8 @@ var AppMain = $.ngoModule(function() {
 		}, "panel_canvas");
 		
 		AppMainUI.init("panel_canvas");
+		
+		AppG1M1Demo1.init();
 	};
 
 	return {
