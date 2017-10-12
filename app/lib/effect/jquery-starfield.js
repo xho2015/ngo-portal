@@ -198,8 +198,8 @@
 			if (canvas.getContext) {
 				var ctx = canvas.getContext('2d');
 
-				// clear canvas, main UI have the responsibility doing clear
-				//ctx.clearRect(0, 0, width, height);
+				// clear canvas
+				ctx.clearRect(0, 0, width, height);
 				ctx.fillStyle = settings.background;
 				ctx.fillRect(0, 0, width, height);
 
@@ -240,8 +240,9 @@
 			draw();
 		}
 		
-		AppMainUI.joinloop(animate);
-		
+		//AppMainUI.joinloop(animate);
+		AppCommon.limitLoop(animate, 40);
+
 		return this;
 	};
 

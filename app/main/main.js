@@ -32,27 +32,10 @@ var AppMain = $.ngoModule(function() {
 	;
 
 	function initUI() {
-		var canvas = $('<canvas id="panel_canvas">').css({
-			position : 'absolute',
-			left : 0,
-			top : 0,
-			width : '100%',
-			height : '100%'
-		}).attr({
-			width : $('#panel_screen').width(),
-			height : $('#panel_screen').height()
-		}).prependTo($('#panel_screen'));
-
-		$('#panel_screen').starfield({
-			looprate : 20,
-			starDensity : 0.08,
-			mouseScale : 0.01,
-			background : '#00000F',
-			seedMovement : true
-		}, "panel_canvas");
 		
-		AppMainUI.init("panel_canvas");
+		AppMainUI.init();
 		
+		//test
 		AppG1M1Demo1.init();
 	};
 

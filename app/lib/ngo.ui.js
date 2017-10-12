@@ -13,9 +13,30 @@ var AppMainUI = (function() {
 		console.log("animation loop joined");
 	}
 	
-	function init(canvasId)
-	{
-		canvas = document.getElementById(canvasId);
+	function init()
+	{	
+		var bgcanvas = $('<canvas id="backgound_canvas">').css({
+			position : 'absolute',
+			left : 0,
+			top : 0,
+			width : '100%',
+			height : '100%'
+		}).attr({
+			width : $('#background_screen').width(),
+			height : $('#background_screen').height()
+		}).prependTo($('#background_screen'));
+
+		$('#background_screen').starfield({
+			looprate : 20,
+			starDensity : 0.08,
+			mouseScale : 0.01,
+			background : '#00000F',
+			seedMovement : true
+		}, "backgound_canvas");
+		
+		var pcanvas = $('<canvas id="panel_canvas">').prependTo($('#panel_screen'));
+		
+		canvas = document.getElementById('panel_canvas');
 		ctx = canvas.getContext("2d");
 		
 		console.log("render App Main UI, canvas id="+canvas.id);
@@ -29,11 +50,9 @@ var AppMainUI = (function() {
 		// listen for mouse events
 		canvas.onmousedown = myDown;
 		canvas.onmouseup = myUp;
-		canvas.onmousemove = myMove;
-
-		animloop.push(drawMainUI);
+		canvas.onmousemove = myMove;	
 		
-		AppCommon.limitLoop(animation, 40);
+		drawMainUI();
 	};
 	
 	
@@ -53,21 +72,25 @@ var AppMainUI = (function() {
 	// an array of objects that define different rectangles
 	var rects = [];
 	rects.push({
-	    x: 475,
-	    y: 50 - 15,
+	    x: 5,
+	    y: 5,
 	    width: 120,
 	    height: 60,
-	    fill: "#040F44",
+	    fill: "#040F04",
+	    hover: false,
 	    isDragging: false
 	});
 	
-	function animation()
-	{
-		clear();
-		for (var i = 0; i < animloop.length; i++) {
-	        animloop[i]();      
-	    }
-	}
+	rects.push({
+	    x: 5,
+	    y: 150,
+	    width: 120,
+	    height: 60,
+	    fill: "#0F0F44",
+	    hover: false,
+	    isDragging: false
+	});
+	
 
 	// draw a single rect
 	function rect(x, y, w, h) {
@@ -84,14 +107,18 @@ var AppMainUI = (function() {
 
 	// redraw the scene
 	function drawMainUI() {
+		clear();
 	    // redraw each rect in the rects[] array
 	    for (var i = 0; i < rects.length; i++) {
 	        var r = rects[i];
-	        ctx.fillStyle = r.fill;
+	        if (r.hover){
+	        	ctx.fillStyle = "#01005F";
+        	}else{
+        		ctx.fillStyle = r.fill;
+        	}
 	        rect(r.x, r.y, r.width, r.height);
 	    }
 	}
-
 
 	// handle mousedown events
 	function myDown(e) {
@@ -121,7 +148,6 @@ var AppMainUI = (function() {
 	    startY = my;
 	}
 
-
 	// handle mouseup events
 	function myUp(e) {  
 	    // tell the browser we're handling this mouse event
@@ -135,19 +161,19 @@ var AppMainUI = (function() {
 	    }
 	}
 
-
 	// handle mouse moves
 	function myMove(e) {
+		
+		// get the current mouse position
+        var mx = parseInt(e.clientX - offsetX);
+        var my = parseInt(e.clientY - offsetY);
+      
 	    // if we're dragging anything...
 	    if (dragok) {
 
 	        // tell the browser we're handling this mouse event
 	        e.preventDefault();
 	        e.stopPropagation();
-
-	        // get the current mouse position
-	        var mx = parseInt(e.clientX - offsetX);
-	        var my = parseInt(e.clientY - offsetY);
 	        
 	        console.log("main.ui myMove  x="+mx+",y="+my);
 
@@ -166,14 +192,32 @@ var AppMainUI = (function() {
 	                r.y += dy;
 	            }
 	        }
-
-	        // redraw the scene with the new rect positions
-	        //drawUI();
+	        
+	        drawMainUI();
 
 	        // reset the starting mouse position for the next mousemove
 	        startX = mx;
 	        startY = my;
-
+	    } 
+	    else
+	    {   
+	    	var dirty = false;
+	    	for (var i = 0; i < rects.length; i++) {
+		        var r = rects[i];
+		        if (mx > r.x && mx < r.x + r.width && my > r.y && my < r.y + r.height) {
+		        	dirty = !r.hover;
+		            r.hover = true;
+		            console.log("hover=true");
+		        } 
+		        else
+	        	{
+		        	dirty = !r.hover;
+		        	r.hover = false;
+		        	console.log("hover=false");
+	        	}
+		    }
+	    	if (dirty)
+	    		drawMainUI();
 	    }
 	}
 	

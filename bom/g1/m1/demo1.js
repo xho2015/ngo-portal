@@ -23,7 +23,6 @@ var AppG1M1Demo1 = (function() {
 		}
 				
 		initDatUI();
-		initPannel();
 		init3d();
 	
 		onWindowResize();
@@ -87,39 +86,7 @@ var AppG1M1Demo1 = (function() {
 		  document.webkitExitFullscreen();
 		 }
 	};
-	
-	function initPannel()
-	{
-		pannel = document.getElementById("panel_canvas");
-		//pannel.onmousedown = OnDown;
-		//pannel.onmouseup = OnUp;
-		//pannel.onmousemove = OnMove;
-	
-		// load background image
-		
-		// var context = pannel.getContext('2d');
-		// var imageObj = new Image();
-		// imageObj.onload = function() {
-		// context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height, 0,
-		// 0,
-		// pannel.width, pannel.height);
-		// };
-		// imageObj.src = 'skydome1.jpg';
-		
-		drawPanelBG();
-	};
-	
-	
-	function drawPanelBG()
-	{
-		pannel = document.getElementById("panel_canvas");
-		var ctx = pannel.getContext('2d');
-		var lGradient = ctx.createLinearGradient(0, 0, 0, 250);
-		lGradient.addColorStop(0, '#000');
-		lGradient.addColorStop(1, '#fff');
-		ctx.fillStyle = lGradient;
-		ctx.fillRect(0, 0, 500, 250);
-	};
+
 	
 	
 	function OnDown(e) {
@@ -179,17 +146,6 @@ var AppG1M1Demo1 = (function() {
 		scene = new THREE.Scene();
 		// scene.background = new THREE.Color( 0x000000 );
 	
-	
-		// skydome
-		// var skyGeo = new THREE.SphereGeometry(100000, 25, 25);
-		// var loader = new THREE.TextureLoader(), texturesky = loader.load(
-		// "/app/rs/skydome1.jpg" );
-		// var material = new THREE.MeshPhongMaterial({
-		// map: texturesky,
-		// });
-		// var sky = new THREE.Mesh(skyGeo, material);
-	    // sky.material.side = THREE.BackSide;
-	    // scene.add(sky);
 		
 	    // Axes
 	    var axes = new THREE.AxisHelper(120);
@@ -208,7 +164,7 @@ var AppG1M1Demo1 = (function() {
 		
 		// grid
 		var gridHelper = new THREE.GridHelper( 1000, 20 );
-		scene.add( gridHelper );
+		//scene.add( gridHelper );
 		
 		// raycaster
 		raycaster = new THREE.Raycaster();
