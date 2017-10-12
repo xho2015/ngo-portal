@@ -143,6 +143,7 @@
 
 		var settings = $.extend({
 			looprate: 24,
+			speedX: 4,
 			starDensity: 1.0,
 			mouseScale: 1.0,
 			background: '#000000',
@@ -159,7 +160,7 @@
 		var numStars = Math.floor(totalPixels * starRatio);
 
 		if(settings.seedMovement){
-			var deltaX = 1;
+			var deltaX = settings.speedX;
 			var deltaY = 0;
 		} else {
 			var deltaX = 0;

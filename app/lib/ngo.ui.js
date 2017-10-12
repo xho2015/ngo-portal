@@ -5,17 +5,39 @@
 
 var AppMainUI = (function() {	
 	
-	var animloop = [];
 	
-	function joinloop(action)
+	var resizeEvents = [];
+	function registerResize(resize)
 	{
-		animloop.push(action);
-		console.log("animation loop joined");
+		resizeEvents.push(resize);
+		console.log("resizeEvents joined");
 	}
+	
+	
+	function onWindowResize() {
+		for (var i = 0; i < resizeEvents.length; i++) {
+			var resize = resizeEvents[i];
+			resize();
+		}
+	};
+	
+	function onResize() {
+		var pleft = $('#three_screen').width() + $('#three_screen').position().left + 20;
+		$('#panel_screen').position().left = pleft;
+		BB = canvas.getBoundingClientRect();
+		offsetX = BB.left;
+		offsetY = BB.top;
+		WIDTH = canvas.width;
+		HEIGHT = canvas.height;
+		drawMainUI();
+	};
 	
 	function init()
 	{	
-		var bgcanvas = $('<canvas id="backgound_canvas">').css({
+		
+		//create background canvas
+		$('<canvas id="backgound_canvas">')
+		.css({
 			position : 'absolute',
 			left : 0,
 			top : 0,
@@ -27,34 +49,43 @@ var AppMainUI = (function() {
 		}).prependTo($('#background_screen'));
 
 		$('#background_screen').starfield({
-			looprate : 20,
-			starDensity : 0.08,
+			looprate : 60,
+			speedX:3,
+			starDensity : 0.18,
 			mouseScale : 0.01,
 			background : '#00000F',
 			seedMovement : true
-		}, "backgound_canvas");
+		}, "backgound_canvas");	
 		
-		var pcanvas = $('<canvas id="panel_canvas">').prependTo($('#panel_screen'));
+		//enable star field effect
+		$('<canvas id="panel_canvas">')
+		.css({
+			position : 'absolute',
+			left : 0,
+			top : 0,
+			width : '100%',
+			height : '100%'
+		}).attr({
+			width : $('#panel_screen').width(),
+			height : $('#panel_screen').height()
+		}).prependTo($('#panel_screen'));
 		
+		//initialize canvas
 		canvas = document.getElementById('panel_canvas');
 		ctx = canvas.getContext("2d");
 		
 		console.log("render App Main UI, canvas id="+canvas.id);
 
-		BB = canvas.getBoundingClientRect();
-		offsetX = BB.left;
-		offsetY = BB.top;
-		WIDTH = canvas.width;
-		HEIGHT = canvas.height;
-		
 		// listen for mouse events
 		canvas.onmousedown = myDown;
 		canvas.onmouseup = myUp;
 		canvas.onmousemove = myMove;	
+
+		window.addEventListener( 'resize', onWindowResize, false );
 		
-		drawMainUI();
+		registerResize(onResize);
+		onWindowResize();
 	};
-	
 	
 	var canvas;
 	var ctx ;
@@ -64,12 +95,12 @@ var AppMainUI = (function() {
 	var WIDTH;
 	var HEIGHT;
 
-	// drag related variables
+	//drag related variables
 	var dragok = false;
 	var startX;
 	var startY;
 
-	// an array of objects that define different rectangles
+	//an array of objects that define different rectangles
 	var rects = [];
 	rects.push({
 	    x: 5,
@@ -92,7 +123,7 @@ var AppMainUI = (function() {
 	});
 	
 
-	// draw a single rect
+	//draw a single rect
 	function rect(x, y, w, h) {
 	    ctx.beginPath();
 	    ctx.rect(x, y, w, h);
@@ -100,12 +131,12 @@ var AppMainUI = (function() {
 	    ctx.fill();
 	}
 
-	// clear the canvas
+	//clear the canvas
 	function clear() {
 	    ctx.clearRect(0, 0, WIDTH, HEIGHT);
 	}
 
-	// redraw the scene
+	//redraw the scene
 	function drawMainUI() {
 		clear();
 	    // redraw each rect in the rects[] array
@@ -120,7 +151,7 @@ var AppMainUI = (function() {
 	    }
 	}
 
-	// handle mousedown events
+	//handle mousedown events
 	function myDown(e) {
 
 	    // tell the browser we're handling this mouse event
@@ -148,7 +179,7 @@ var AppMainUI = (function() {
 	    startY = my;
 	}
 
-	// handle mouseup events
+	//handle mouseup events
 	function myUp(e) {  
 	    // tell the browser we're handling this mouse event
 	    e.preventDefault();
@@ -161,7 +192,7 @@ var AppMainUI = (function() {
 	    }
 	}
 
-	// handle mouse moves
+	//handle mouse moves
 	function myMove(e) {
 		
 		// get the current mouse position
@@ -195,7 +226,7 @@ var AppMainUI = (function() {
 	        
 	        drawMainUI();
 
-	        // reset the starting mouse position for the next mousemove
+	        //reset the starting mouse position for the next mousemove
 	        startX = mx;
 	        startY = my;
 	    } 
@@ -224,7 +255,7 @@ var AppMainUI = (function() {
 	
 	return {
 		init : init,
-		joinloop : joinloop
+		registerResize : registerResize
 	};
 	
 })();

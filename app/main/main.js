@@ -32,11 +32,7 @@ var AppMain = $.ngoModule(function() {
 	;
 
 	function initUI() {
-		
 		AppMainUI.init();
-		
-		//test
-		AppG1M1Demo1.init();
 	};
 
 	return {

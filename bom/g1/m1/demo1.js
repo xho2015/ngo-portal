@@ -1,4 +1,4 @@
-var AppG1M1Demo1 = (function() {
+var AppG1M1Demo1 = $.ngoModule(function() {
 	
 	var gui, params;
 	var pannel;
@@ -24,8 +24,8 @@ var AppG1M1Demo1 = (function() {
 				
 		initDatUI();
 		init3d();
-	
-		onWindowResize();
+		AppMainUI.registerResize(onResize);
+		onResize();
 		animate();
 	};
 	
@@ -49,7 +49,7 @@ var AppG1M1Demo1 = (function() {
 				container3d.style.visibility = 'visible';     // Show
 	    	},
 	    	resize:function() {
-				onWindowResize();
+	    		onResize();
 	    	}
 		};
 		gui = new dat.gui.GUI({ autoPlace: false });
@@ -61,7 +61,7 @@ var AppG1M1Demo1 = (function() {
 		gui.add(params, 'show3d');
 		gui.add(params, 'resize');
 		gui.domElement.id = 'gui';
-	    var gui_container = document.getElementById("gui_container");
+	    var gui_container = document.getElementById("gui_screen");
 		gui_container.appendChild(gui.domElement);
 	};
 	
@@ -91,8 +91,8 @@ var AppG1M1Demo1 = (function() {
 	
 	function OnDown(e) {
 		// tell the browser we're handling this mouse event
-	        //e.preventDefault();
-	        //e.stopPropagation();
+	        // e.preventDefault();
+	        // e.stopPropagation();
 	
 	        clickOk = 1;
 	
@@ -100,14 +100,14 @@ var AppG1M1Demo1 = (function() {
 	        var mx = parseInt(e.clientX - offsetX);
 	        var my = parseInt(e.clientY - offsetY);
 	
-		//console.log("onDown  x="+mx+",y="+my);
+		// console.log("onDown x="+mx+",y="+my);
 	};
 	
 	
 	function OnUp(e) {
 		// tell the browser we're handling this mouse event
-	        //e.preventDefault();
-	        //e.stopPropagation();
+	        // e.preventDefault();
+	        // e.stopPropagation();
 	
 	        clickOk = 1;
 	
@@ -115,13 +115,13 @@ var AppG1M1Demo1 = (function() {
 	        var mx = parseInt(e.clientX - offsetX);
 	        var my = parseInt(e.clientY - offsetY);
 	
-		//console.log("OnUp  x="+mx+",y="+my);
+		// console.log("OnUp x="+mx+",y="+my);
 	};
 	
 	
 	function OnMove(e) {
 		// tell the browser we're handling this mouse event
-	        //e.preventDefault();
+	        // e.preventDefault();
 	       // e.stopPropagation();
 	
 	        clickOk = 1;
@@ -134,7 +134,7 @@ var AppG1M1Demo1 = (function() {
 	};
 	
 	function init3d() {
-		container3d = document.getElementById( 'three3d_screen' );
+		container3d = document.getElementById( 'three_screen' );
 		WIDTH_3D = container3d.clientWidth;
 		HEIGHT_3D = container3d.clientHeight;
 		// camera
@@ -164,7 +164,7 @@ var AppG1M1Demo1 = (function() {
 		
 		// grid
 		var gridHelper = new THREE.GridHelper( 1000, 20 );
-		//scene.add( gridHelper );
+		scene.add( gridHelper );
 		
 		// raycaster
 		raycaster = new THREE.Raycaster();
@@ -194,16 +194,16 @@ var AppG1M1Demo1 = (function() {
 		container3d.addEventListener( 'mousedown', onDocumentMouseDown, false );
 		container3d.addEventListener( 'keydown', onDocumentKeyDown, false );
 		container3d.addEventListener( 'keyup', onDocumentKeyUp, false );
-		window.addEventListener( 'resize', onWindowResize, false );
+		
 	};
 	
 	
-	function onWindowResize() {
+	function onResize() {
 	
 		params.width = window.innerWidth;;
 		params.height = window.innerHeight;
 	
-		container3d = document.getElementById( 'three3d_screen' );
+		container3d = document.getElementById( 'three_screen' );
 		WIDTH_3D = container3d.clientWidth;
 		HEIGHT_3D = container3d.clientHeight;
 	
@@ -277,4 +277,4 @@ var AppG1M1Demo1 = (function() {
 		init : init
 	};
 
-})();
+}());
