@@ -54,7 +54,7 @@ var AppMainUI = (function() {
 		}).prependTo(bgscreen);
 
 		$(bgscreen).starfield({
-			looprate : 60,
+			looprate : 20,
 			speedX:2,
 			starDensity : 0.18,
 			mouseScale : 0.01,
@@ -110,6 +110,7 @@ var AppMainUI = (function() {
 	//an array of objects that define different rectangles
 	var rects = [];
 	rects.push({
+	    id:1,
 	    x: 5,
 	    y: 5,
 	    width: 120,
@@ -120,7 +121,8 @@ var AppMainUI = (function() {
 	});
 	
 	rects.push({
-	    x: 5,
+		id: 2,
+		x: 5,
 	    y: 150,
 	    width: 120,
 	    height: 60,
@@ -245,13 +247,13 @@ var AppMainUI = (function() {
 		        if (mx > r.x && mx < r.x + r.width && my > r.y && my < r.y + r.height) {
 		        	dirty = !r.hover;
 		            r.hover = true;
-		            console.log("hover=true");
+		            console.log("hover"+r.id+"=true");
 		        } 
 		        else
 	        	{
 		        	dirty = !r.hover;
 		        	r.hover = false;
-		        	console.log("hover=false");
+		        	console.log("hover"+r.id+"=false");
 	        	}
 		    }
 	    	if (dirty)
