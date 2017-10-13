@@ -41,7 +41,7 @@ var AppMainUI = (function() {
 		
 		//create background canvas
 		var bgscreen = $('#background_screen');
-		$('<canvas id="backgound_canvas">')
+		$('<canvas>')
 		.css({
 			position : 'absolute',
 			left : 0,
@@ -49,7 +49,8 @@ var AppMainUI = (function() {
 			width : '100%',
 			height : '100%'
 		}).attr({
-			width : bgscreen.width(),
+			id:      'backgound_canvas',
+			width :  bgscreen.width(),
 			height : bgscreen.height()
 		}).prependTo(bgscreen);
 
@@ -64,7 +65,7 @@ var AppMainUI = (function() {
 		
 		//enable star field effect
 		panelscreen = $('#panel_screen');
-		$('<canvas id="panel_canvas">')
+		$('<canvas>')
 		.css({
 			position : 'absolute',
 			left : 0,
@@ -72,7 +73,8 @@ var AppMainUI = (function() {
 			width : '100%',
 			height : '100%'
 		}).attr({
-			width : panelscreen.width(),
+			id :     'panel_canvas',
+			width :  panelscreen.width(),
 			height : panelscreen.height()
 		}).prependTo(panelscreen);
 		
@@ -106,6 +108,8 @@ var AppMainUI = (function() {
 	var dragok = false;
 	var startX;
 	var startY;
+	
+	var dirty = true;
 
 	//an array of objects that define different rectangles
 	var rects = [];
@@ -117,6 +121,7 @@ var AppMainUI = (function() {
 	    height: 60,
 	    fill: "#040F04",
 	    hover: false,
+	    isDirty: true,
 	    isDragging: false
 	});
 	
@@ -128,6 +133,7 @@ var AppMainUI = (function() {
 	    height: 60,
 	    fill: "#0F0F44",
 	    hover: false,
+	    isDirty: true,
 	    isDragging: false
 	});
 	
@@ -147,16 +153,20 @@ var AppMainUI = (function() {
 
 	//redraw the scene
 	function drawMainUI() {
-		clear();
+		if (dirty)
+			clear();
 	    // redraw each rect in the rects[] array
 	    for (var i = 0; i < rects.length; i++) {
 	        var r = rects[i];
-	        if (r.hover){
-	        	ctx.fillStyle = "#01005F";
-        	}else{
-        		ctx.fillStyle = r.fill;
+	        if (r.isDirty || dirty){
+	        	if (r.hover){
+		        	ctx.fillStyle = "#01005F";
+	        	}else{
+	        		ctx.fillStyle = r.fill;
+	        	}
+		        rect(r.x, r.y, r.width, r.height);
+		        r.isDirty = false;
         	}
-	        rect(r.x, r.y, r.width, r.height);
 	    }
 	}
 
@@ -230,6 +240,7 @@ var AppMainUI = (function() {
 	            if (r.isDragging) {
 	                r.x += dx;
 	                r.y += dy;
+	                r.isDirty = true;
 	            }
 	        }
 	        
@@ -241,19 +252,20 @@ var AppMainUI = (function() {
 	    } 
 	    else
 	    {   
-	    	var dirty = false;
+	    	
 	    	for (var i = 0; i < rects.length; i++) {
 		        var r = rects[i];
 		        if (mx > r.x && mx < r.x + r.width && my > r.y && my < r.y + r.height) {
 		        	dirty = !r.hover;
+		        	r.dirty = dirty;
 		            r.hover = true;
 		            console.log("hover"+r.id+"=true");
 		        } 
 		        else
 	        	{
 		        	dirty = !r.hover;
+		        	r.dirty = dirty;
 		        	r.hover = false;
-		        	console.log("hover"+r.id+"=false");
 	        	}
 		    }
 	    	if (dirty)
