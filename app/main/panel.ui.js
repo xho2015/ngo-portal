@@ -241,6 +241,7 @@ var AppMainUI = (function() {
 	                r.x += dx;
 	                r.y += dy;
 	                r.isDirty = true;
+	                dirty = true;
 	            }
 	        }
 	        
