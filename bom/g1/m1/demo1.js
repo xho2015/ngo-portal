@@ -24,8 +24,8 @@ var AppG1M1Demo1 = $.ngoModule(function() {
 				
 		initDatUI();
 		init3d();
-		AppMainUI.registerResize(onResize);
-		onResize();
+		
+		onWindowResize();
 		animate();
 	};
 	
@@ -160,7 +160,7 @@ var AppG1M1Demo1 = $.ngoModule(function() {
 	
 		// cubes
 		cubeGeo = new THREE.BoxGeometry( 50, 50, 50 );
-		cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( "/app/rs/square-outline-textured.ngpng" ) } );
+		cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xfeb74c, map: new THREE.TextureLoader().load( "/app/res/square-outline-textured.ngpng" ) } );
 		
 		// grid
 		var gridHelper = new THREE.GridHelper( 1000, 20 );
@@ -195,10 +195,11 @@ var AppG1M1Demo1 = $.ngoModule(function() {
 		container3d.addEventListener( 'keydown', onDocumentKeyDown, false );
 		container3d.addEventListener( 'keyup', onDocumentKeyUp, false );
 		
+		window.addEventListener( 'resize', onWindowResize, false );
 	};
 	
 	
-	function onResize() {
+	function onWindowResize() {
 	
 		params.width = window.innerWidth;;
 		params.height = window.innerHeight;

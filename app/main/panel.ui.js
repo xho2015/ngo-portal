@@ -7,13 +7,15 @@ var AppMainUI = (function() {
 	
 	
 	var resizeEvents = [];
-	function registerResize(resize)
+	function registeResize(resize)
 	{
 		resizeEvents.push(resize);
-		console.log("resizeEvents joined");
+		console.log("resize Events registed");
 	}
 	
-	
+	/*
+	 * the only sensor of window resize event
+	 **/
 	function onWindowResize() {
 		for (var i = 0; i < resizeEvents.length; i++) {
 			var resize = resizeEvents[i];
@@ -22,13 +24,15 @@ var AppMainUI = (function() {
 	};
 	
 	function onResize() {
-		var pleft = $('#three_screen').width() + $('#three_screen').position().left + 20;
-		$('#panel_screen').position().left = pleft;
+		canvas.width = panelscreen.innerWidth();
+		canvas.height = panelscreen.innerHeight();
 		BB = canvas.getBoundingClientRect();
 		offsetX = BB.left;
 		offsetY = BB.top;
 		WIDTH = canvas.width;
 		HEIGHT = canvas.height;
+		
+		console.log("onResize, WIDTH="+WIDTH+", HEIGHT="+HEIGHT);		
 		drawMainUI();
 	};
 	
@@ -36,6 +40,7 @@ var AppMainUI = (function() {
 	{	
 		
 		//create background canvas
+		var bgscreen = $('#background_screen');
 		$('<canvas id="backgound_canvas">')
 		.css({
 			position : 'absolute',
@@ -44,20 +49,21 @@ var AppMainUI = (function() {
 			width : '100%',
 			height : '100%'
 		}).attr({
-			width : $('#background_screen').width(),
-			height : $('#background_screen').height()
-		}).prependTo($('#background_screen'));
+			width : bgscreen.width(),
+			height : bgscreen.height()
+		}).prependTo(bgscreen);
 
-		$('#background_screen').starfield({
+		$(bgscreen).starfield({
 			looprate : 60,
-			speedX:3,
+			speedX:2,
 			starDensity : 0.18,
 			mouseScale : 0.01,
-			background : '#00000F',
+			background : '#000007',
 			seedMovement : true
 		}, "backgound_canvas");	
 		
 		//enable star field effect
+		panelscreen = $('#panel_screen');
 		$('<canvas id="panel_canvas">')
 		.css({
 			position : 'absolute',
@@ -66,9 +72,9 @@ var AppMainUI = (function() {
 			width : '100%',
 			height : '100%'
 		}).attr({
-			width : $('#panel_screen').width(),
-			height : $('#panel_screen').height()
-		}).prependTo($('#panel_screen'));
+			width : panelscreen.width(),
+			height : panelscreen.height()
+		}).prependTo(panelscreen);
 		
 		//initialize canvas
 		canvas = document.getElementById('panel_canvas');
@@ -83,10 +89,11 @@ var AppMainUI = (function() {
 
 		window.addEventListener( 'resize', onWindowResize, false );
 		
-		registerResize(onResize);
+		registeResize(onResize);
 		onWindowResize();
 	};
 	
+	var panelscreen;
 	var canvas;
 	var ctx ;
 	var BB;
@@ -255,7 +262,7 @@ var AppMainUI = (function() {
 	
 	return {
 		init : init,
-		registerResize : registerResize
+		registeResize : registeResize
 	};
 	
 })();
