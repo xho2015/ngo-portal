@@ -7,13 +7,15 @@ var AppMainUI = (function() {
 	
 	
 	var resizeEvents = [];
-	function registerResize(resize)
+	function registeResize(resize)
 	{
 		resizeEvents.push(resize);
-		console.log("resizeEvents joined");
+		console.log("resize Events registed");
 	}
 	
-	
+	/*
+	 * the only sensor of window resize event
+	 **/
 	function onWindowResize() {
 		for (var i = 0; i < resizeEvents.length; i++) {
 			var resize = resizeEvents[i];
@@ -22,13 +24,15 @@ var AppMainUI = (function() {
 	};
 	
 	function onResize() {
-		var pleft = $('#three_screen').width() + $('#three_screen').position().left + 20;
-		$('#panel_screen').position().left = pleft;
+		canvas.width = panelscreen.innerWidth();
+		canvas.height = panelscreen.innerHeight();
 		BB = canvas.getBoundingClientRect();
 		offsetX = BB.left;
 		offsetY = BB.top;
 		WIDTH = canvas.width;
 		HEIGHT = canvas.height;
+		
+		console.log("onResize, WIDTH="+WIDTH+", HEIGHT="+HEIGHT);		
 		drawMainUI();
 	};
 	
@@ -36,7 +40,8 @@ var AppMainUI = (function() {
 	{	
 		
 		//create background canvas
-		$('<canvas id="backgound_canvas">')
+		var bgscreen = $('#background_screen');
+		$('<canvas>')
 		.css({
 			position : 'absolute',
 			left : 0,
@@ -44,21 +49,23 @@ var AppMainUI = (function() {
 			width : '100%',
 			height : '100%'
 		}).attr({
-			width : $('#background_screen').width(),
-			height : $('#background_screen').height()
-		}).prependTo($('#background_screen'));
+			id:      'backgound_canvas',
+			width :  bgscreen.width(),
+			height : bgscreen.height()
+		}).prependTo(bgscreen);
 
-		$('#background_screen').starfield({
-			looprate : 60,
-			speedX:3,
+		$(bgscreen).starfield({
+			looprate : 20,
+			speedX:2,
 			starDensity : 0.18,
 			mouseScale : 0.01,
-			background : '#00000F',
+			background : '#000007',
 			seedMovement : true
 		}, "backgound_canvas");	
 		
 		//enable star field effect
-		$('<canvas id="panel_canvas">')
+		panelscreen = $('#panel_screen');
+		$('<canvas>')
 		.css({
 			position : 'absolute',
 			left : 0,
@@ -66,9 +73,10 @@ var AppMainUI = (function() {
 			width : '100%',
 			height : '100%'
 		}).attr({
-			width : $('#panel_screen').width(),
-			height : $('#panel_screen').height()
-		}).prependTo($('#panel_screen'));
+			id :     'panel_canvas',
+			width :  panelscreen.width(),
+			height : panelscreen.height()
+		}).prependTo(panelscreen);
 		
 		//initialize canvas
 		canvas = document.getElementById('panel_canvas');
@@ -83,10 +91,11 @@ var AppMainUI = (function() {
 
 		window.addEventListener( 'resize', onWindowResize, false );
 		
-		registerResize(onResize);
+		registeResize(onResize);
 		onWindowResize();
 	};
 	
+	var panelscreen;
 	var canvas;
 	var ctx ;
 	var BB;
@@ -99,26 +108,32 @@ var AppMainUI = (function() {
 	var dragok = false;
 	var startX;
 	var startY;
+	
+	var dirty = true;
 
 	//an array of objects that define different rectangles
 	var rects = [];
 	rects.push({
+	    id:1,
 	    x: 5,
 	    y: 5,
 	    width: 120,
 	    height: 60,
 	    fill: "#040F04",
 	    hover: false,
+	    isDirty: true,
 	    isDragging: false
 	});
 	
 	rects.push({
-	    x: 5,
+		id: 2,
+		x: 5,
 	    y: 150,
 	    width: 120,
 	    height: 60,
 	    fill: "#0F0F44",
 	    hover: false,
+	    isDirty: true,
 	    isDragging: false
 	});
 	
@@ -138,16 +153,20 @@ var AppMainUI = (function() {
 
 	//redraw the scene
 	function drawMainUI() {
-		clear();
+		if (dirty)
+			clear();
 	    // redraw each rect in the rects[] array
 	    for (var i = 0; i < rects.length; i++) {
 	        var r = rects[i];
-	        if (r.hover){
-	        	ctx.fillStyle = "#01005F";
-        	}else{
-        		ctx.fillStyle = r.fill;
+	        if (r.isDirty || dirty){
+	        	if (r.hover){
+		        	ctx.fillStyle = "#01005F";
+	        	}else{
+	        		ctx.fillStyle = r.fill;
+	        	}
+		        rect(r.x, r.y, r.width, r.height);
+		        r.isDirty = false;
         	}
-	        rect(r.x, r.y, r.width, r.height);
 	    }
 	}
 
@@ -221,6 +240,8 @@ var AppMainUI = (function() {
 	            if (r.isDragging) {
 	                r.x += dx;
 	                r.y += dy;
+	                r.isDirty = true;
+	                dirty = true;
 	            }
 	        }
 	        
@@ -232,19 +253,20 @@ var AppMainUI = (function() {
 	    } 
 	    else
 	    {   
-	    	var dirty = false;
+	    	
 	    	for (var i = 0; i < rects.length; i++) {
 		        var r = rects[i];
 		        if (mx > r.x && mx < r.x + r.width && my > r.y && my < r.y + r.height) {
 		        	dirty = !r.hover;
+		        	r.dirty = dirty;
 		            r.hover = true;
-		            console.log("hover=true");
+		            console.log("hover"+r.id+"=true");
 		        } 
 		        else
 	        	{
 		        	dirty = !r.hover;
+		        	r.dirty = dirty;
 		        	r.hover = false;
-		        	console.log("hover=false");
 	        	}
 		    }
 	    	if (dirty)
@@ -255,7 +277,7 @@ var AppMainUI = (function() {
 	
 	return {
 		init : init,
-		registerResize : registerResize
+		registeResize : registeResize
 	};
 	
 })();

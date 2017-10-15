@@ -203,16 +203,30 @@
 				ctx.clearRect(0, 0, width, height);
 				ctx.fillStyle = settings.background;
 				ctx.fillRect(0, 0, width, height);
+				
+				// randomly shine
+				var rands = [];
+				rands.push(getRandomInt(0, Starfield.length));
+				rands.push(getRandomInt(Math.floor(Starfield.length / 2) , Starfield.length));
 
+				var idxr = 0, shine = 0;
 				// iterate stars and draw them
 				$.each(Starfield, function (index, star) {
 					var coords = star.mapXYToCanvasCoordinates(width, height);
-
+					shine = (rands.indexOf(idxr++) > 0) ? 2 : 0;
 					ctx.fillStyle = star.color;
-					ctx.fillRect(coords.x, coords.y, star.size, star.size);
+					ctx.fillRect(coords.x, coords.y, star.size+shine, star.size+shine);
 				});
 			}
 		};
+		
+		/**
+		 * Returns a random integer between min (inclusive) and max (inclusive)
+		 * Using Math.round() will give you a non-uniform distribution!
+		 */
+		function getRandomInt(min, max) {
+		    return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
 
 		// EVENT HANDLERS
 		/*
@@ -240,8 +254,7 @@
 			recalcMovement();
 			draw();
 		}
-		
-		//AppMainUI.joinloop(animate);
+
 		AppCommon.limitLoop(animate, 40);
 
 		return this;

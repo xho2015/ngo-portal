@@ -1,34 +1,25 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>NGO Main Page</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
 		<style>
-			html, body {
-				width: 100%; height: 100%; 
- 				font-family: Monospace;
-				margin: 0px; overflow: hidden;
-			}
-			#gui{
-			  position: absolute;  top: 22px;  left: 22px;
-			}
-			#background_screen{
-			  position:absolute; left:0px; top:0px; width:100%;height:100%;
-			}
-			#three_screen{
-			  position:absolute; left:20px; top:20px;width:60%;height:60%; background-color:rgba(0, 0, 50, 0.5);border-style:dashed; 
-			}
-			#panel_screen{
-			  position:absolute; left:500px; top:20px;width:30%;height:90%; background-color:rgba(123, 0, 50, 0.5);border-style:dashed; 
-			}		
+			html, body {width:100%;height:100%;	font-family: Monospace;margin:0px;overflow:hidden;}
+			#gui{ position:absolute;top:2px;left:2px;}
+			#background_screen{position:absolute;left:0px;top:0px;width:100%;height:100%;}
+			#three_screen{display:none;position:absolute;left:20px;top:20px;width:60%;height:60%;background-color:rgba(0,0,50,0.5);border-style:dashed;}
+			#panel_screen{position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;margin:auto;width:90%;height:85%;background-color:rgba(70,0,30,0.5);border-style:dashed;}		
 		</style>
 		<script src="/app/lib/jquery-1.9.1.min.ngjs" type="text/javascript"></script>	
 	</head>
 	<body>	
 		<div id="background_screen"></div>	
-		<div id="three_screen"></div>
+		<div id="three_screen">
+			<div id="gui_screen"></div>
+		</div>
 		<div id="panel_screen"></div>
-		<div id="gui_screen"></div>
+		
 		<script>
 			var AppSettings = (function() {	
 				var debug = true;		

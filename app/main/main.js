@@ -9,7 +9,7 @@ var AppMain = $.ngoModule(function() {
 	};
 
 	function init() {
-		var dependency;
+		var depends;
 		$.ajax({
 			type : "GET",
 			async : false,
@@ -17,17 +17,17 @@ var AppMain = $.ngoModule(function() {
 			dataType : "json",
 			url : "/json/bom/list",
 			data : {
-				token : "usersessioncode",
+				token : "ses001",
 				module : "main"
 			},
 			success : function(json) {
-				dependency = json;
+				depends = json;
 			},
 			error : function(error) {
 				alert(error.status);
 			}
 		});
-		AppBootstrap.loadBulkScript(dependency, ready, error);
+		AppBootstrap.loadBulkScript(depends, ready, error);
 	}
 	;
 
