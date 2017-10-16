@@ -34,7 +34,7 @@ NG resource client updating strategy
 
 MYSQL5.6.34 database server setup
 	[ref]https://dev.mysql.com/doc/refman/5.6/en/resetting-permissions.html
-	. root password reset to "root:Qwer!234l"
+	. root password reset to "root/Qwer!234d"
 	. added a new mysql db user for ngo web "ngow:nG@F0rmW#b"
 	
 
@@ -122,19 +122,13 @@ NGO application deployment strategy.
 			
 			  			 
 					
+--10.15
+[T1] Added Easeljs H5 2d canvas library
+	http://www.createjs.com/
 	
-[T2] NGO ManagerServlet text interface
-	refer to tomcat manager implementation
-	1. initBom action parms
-		. bomFile - the path + filename of NGO bom located in app folder
-		. 
 	
-		a. load ngo.bom from app root folder 
 	
-	2. validateBom
 	
-	3. security constraint
-
 
 			
 [T?] Enable both HTTP and HTTPS in Tomcat 
