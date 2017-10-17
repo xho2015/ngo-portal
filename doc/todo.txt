@@ -127,7 +127,10 @@ NGO application deployment strategy.
 	http://www.createjs.com/
 	
 	
-	
+--10.17
+http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
+[1] createjs container and image testing done
+		
 	
 
 			
