@@ -142,7 +142,7 @@
 	$.fn.starfield = function (options, canvasId) {
 
 		var settings = $.extend({
-			looprate: 24,
+			framerate: 24,
 			speedX: 4,
 			starDensity: 1.0,
 			mouseScale: 1.0,
