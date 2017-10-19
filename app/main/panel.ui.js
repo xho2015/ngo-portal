@@ -74,19 +74,6 @@ var AppMainUI = (function() {
 
 	}
 	
-	
-	var tickEvents = [];
-	
-	function registTick(event)
-	{
-		tickEvents.push(event);
-	}
-
-	function tick(event)
-	{
-		for (t in tickEvents)
-			tickEvents[t](event);
-	}
 
 	var stages = [];
 	var moduleContainer;
@@ -110,99 +97,105 @@ var AppMainUI = (function() {
 		var moduleNPCs = [];
 		moduleContainer = new createjs.Container();
 
-		moduleContainer.width = 200;
-		moduleContainer.height = 300;
-		moduleContainer.x = WIDTH - moduleContainer.width - 40;
-		moduleContainer.y = HEIGHT - moduleContainer.height - 40;
 
-		var spriteBMP = new createjs.Shape(); // new
-												// createjs.Bitmap("/app/res/tile.png");
-		spriteBMP.graphics.beginFill("#004").drawRect(5, 0, 110, 80);
-		spriteBMP.y = 4;
-		spriteBMP.x = 0;
-		var spriteBMP2 = new createjs.Shape(); // new
-												// createjs.Bitmap("/app/res/tile.png");
-		spriteBMP2.graphics.beginFill("#004").drawRect(5, 0, 110, 80);
-		spriteBMP2.y = 88;
-		spriteBMP2.x = 0;
-		var spriteBMP3 = new createjs.Shape(); // new
-												// createjs.Bitmap("/app/res/tile.png");
-		spriteBMP3.graphics.beginFill("#007").drawRect(5, 0, 110, 80);
-		spriteBMP3.y = 172;
-		spriteBMP3.x = 0;
-
+		//add tiles
+		for (i = 0; i<3; i++)
+		{
+			var tile = new createjs.Shape(); 
+			tile.graphics.beginFill("#10f").drawRect(5, 0, 110, 80);
+			tile.y = i * 80 + 8;
+			tile.x = 0;
+			moduleNPCs.push(tile);
+		}
+		
+		//up key
 		var squareUp = new createjs.Shape();
-		squareUp.graphics.beginFill("green").drawRect(0, 0, 200, 10);
+		squareUp.graphics.beginFill("green").drawRect(0, 0, 200, 4);
 		squareUp.x = 0;
 		squareUp.y = 0;
 
-		var upPressed = false;
-		squareUp.on("mousedown", function(evt) {
-			upPressed = true;
-		});
-		squareUp.on("pressup", function(evt) {
-			upPressed = false;
-		});
-		
-		
-		function arrowTick(event) {
-			if (upPressed) {
-				if (spriteBMP.y == 4)
-					return;
-				spriteBMP.y -= 8;
-				spriteBMP2.y -= 8;
-				spriteBMP3.y -= 8;
-			} else if (downPressed) {
-				if (spriteBMP.y == moduleContainer.height)
-					return;
-				spriteBMP.y += 8;
-				spriteBMP2.y += 8;
-				spriteBMP3.y += 8;
-			}
-			moduleStage.update(event);
+
+		//populate childs
+		for (j in moduleNPCs) {
+			moduleContainer.addChild(moduleNPCs[j]);
 		}
-		
-		registTick(arrowTick);
+		moduleContainer.addChild(squareUp);
 
-		var squareDown = new createjs.Shape();
-		squareDown.graphics.beginFill("green").drawRect(0, 0, 200, 10);
-		squareDown.x = 0;
-		squareDown.y = moduleContainer.height - 10;
-
-		var downPressed = false;	
-		squareDown.on("mousedown", function(evt) {
-			downPressed = true;
-		});
-		squareDown.on("pressup", function(evt) {
-			downPressed = false;
-		});
-
-
-		moduleNPCs
-				.push(spriteBMP, spriteBMP2, spriteBMP3, squareUp, squareDown);
-
-		for (i in moduleNPCs) {
-			moduleContainer.addChild(moduleNPCs[i]);
-		}
-
+		//create stage
 		moduleStage = new createjs.Stage("panel_canvas");
-		// stage.autoClear = false;
-		moduleStage.enableMouseOver();
-		var moduleRect = new createjs.Rectangle(moduleContainer.x,
-				moduleContainer.y, moduleContainer.width,
-				moduleContainer.height);
-		moduleStage.drawRect = moduleRect;
-
 		moduleStage.addChild(moduleContainer);
+		
+		//inertia effects
+		var m0 = md = 0, mu = 0, offset = 0; 
+		moduleContainer.on("pressmove", function(evt) {
+			m0 = m0 == 0 ? evt.stageY : m0;
+			md = md == 0 ? evt.stageY : mu;
+			mu = evt.stageY;	
+			offset = mu - md;
+			//console.log("md="+md+",mu="+mu+",offset="+offset)
+			if ((moduleNPCs[0].y + offset) < 0 || (moduleNPCs[moduleNPCs.length - 1].y+offset + 20) > moduleContainer.height)
+				{return;}
+			
+			for (i in moduleNPCs) {
+				moduleNPCs[i].y += offset;
+			}
+			//console.log("evt.target.y="+evt.target.y+",evt.stageY="+evt.stageY)
+			moduleStage.update();	
+		});
+		moduleContainer.on("pressup", function(evt) {
+			var os = m0 > 0 ? evt.stageY - m0 : 0;
+			console.log("up offset="+ os)
+			m0 = 0;
+			if (os > 0)
+				inertiaEffect(os);
+		});
+		
+		function inertiaEffect(os){
+			var ab = Math.abs(os);
+			nop = ab == os;
+			strength = inertia.length - 1;		
+		}
+		
+		var inertia = [16,16,15,14,12,8,4,4,2];
+		var strength = 0;
+		var nop = true;
+		//createjs.Ticker.on("tick", tickInertia);
+		createjs.Ticker.addEventListener("tick", inertiaTick)
+		
+		function inertiaTick(event)
+		{		
+			if (strength > 0){
+				console.log("nop="+nop+",strength="+strength);
+				if (nop===true){
+					if (moduleNPCs[0].y + inertia[strength] + 20 > moduleContainer.height)
+					{strength = 0;	return;}
+					for (i in moduleNPCs) {
+						moduleNPCs[i].y += inertia[strength];
+					}
+					moduleStage.update();
+					strength--;
+					//console.log("inertia down idx="+strength);
+				} else {
+					if (moduleNPCs[moduleNPCs.length-1].y - inertia[strength] < 0)
+					{strength = 0;return;}
+					for (i in moduleNPCs) {
+						moduleNPCs[i].y -= inertia[strength];
+					}
+					moduleStage.update();
+					strength--;
+					//console.log("inertia up idx="+strength);
+				}
+			}
+		}	
 	}
 
 	function drawPanelUI() {
 
 		moduleContainer.width = 120;
-		moduleContainer.height = 300;
+		moduleContainer.height = 400;
 		moduleContainer.x = WIDTH - moduleContainer.width - 40;
 		moduleContainer.y = HEIGHT - moduleContainer.height - 40;
-
+		
 		var moduleRect = new createjs.Rectangle(moduleContainer.x,
 				moduleContainer.y, moduleContainer.width,
 				moduleContainer.height);
@@ -219,7 +212,7 @@ var AppMainUI = (function() {
 		onWindowResize();
 		
 		//give panel heart to beat
-		createjs.Ticker.on("tick", tick);
+		//createjs.Ticker.on("tick", tick);
 	};
 
 	return {
