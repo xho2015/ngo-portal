@@ -102,9 +102,9 @@ var AppMainUI = (function() {
 		for (i = 0; i<3; i++)
 		{
 			var tile = new createjs.Shape(); 
-			tile.graphics.beginFill("#10f").drawRect(5, 0, 110, 80);
-			tile.y = i * 80 + 8;
-			tile.x = 0;
+			tile.graphics.beginFill("#10f").drawRect(0, 0, 110, 80);
+			tile.y = i * (80 + 10);
+			tile.x = 5;
 			moduleNPCs.push(tile);
 		}
 		
