@@ -96,7 +96,7 @@ var AppMainUI = (function() {
 		// init module list
 		var moduleNPCs = [];
 		moduleContainer = new createjs.Container();
-
+		//moduleContainer.alpha=0.4;
 
 		//add tiles
 		for (i = 0; i<3; i++)
@@ -105,8 +105,15 @@ var AppMainUI = (function() {
 			tile.graphics.beginFill("#10f").drawRect(0, 0, 110, 80);
 			tile.y = i * (80 + 10);
 			tile.x = 5;
+			tile.alpha=0.4;
 			moduleNPCs.push(tile);
 		}
+		
+		var spriteBMP = new createjs.Bitmap("/app/res/res1.png");
+		spriteBMP.y = 280;
+		spriteBMP.x = 5;
+		spriteBMP.alpha=0.4;
+		moduleNPCs.push(spriteBMP);
 		
 		//up key
 		var squareUp = new createjs.Shape();
