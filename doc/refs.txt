@@ -1,0 +1,9 @@
+1. A layout demo
+	http://pbskids.org/video/
+
+2. SVG
+	http://snapsvg.io/demos
+	https://github.com/amfe/article/issues/2
+	http://www.cnblogs.com/wang985850293/p/5287460.html
+	--svg auto scale
+	https://www.douban.com/note/271260021/
