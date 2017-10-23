@@ -1,0 +1,6 @@
+*.classpath
+*.project
+
+WEB-INF/spring/*.xml
+WEB-INF/util/ant/build.properties
+
