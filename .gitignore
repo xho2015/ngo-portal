@@ -1,2 +1,2 @@
 /WEB-INF/spring/applicationContext.xml
-/WEB-INF/util/ant/build.properties
+/util/ant/build.properties
