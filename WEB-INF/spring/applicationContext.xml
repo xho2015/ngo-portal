@@ -22,17 +22,17 @@
 	<bean class="ngo.front.common.service.ContextHolder" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
-<!--
+
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
 		destroy-method="close" p:driverClassName="org.apache.derby.jdbc.ClientDriver"
 		p:url="jdbc:derby://localhost:1527/ngo" p:username="APP" p:password="sa" />
- -->
+ <!--
 	 <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" 
 		destroy-method="close" p:driverClassName="com.mysql.cj.jdbc.Driver" p:url="jdbc:mysql://localhost:3306/ngodev" 
 		p:username="ngow" p:password="nG@F0rmW#b" p:initialSize="2" p:maxTotal="30" 
 		p:maxIdle="10" p:minIdle="3" p:maxWaitMillis="30000" p:validationQuery="SELECT 
 		1" />
-		
+-->		
 	<!-- <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> 
 		<property name="jndiName"> <value>java:comp/env/jdbc/NGODB</value> </property> 
 		</bean> -->
