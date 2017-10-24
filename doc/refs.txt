@@ -1,9 +1,13 @@
-1. A layout demo
-	http://pbskids.org/video/
+1. 16:9 screen resolution
 
-2. SVG
-	http://snapsvg.io/demos
-	https://github.com/amfe/article/issues/2
-	http://www.cnblogs.com/wang985850293/p/5287460.html
-	--svg auto scale
-	https://www.douban.com/note/271260021/
+	----------
+	1600 X 900
+	1440 X 810
+	1280 X 720
+	1120 X 630
+	960 X 540
+	800 X 450
+	640 X 360
+	----------
+	320 X 180
+	160 X 90

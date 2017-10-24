@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<style>
+body {
+	margin: 0px;
+	padding: 0px;
+	font-size: 10px;
+}
+</style>
+<script src="/app/lib/jquery-1.9.1.min.ngjs" type="text/javascript"></script>
+
+</head>
+<body>
+	<p><b>view user agent</b></p>
+
+	
+	<div id="console"></div>
+	<script>
+		var x = document.getElementById("console");
+		x.innerHTML = 'userAgent='+navigator.userAgent;
+		x.innerHTML += '<br> vendor=' + navigator.vendor;
+		x.innerHTML += '<br> product=' + navigator.product;
+		x.innerHTML += '<br> vendor=' + navigator.vendor;
+		
+		
+		
+	</script>
+</body>
+</html>

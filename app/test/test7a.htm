@@ -21,11 +21,31 @@ body {
 	<p>
 		some test content text.
 	</p>
+	<button id="screenfull" onclick="fullScreen()">full screen</button>
 	<button id="screen-resolution">screen width & height</button>
 	<br/>
+	<li>user name:<input type="text" name="username"> </input>
+	<li>user pass:<input type="text" name="userpass"> </input> 
 	
 	<div id="console"></div>
 	<script>
+	
+	function fullScreen() {
+		var docElm = document.documentElement;
+		if (docElm.requestFullscreen) {
+			docElm.requestFullscreen();
+		} else if (docElm.msRequestFullscreen) {
+			docElm = document.body; //overwrite the element (for IE)
+			docElm.msRequestFullscreen();
+		} else if (docElm.mozRequestFullScreen) {
+			docElm.mozRequestFullScreen();
+		} else if (docElm.webkitRequestFullScreen) {
+			docElm.webkitRequestFullScreen();
+		}else if (docElm.webkitEnterFullscreen) {
+			docElm.webkitEnterFullscreen();
+		}		
+	}
+	
 	function screenResolution()
 	{
 		var w=window.innerWidth

@@ -1,4 +1,35 @@
 var AppCommon = (function() {
+	
+	function enterFullScreen() {
+		var docElm = document.documentElement;
+		if (docElm.requestFullscreen) {
+			docElm.requestFullscreen();
+		} else if (docElm.msRequestFullscreen) {
+			docElm = document.body; //overwrite the element (for IE)
+			docElm.msRequestFullscreen();
+		} else if (docElm.mozRequestFullScreen) {
+			docElm.mozRequestFullScreen();
+		} else if (docElm.webkitRequestFullScreen) {
+			docElm.webkitRequestFullScreen();
+		} else if (docElm.webkitEnterFullscreen) {
+			docElm.webkitEnterFullscreen();
+		}
+	};
+
+	function exitFullScreen() {
+		if (document.exitFullscreen) {
+			document.exitFullscreen();
+		} else if (document.msExitFullscreen) {
+			document.msExitFullscreen();
+		} else if (document.mozCancelFullScreen) {
+			document.mozCancelFullScreen();
+		} else if (document.webkitCancelFullScreen) {
+			document.webkitCancelFullScreen();
+		} else if (document.webkitExitFullScreen) {
+			document.webkitExitFullScreen();
+		}
+	};
+	
 	/*
 	 * Limit the frame rate https://gist.github.com/addyosmani/5434533
 	 */
@@ -109,7 +140,9 @@ var AppCommon = (function() {
 	
 	return {
 		limitLoop : limitLoop,
-		Detector : Detector
+		Detector : Detector,
+		enterFullScreen: enterFullScreen,
+		exitFullScreen : exitFullScreen
 	};
 
 })();
