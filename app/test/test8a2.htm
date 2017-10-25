@@ -9,14 +9,16 @@
 			#panel_screen{font-size:18px;text-align:right;position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;margin:auto;width:320px;height:180px;background-color:rgba(0,0,1,0.1);border-style:dashed;}		
 		</style>
 		<script src="/app/lib/jquery-1.9.1.min.ngjs" type="text/javascript"></script>
+		<script src="/app/lib/createjs-0.8.2.min.js" type="text/javascript"></script>
 		<script src="/app/main/common.js" type="text/javascript"></script>
 		
 	</head>
 	<body>
 		<button id="view-fullscreen">Fullscreen</button>
 		<button id="cancel-fullscreen">Cancel fullscreen</button>
-		<div id="panel_screen">
-		</div>
+		<div id="console"></div>
+		<canvas id="panel_screen"></canvas>
+		
 						
 		<script>
 			function onResize()
@@ -42,50 +44,50 @@
 				$('#panel_screen').width(w);
 				$('#panel_screen').height(h);
 				
-				var x = document.getElementById("panel_screen");
+				var x = document.getElementById("console");
 				x.innerHTML="width="+w+", height="+h;
+				
+				redraw(w, h);
 			}
-			
-			
-			function fullScreen() {
-				var docElm = document.documentElement;
-				if (docElm.requestFullscreen) {
-					docElm.requestFullscreen();
-				} else if (docElm.msRequestFullscreen) {
-					docElm = document.body; //overwrite the element (for IE)
-					docElm.msRequestFullscreen();
-				} else if (docElm.mozRequestFullScreen) {
-					docElm.mozRequestFullScreen();
-				} else if (docElm.webkitRequestFullScreen) {
-					docElm.webkitRequestFullScreen();
-				} else if (docElm.webkitEnterFullscreen) {
-					docElm.webkitEnterFullscreen();
+
+			function redraw(width, height)
+			{
+				//determine rect based on canvas dimension
+				var pwidth, pheight = 0;
+				var rect = new createjs.Rectangle(0, 0, 200, 410);
+				
+				var NPCs = [];
+				var pcontainer = new createjs.Container();
+
+				pcontainer.x = 0;
+				pcontainer.y = 0;
+				pcontainer.width = 200;
+				pcontainer.height = 410;
+
+
+				var Label1 = new createjs.Text("字体14px", "14px Arial", "Black");
+				
+				NPCs.push(Label1, );
+
+				for (i in NPCs) {
+					spriteContainer.addChild(NPCs[i]);
 				}
+
+				var stage = new createjs.Stage("panel_screen");
+				stage.drawRect = rect;
+
+				stage.addChild(pcontainer);
+				stage.update();
+				console.log("s1. done");
 			}
 
-			function exitFullScreen() {
-				if (document.exitFullscreen) {
-					document.exitFullscreen();
-				} else if (document.msExitFullscreen) {
-					document.msExitFullscreen();
-				} else if (document.mozCancelFullScreen) {
-					document.mozCancelFullScreen();
-				} else if (document.webkitCancelFullScreen) {
-					document.webkitCancelFullScreen();
-				} else if (document.webkitExitFullScreen) {
-					document.webkitExitFullScreen();
-				}
-			}
+			$("#view-fullscreen").on("click", function (){
+				AppCommon.enterFullScreen();
+			});
 
-			var viewFullScreen = document.getElementById("view-fullscreen");
-			if (viewFullScreen) {
-				viewFullScreen.addEventListener("click", fullScreen);
-			}
-
-			var cancelFullScreen = document.getElementById("cancel-fullscreen");
-			if (cancelFullScreen) {
-				cancelFullScreen.addEventListener("click", exitFullScreen);
-			}
+			$("#cancel-fullscreen").on("click", function (){
+				AppCommon.exitFullScreen();
+			});
 			
 			window.addEventListener('resize', onResize, false);
 			
