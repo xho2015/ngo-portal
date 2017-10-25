@@ -1,11 +1,200 @@
 /**
- * NGO UI library - H5 canvas based interface
+ * NGO main panel module
  */
+var PANEL = (function(my) {
+	my.name = 'NGO Head navigator';
+	
+	my.backgroud = $('#background_screen');
+	my.bgcanvas = $('<canvas>').css({
+			position : 'absolute',
+			left : 0,
+			top : 0,
+			width : '100%',
+			height : '100%'
+		}).attr({
+			id : 'backgound_canvas',
+			width : my.backgroud.width(),
+			height : my.backgroud.height()
+		}).prependTo(my.backgroud);
+
+	my.backgroundEffect = function() {
+		// enable star field effect
+		if (AppSettings.bganimate) {
+			$(my.backgroud).starfield({	framerate : 20,	speedX : 2,	starDensity : 0.10,	mouseScale : 0.01,	background : '#000007',	seedMovement : true
+			}, "backgound_canvas");
+		};
+	};
+
+    my.screenStatus = {	isFull : false,	orientation : 0	};
+    
+    my.isFullscreen = function () {
+		return document.fullscreenElement || document.msFullscreenElement
+				|| document.mozFullScreenElement
+				|| document.webkitFullscreenElement || false;
+	};
+	
+	my.fullScreen = function () {
+		var docElm = document.documentElement;
+		if (docElm.requestFullscreen) {
+			docElm.requestFullscreen();
+		} else if (docElm.msRequestFullscreen) {
+			docElm = document.body; // overwrite the element (for IE)
+			docElm.msRequestFullscreen();
+		} else if (docElm.mozRequestFullScreen) {
+			docElm.mozRequestFullScreen();
+		} else if (docElm.webkitRequestFullScreen) {
+			docElm.webkitRequestFullScreen();
+		} else if (docElm.webkitEnterFullscreen) {
+			docElm.webkitEnterFullscreen();
+		}
+	};
+
+	my.exitFullScreen = function () {
+		if (document.exitFullscreen) {
+			document.exitFullscreen();
+		} else if (document.msExitFullscreen) {
+			document.msExitFullscreen();
+		} else if (document.mozCancelFullScreen) {
+			document.mozCancelFullScreen();
+		} else if (document.webkitCancelFullScreen) {
+			document.webkitCancelFullScreen();
+		} else if (document.webkitExitFullScreen) {
+			document.webkitExitFullScreen();
+		}
+	};
+    
+    my.resize = function() {
+    	
+    	//reset background
+    	my.backgroundEffect();
+    	
+    	//check screen full status
+		if (!my.isFullscreen()) {
+			my.screenStatus.isFull = false;
+		} else {
+			my.screenStatus.isFull = true;
+		}
+			
+		// match resolution matrix by current window dimension
+		var winWidth = window.innerWidth;
+		var winHeight = window.innerHeight;
+		var matrix = [ [ 1600, 900 ], [ 1440, 810 ], [ 1280, 720 ],
+				[ 1120, 630 ], [ 960, 540 ], [ 800, 450 ], [ 640, 360 ],
+				[ 600, 340 ], [ 340, 240 ] ];
+		for (m in matrix) {
+			if (winWidth > matrix[m][0] && winHeight > matrix[m][1]) {
+				panelResize(matrix[m][0], matrix[m][1]);
+				redraw(matrix[m][0], matrix[m][1]);
+				console.log("panel dimension change, width="+matrix[m][0]+", height="+matrix[m][1]);
+				break;
+			}
+		}
+	};
+    
+    function panelResize(w, h) {
+		$('#panel_canvas').width(w);
+		$('#panel_canvas').height(h);
+
+		var canvas = document.getElementById("panel_canvas");
+		canvas.width = w;
+		canvas.height = h;
+	}
+	
+	/**
+	 * orientation: false - portrait true - landscape
+	 */
+	function redraw(width, height, orientation) {
+		var hw = width;
+		var hh = Math.abs(height / 10);
+		hh = hh < 32 ? 32 : hh;
+
+		var sw = width;
+		var sh = height - hh;
+
+		PANEL.header.draw(0, 0, hw, hh);
+		PANEL.screen.draw(0, hh, sw, sh);
+	}
+	
+	return my;
+}(PANEL || {}));
+
+/**
+ * panel header sub-module
+ */
+PANEL.header = (function() {
+	var my = {};
+	my.container = new createjs.Container();
+	my.square = new createjs.Shape();
+	my.container.addChild(my.square);
+	my.Label1 = new createjs.Text("NGO KidsMath", "17px Arial", "#eeffff");
+	my.Label1.shadow = new createjs.Shadow("#090909", 1, 1, 6);
+	my.container.addChild(my.Label1);
+	my.container.addChild(my.Label2);
+	my.stage = new createjs.Stage("panel_canvas");
+	my.stage.addChild(my.container);
+	my.stage.alpha = 0.8;
+
+	my.draw = function(x, y, w, h) {
+		my.square.x = 0;
+		my.square.y = 0;
+		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
+		my.square.alpha = 0.9;
+		my.Label1.x = 10;
+		my.Label1.y = (h - 16) / 2;
+		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
+		my.stage.alpha = 0.8;
+
+		my.stage.update();
+	};
+
+	return my;
+}());
+
+/**
+ * panel screen sub-module
+ */
+PANEL.screen = (function() {
+	var my = {};
+	my.container = new createjs.Container();
+	my.container.alpha = 0.5;
+	my.square = new createjs.Shape();
+	my.square.alpha = 0.5;
+	my.container.addChild(my.square);
+	my.Label1 = new createjs.Text("info", "16px Arial", "#F0FFF0");
+	my.Label1.alpha = 0.5;
+	my.container.addChild(my.Label1);
+	my.enlarge = new createjs.Bitmap("/app/res/enlarge_screen.png");
+	my.enlarge.shadow = new createjs.Shadow("#090909", 3, 3, 6);
+	my.container.addChild(my.enlarge);
+	my.stage = new createjs.Stage("panel_canvas");
+	my.stage.addChild(my.container);
+	my.stage.alpha = 0.5;
+	my.draw = function(x, y, w, h) {
+		my.square.alpha = 0.5;
+		my.square.graphics.beginFill("#1F1F1F").drawRect(x, y, w, h);
+		my.Label1.x = x;
+		my.Label1.y = y+10;
+		my.Label1.text = "Click下面图标切换到全屏模式！";
+		my.enlarge.x = (w - my.enlarge.image.width) / 2;
+		my.enlarge.y = (h - my.enlarge.image.height) / 2;
+		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
+
+		my.stage.update();
+	};
+
+	my.enlarge.on("click", function(evt) {
+		if (PANEL.isFullscreen())
+			PANEL.exitFullScreen();
+		else
+			PANEL.fullScreen();
+	});
+
+	return my;
+}());
 
 var AppMainUI = (function() {
 
 	var resizeEvents = [];
-
 	function registeResize(resize) {
 		resizeEvents.push(resize);
 		console.log("resize Events registed");
@@ -20,210 +209,33 @@ var AppMainUI = (function() {
 			resize();
 		}
 	}
-	;
 
-	var canvas;
-	var ctx;
-	var BB;
-	var offsetX;
-	var offsetY;
-	var WIDTH;
-	var HEIGHT;
+	function onOrientationChange() {
+		if (window.orientation === 180 || window.orientation === 0) {
+			PANEL.screenStatus.orientation = 1;
+			alert('当前竖屏，请切换到横屏方式以获得更好的显示效果！');
+		}
+		if (window.orientation === 90 || window.orientation === -90) {
+			PANEL.screenStatus.orientation = 0;
+		}
+	}
 
 	function onResize() {
-		var canvas = document.getElementById('panel_canvas');
-		canvas.width = panelscreen.innerWidth();
-		canvas.height = panelscreen.innerHeight();
-		BB = canvas.getBoundingClientRect();
-		offsetX = BB.left;
-		offsetY = BB.top;
-		WIDTH = canvas.width;
-		HEIGHT = canvas.height;
-
-		console.log("onResize, WIDTH=" + WIDTH + ", HEIGHT=" + HEIGHT);
-		drawPanelUI();
-	}
-	;
-
-	function initBackground() {
-		// create background canvas
-		var bgscreen = $('#background_screen');
-		$('<canvas>').css({
-			position : 'absolute',
-			left : 0,
-			top : 0,
-			width : '100%',
-			height : '100%'
-		}).attr({
-			id : 'backgound_canvas',
-			width : bgscreen.width(),
-			height : bgscreen.height()
-		}).prependTo(bgscreen);
-
-		// enable star field effect
-		if (AppSettings.bganimate) {
-			$(bgscreen).starfield({
-				framerate : 20,
-				speedX : 2,
-				starDensity : 0.10,
-				mouseScale : 0.01,
-				background : '#000007',
-				seedMovement : true
-			}, "backgound_canvas");
-		}
-
-	}
-	
-
-	var stages = [];
-	var moduleContainer;
-	var moduleStage;
-
-	function initPanel() {
-		panelscreen = $('#panel_screen');
-		$('<canvas>').css({
-			position : 'absolute',
-			left : 0,
-			top : 0,
-			width : '100%',
-			height : '100%'
-		}).attr({
-			id : 'panel_canvas',
-			width : panelscreen.width(),
-			height : panelscreen.height()
-		}).prependTo(panelscreen);
-
-		// init module list
-		var moduleNPCs = [];
-		moduleContainer = new createjs.Container();
-		//moduleContainer.alpha=0.4;
-
-		//add tiles
-		for (i = 0; i<3; i++)
-		{
-			var tile = new createjs.Shape(); 
-			tile.graphics.beginFill("#10f").drawRect(0, 0, 110, 80);
-			tile.y = i * (80 + 10);
-			tile.x = 5;
-			tile.alpha=0.4;
-			moduleNPCs.push(tile);
-		}
-		
-		var spriteBMP = new createjs.Bitmap("/app/res/res1.png");
-		spriteBMP.y = 280;
-		spriteBMP.x = 5;
-		spriteBMP.alpha=0.4;
-		moduleNPCs.push(spriteBMP);
-		
-		//up key
-		var squareUp = new createjs.Shape();
-		squareUp.graphics.beginFill("green").drawRect(0, 0, 200, 4);
-		squareUp.x = 0;
-		squareUp.y = 0;
-
-
-		//populate childs
-		for (j in moduleNPCs) {
-			moduleContainer.addChild(moduleNPCs[j]);
-		}
-		moduleContainer.addChild(squareUp);
-
-		//create stage
-		moduleStage = new createjs.Stage("panel_canvas");
-		moduleStage.addChild(moduleContainer);
-		
-		//inertia effects
-		var m0 = md = 0, mu = 0, offset = 0; 
-		moduleContainer.on("pressmove", function(evt) {
-			m0 = m0 == 0 ? evt.stageY : m0;
-			md = md == 0 ? evt.stageY : mu;
-			mu = evt.stageY;	
-			offset = mu - md;
-			//console.log("md="+md+",mu="+mu+",offset="+offset)
-			if ((moduleNPCs[0].y + offset) < 0 || (moduleNPCs[moduleNPCs.length - 1].y+offset + 20) > moduleContainer.height)
-				{return;}
-			
-			for (i in moduleNPCs) {
-				moduleNPCs[i].y += offset;
-			}
-			//console.log("evt.target.y="+evt.target.y+",evt.stageY="+evt.stageY)
-			moduleStage.update();	
-		});
-		moduleContainer.on("pressup", function(evt) {
-			var os = m0 > 0 ? evt.stageY - m0 : 0;
-			console.log("up offset="+ os)
-			m0 = 0;
-			if (os > 0)
-				inertiaEffect(os);
-		});
-		
-		function inertiaEffect(os){
-			var ab = Math.abs(os);
-			nop = ab == os;
-			strength = inertia.length - 1;		
-		}
-		
-		var inertia = [16,16,15,14,12,8,4,4,2];
-		var strength = 0;
-		var nop = true;
-		//createjs.Ticker.on("tick", tickInertia);
-		createjs.Ticker.addEventListener("tick", inertiaTick)
-		
-		function inertiaTick(event)
-		{		
-			if (strength > 0){
-				console.log("nop="+nop+",strength="+strength);
-				if (nop===true){
-					if (moduleNPCs[0].y + inertia[strength] + 20 > moduleContainer.height)
-					{strength = 0;	return;}
-					for (i in moduleNPCs) {
-						moduleNPCs[i].y += inertia[strength];
-					}
-					moduleStage.update();
-					strength--;
-					//console.log("inertia down idx="+strength);
-				} else {
-					if (moduleNPCs[moduleNPCs.length-1].y - inertia[strength] < 0)
-					{strength = 0;return;}
-					for (i in moduleNPCs) {
-						moduleNPCs[i].y -= inertia[strength];
-					}
-					moduleStage.update();
-					strength--;
-					//console.log("inertia up idx="+strength);
-				}
-			}
-		}	
-	}
-
-	function drawPanelUI() {
-
-		moduleContainer.width = 120;
-		moduleContainer.height = 400;
-		moduleContainer.x = WIDTH - moduleContainer.width - 40;
-		moduleContainer.y = HEIGHT - moduleContainer.height - 40;
-		
-		var moduleRect = new createjs.Rectangle(moduleContainer.x,
-				moduleContainer.y, moduleContainer.width,
-				moduleContainer.height);
-		moduleStage.drawRect = moduleRect;
-
-		moduleStage.update();
+		PANEL.resize();
 	}
 
 	function init() {
-		initBackground();
-		initPanel();
+		//initBackground();
+		//initPanel();
 		window.addEventListener('resize', onWindowResize, false);
+		window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", onOrientationChange, false);
 		registeResize(onResize);
 		onWindowResize();
-		
-		//give panel heart to beat
-		//createjs.Ticker.on("tick", tick);
-	};
+	}
 
 	return {
 		init : init
 	};
-
 })();
+
+

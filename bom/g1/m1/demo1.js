@@ -61,8 +61,8 @@ var AppG1M1Demo1 = $.ngoModule(function() {
 		gui.add(params, 'show3d');
 		gui.add(params, 'resize');
 		gui.domElement.id = 'gui';
-	    var gui_container = document.getElementById("gui_screen");
-		gui_container.appendChild(gui.domElement);
+	    //var gui_container = document.getElementById("gui_screen");
+		//gui_container.appendChild(gui.domElement);
 	};
 	
 	function fullscreen1(element) {

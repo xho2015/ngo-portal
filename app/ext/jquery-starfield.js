@@ -138,6 +138,8 @@
 	};
 
 	var Starfield = [];
+	
+	var lunched = false;
 
 	$.fn.starfield = function (options, canvasId) {
 
@@ -167,6 +169,8 @@
 			var deltaY = 0;
 		}		
 
+		//clean up the starts
+		Starfield = [];
 		for (var i = 0; i < numStars; i++) {
 			Starfield.push(StarFactory.getRandomStar());
 		}
@@ -255,8 +259,11 @@
 			draw();
 		}
 
-		AppCommon.limitLoop(animate, 40);
-
+		if (lunched == false) {
+			AppCommon.limitLoop(animate, 40);
+			lunched = true;
+		}
+			
 		return this;
 	};
 

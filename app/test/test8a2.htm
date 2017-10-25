@@ -1,97 +1,219 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>NGO Main Page</title>
-		<meta charset="utf-8"/>
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
-		<style>
-			html, body {width:100%;height:100%;	font-family: Monospace;margin:0px;overflow:hidden;}
-			#panel_screen{font-size:18px;text-align:right;position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;margin:auto;width:320px;height:180px;background-color:rgba(0,0,1,0.1);border-style:dashed;}		
-		</style>
-		<script src="/app/lib/jquery-1.9.1.min.ngjs" type="text/javascript"></script>
-		<script src="/app/lib/createjs-0.8.2.min.js" type="text/javascript"></script>
-		<script src="/app/main/common.js" type="text/javascript"></script>
-		
-	</head>
-	<body>
-		<button id="view-fullscreen">Fullscreen</button>
-		<button id="cancel-fullscreen">Cancel fullscreen</button>
-		<div id="console"></div>
-		<canvas id="panel_screen"></canvas>
-		
-						
-		<script>
-			function onResize()
-			{
-				var winWidth = window.innerWidth;
-				var winHeight = window.innerHeight;
-				
-				//resolution matrix
-				var matrix = [[1600,900],[1440,810],[1280,720], [1120,630], [960, 540], [800,450], [640,360], [608, 342]];	
-				for (m in matrix)
-				{
-					if (winWidth > matrix[m][0] &&  winHeight > matrix[m][1] )
-					{	
-						setPanelSize(matrix[m][0], matrix[m][1]);
-						break;
-					}
-				}	
+<head>
+<title>NGO Main Page</title>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<style>
+html, body {
+	width: 100%;
+	height: 100%;
+	font-family: Monospace;
+	margin: 0px;
+	overflow: hidden;
+	background-color: rgba(5, 0, 0, 0.4);
+}
+
+#panel_screen {
+	width: 340px;
+	height: 240px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	margin: auto;
+	background-color: rgba(0, 0, 1, 0.6);
+	border-style: none;
+}
+</style>
+<script src="/app/lib/jquery-1.9.1.min.ngjs" type="text/javascript"></script>
+<script src="/app/lib/createjs-0.8.2.min.js" type="text/javascript"></script>
+
+</head>
+<body>
+	<div id="console"></div>
+	<canvas id="panel_screen"></canvas>
+
+	<script>
+		window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", function() {
+							if (window.orientation === 180 || window.orientation === 0) {
+								screenSetting.orientation = 1;
+								alert('当前竖屏，请切换到横屏方式以获得更好的显示效果！');
+								
+							}
+							if (window.orientation === 90 || window.orientation === -90) {
+								screenSetting.orientation = 0;
+							}
+						}, false);
+
+
+		function onResize() {
+			if (!isFullscreen()){
+				screenSetting.isFull = false;			
+			} else {
+				screenSetting.isFull = true;
 			}
-			
-			
-			function setPanelSize(w, h)
-			{
-				$('#panel_screen').width(w);
-				$('#panel_screen').height(h);
 				
-				var x = document.getElementById("console");
-				x.innerHTML="width="+w+", height="+h;
-				
-				redraw(w, h);
-			}
+			var winWidth = window.innerWidth;
+			var winHeight = window.innerHeight;
 
-			function redraw(width, height)
-			{
-				//determine rect based on canvas dimension
-				var pwidth, pheight = 0;
-				var rect = new createjs.Rectangle(0, 0, 200, 410);
-				
-				var NPCs = [];
-				var pcontainer = new createjs.Container();
-
-				pcontainer.x = 0;
-				pcontainer.y = 0;
-				pcontainer.width = 200;
-				pcontainer.height = 410;
-
-
-				var Label1 = new createjs.Text("字体14px", "14px Arial", "Black");
-				
-				NPCs.push(Label1, );
-
-				for (i in NPCs) {
-					spriteContainer.addChild(NPCs[i]);
+			//resolution matrix
+			var matrix = [ [ 1600, 900 ], [ 1440, 810 ], [ 1280, 720 ],
+					[ 1120, 630 ], [ 960, 540 ], [ 800, 450 ], [ 640, 360 ],
+					[ 600, 340 ], [340, 240] ];
+			for (m in matrix) {
+				if (winWidth > matrix[m][0] && winHeight > matrix[m][1]) {
+					setPanelSize(matrix[m][0], matrix[m][1]);
+					break;
 				}
-
-				var stage = new createjs.Stage("panel_screen");
-				stage.drawRect = rect;
-
-				stage.addChild(pcontainer);
-				stage.update();
-				console.log("s1. done");
 			}
+		}
+		
+		var screenSetting = {
+			isFull: false,
+			orientation: 0
+		};
 
-			$("#view-fullscreen").on("click", function (){
-				AppCommon.enterFullScreen();
-			});
+		function setPanelSize(w, h) {
+			$('#panel_screen').width(w);
+			$('#panel_screen').height(h);
 
-			$("#cancel-fullscreen").on("click", function (){
-				AppCommon.exitFullScreen();
+			var cv = document.getElementById("panel_screen");
+			cv.width = w;
+			cv.height = h;
+
+			var x = document.getElementById("console");
+			x.innerHTML = "width=" + cv.width + ", height=" + cv.height;
+
+			redraw(w, h, true);
+		}
+
+		var PANEL = (function(my) {
+			my.name = 'NGO Head navigator';
+
+			return my;
+		}(PANEL || {}));
+
+		PANEL.header = (function() {
+			var my = {};
+			my.container = new createjs.Container();
+			my.square = new createjs.Shape();
+			my.container.addChild(my.square);
+			my.Label1 = new createjs.Text("NGO KidsMath", "17px Arial",	"#eeffff");
+			my.Label1.shadow = new createjs.Shadow("#090909", 1, 1, 6);
+			my.container.addChild(my.Label1);
+			my.container.addChild(my.Label2);
+			my.stage = new createjs.Stage("panel_screen");
+			my.stage.addChild(my.container);
+			
+			my.draw = function(x, y, w, h) {
+				my.square.x = 0;
+				my.square.y = 0;
+				my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
+				my.Label1.x = 10;
+				my.Label1.y = (h - 16) / 2;				
+				my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
+				my.stage.update();
+			};
+
+			return my;
+		}());
+		
+		PANEL.screen = (function() {
+			var my = {};
+			my.container = new createjs.Container();
+			my.square = new createjs.Shape();
+			my.container.addChild(my.square);
+			my.Label1 = new createjs.Text("info", "16px Arial",	"#0ffffff");
+			my.container.addChild(my.Label1);
+			my.enlarge = new createjs.Bitmap("/app/res/enlarge_screen.png");
+			my.enlarge.shadow = new createjs.Shadow("#090909", 3, 3, 6);
+			my.container.addChild(my.enlarge);
+			my.stage = new createjs.Stage("panel_screen");
+			my.stage.addChild(my.container);
+			
+			my.draw = function(x, y, w, h) {				
+				my.square.graphics.beginFill("#090606").drawRect(x, y, w, h);
+				my.Label1.x = x;
+				my.Label1.y = y;
+				my.Label1.text = "Click下面图标切换到全屏模式！";			
+				my.enlarge.x = (w - my.enlarge.image.width) / 2;
+				my.enlarge.y = (h - my.enlarge.image.height) / 2;
+				my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
+				my.stage.update();
+			};
+			
+			my.enlarge.on("click", function(evt) {
+				if (isFullscreen())
+					exitFullScreen();
+				else
+					fullScreen();
 			});
-			
-			window.addEventListener('resize', onResize, false);
-			
-			onResize();
-		</script>
-	</body>
+			return my;
+		}());
+
+		/**
+		 orientation:  
+		  false - portrait
+		  true - landscape
+		 */
+		function redraw(width, height, orientation) {
+			 
+			 var hw = width;
+			 var hh = Math.abs(height / 10);
+			 hh = hh < 32 ? 32 : hh; 
+			 
+			 var sw = width;
+			 var sh = height - hh;
+			 
+			 PANEL.header.draw(0, 0, hw, hh);
+			 PANEL.screen.draw(0, hh, sw, sh);
+			 console.log("draw header done");
+		}
+		
+		function isFullscreen(){
+            return document.fullscreenElement    ||
+                   document.msFullscreenElement  ||
+                   document.mozFullScreenElement ||
+                   document.webkitFullscreenElement || false;
+        }
+
+		function fullScreen() {
+			var docElm = document.documentElement;
+			if (docElm.requestFullscreen) {
+				docElm.requestFullscreen();
+			} else if (docElm.msRequestFullscreen) {
+				docElm = document.body; //overwrite the element (for IE)
+				docElm.msRequestFullscreen();
+			} else if (docElm.mozRequestFullScreen) {
+				docElm.mozRequestFullScreen();
+			} else if (docElm.webkitRequestFullScreen) {
+				docElm.webkitRequestFullScreen();
+			} else if (docElm.webkitEnterFullscreen) {
+				docElm.webkitEnterFullscreen();
+			}
+		}
+
+		function exitFullScreen() {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.msExitFullscreen) {
+				document.msExitFullscreen();
+			} else if (document.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document.webkitCancelFullScreen) {
+				document.webkitCancelFullScreen();
+			} else if (document.webkitExitFullScreen) {
+				document.webkitExitFullScreen();
+			}
+		}
+
+		window.addEventListener('resize', onResize, false);
+
+		onResize();
+	</script>
+</body>
 </html>
