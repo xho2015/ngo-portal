@@ -144,7 +144,7 @@
 	$.fn.starfield = function (options, canvasId) {
 
 		var settings = $.extend({
-			framerate: 24,
+			framerate: 8,
 			speedX: 4,
 			starDensity: 1.0,
 			mouseScale: 1.0,
@@ -213,13 +213,14 @@
 				rands.push(getRandomInt(0, Starfield.length));
 				rands.push(getRandomInt(Math.floor(Starfield.length / 2) , Starfield.length));
 
-				var idxr = 0, shine = 0;
+				var idxr = 0, shine = 0, soffset = 0;
 				// iterate stars and draw them
 				$.each(Starfield, function (index, star) {
 					var coords = star.mapXYToCanvasCoordinates(width, height);
 					shine = (rands.indexOf(idxr++) > 0) ? 2 : 0;
+					soffset = shine > 0 ? -1 : 0;
 					ctx.fillStyle = star.color;
-					ctx.fillRect(coords.x, coords.y, star.size+shine, star.size+shine);
+					ctx.fillRect(coords.x+soffset, coords.y+soffset, star.size+shine, star.size+shine);
 				});
 			}
 		};
@@ -260,7 +261,7 @@
 		}
 
 		if (lunched == false) {
-			AppCommon.limitLoop(animate, 40);
+			AppCommon.limitLoop(animate, settings.framerate);
 			lunched = true;
 		}
 			

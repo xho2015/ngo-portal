@@ -21,13 +21,12 @@
 		</div>	
 		
 		<script>
-			var AppSettings = (function() {	
-				var debug = true;
-				var bganimate = true;
-				return {
-					debug : debug,
-					bganimate: bganimate
-				};
+			var AppSettings = (function() {
+				var my = {};
+				my.debug = true;
+				my.bganimate = true;
+				my.framerate = 16;
+				return my;
 			})();
 		</script>
 		<script src="bootstrap.min.ngjs?0"></script>

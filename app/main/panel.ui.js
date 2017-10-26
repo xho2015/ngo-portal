@@ -14,7 +14,7 @@ var PANEL = (function(my) {
 	my.bgeffects = function() {
 		// enable star field effect
 		if (AppSettings.bganimate) {
-			$(my.bgcontainer).starfield({	framerate : 20,	speedX : 2,	starDensity : 0.10,	mouseScale : 0.01,	background : '#000007',	seedMovement : true
+			$(my.bgcontainer).starfield({framerate:AppSettings.framerate, speedX:2, starDensity:0.10,	mouseScale:0.01, background:'#000007',	seedMovement:true
 			}, "backgound_canvas");
 		};
 	};
@@ -51,8 +51,6 @@ var PANEL = (function(my) {
 	};
     
     my.resize = function() {   	
-    	//reset background
-    	my.bgeffects();   	
     	//check screen full status
 		if (!my.isFullscreen()) {my.screenStatus.isFull = false;
 		} else {my.screenStatus.isFull = true;}
@@ -65,6 +63,7 @@ var PANEL = (function(my) {
 				[ 600, 340 ], [ 340, 240 ] ];
 		for (m in matrix) {
 			if (winWidth > matrix[m][0] && winHeight > matrix[m][1]) {
+				backgroundResize(matrix[m][0], matrix[m][1]);   	
 				panelResize(matrix[m][0], matrix[m][1]);
 				redraw(matrix[m][0], matrix[m][1]);
 				console.log("panel dimension change, width="+matrix[m][0]+", height="+matrix[m][1]);
@@ -72,6 +71,18 @@ var PANEL = (function(my) {
 			}
 		}
 	};
+    
+    function backgroundResize(w, h) {
+    	$('#background_screen').width(window.innerWidth); $('#background_screen').height(window.innerHeight);
+    	var bgscreen = document.getElementById('background_screen');
+    	bgscreen.width = w; bgscreen.height = h;
+    	
+		$('#backgound_canvas').width(window.innerWidth); $('#backgound_canvas').height(window.innerHeight);
+		var bgcanvas = document.getElementById('backgound_canvas');
+		bgcanvas.width = w; bgcanvas.height = h;
+		
+		my.bgeffects();
+	}
     
     function panelResize(w, h) {
 		$('#'+my.panelId).width(w); $('#'+my.panelId).height(h);
