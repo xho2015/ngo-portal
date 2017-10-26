@@ -1,4 +1,4 @@
-var AppMain = $.ngoModule(function() {
+var MAINAPP = $.ngoModule(function() {
 
 	var ready = function() {
 		initUI();		
@@ -32,7 +32,7 @@ var AppMain = $.ngoModule(function() {
 	;
 
 	function initUI() {
-		AppMainUI.init();
+		MAIMUI.init();
 	};
 
 	return {
