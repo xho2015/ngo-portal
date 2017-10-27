@@ -11,6 +11,7 @@ var PANEL = (function(my) {
 		.attr({	id : 'backgound_canvas', width : my.bgcontainer.width(), height : my.bgcontainer.height()})
 		.prependTo(my.bgcontainer);
 
+	//background effects
 	my.bgeffects = function() {
 		// enable star field effect
 		if (AppSettings.bganimate) {
@@ -38,16 +39,16 @@ var PANEL = (function(my) {
     var pmatrix = [[ 1600, 900 ], [ 1440, 810 ], [ 1280, 720 ],
 		[ 1120, 630 ], [ 960, 540 ], [ 800, 450 ], [ 640, 360 ],
 		[ 600, 340 ], [ 340, 240 ] ];
-    
+
     //header resolution matrix
-    var hmatrix = new Map( [[ 1600, 80 ], [ 1440, 80 ], [ 1280, 80 ],
+    var hmatrix = [[ 1600, 80 ], [ 1440, 80 ], [ 1280, 80 ],
 		[ 1120, 60 ], [ 960, 60 ], [ 800, 40 ], [ 640, 40 ],
-		[ 600, 40 ], [ 340, 40 ] ] );
+		[ 600, 40 ], [ 340, 40 ] ];
     
-    // resolution matrix
-    var amatrix = new Map([[1600, '320,820' ], [ 1440, '320,730' ], [ 1280, '320,640' ],
+    //resolution matrix
+    var amatrix = [[1600, '320,820' ], [ 1440, '320,730' ], [ 1280, '320,640' ],
 		[ 1120, '240,570' ], [ 960, '240,480' ], [ 800, '180,410' ], [ 640, '180,320' ],
-		[ 600, '180,300' ], [ 340, '0,0' ]]);
+		[ 600, '180,300' ], [ 340, '0,0' ]];
     
     //full screen checker
     my.isFullscreen = function () {
@@ -62,8 +63,7 @@ var PANEL = (function(my) {
 		} else if (docElm.msRequestFullscreen) {docElm = document.body; docElm.msRequestFullscreen();
 		} else if (docElm.mozRequestFullScreen) {docElm.mozRequestFullScreen();
 		} else if (docElm.webkitRequestFullScreen) {docElm.webkitRequestFullScreen();
-		} else if (docElm.webkitEnterFullscreen) {docElm.webkitEnterFullscreen();
-		}
+		} else if (docElm.webkitEnterFullscreen) {docElm.webkitEnterFullscreen();}
 	};
 
 	my.exitFullScreen = function () {
@@ -71,11 +71,10 @@ var PANEL = (function(my) {
 		} else if (document.msExitFullscreen) {document.msExitFullscreen();
 		} else if (document.mozCancelFullScreen) {document.mozCancelFullScreen();
 		} else if (document.webkitCancelFullScreen) {document.webkitCancelFullScreen();
-		} else if (document.webkitExitFullScreen) {document.webkitExitFullScreen();
-		}
+		} else if (document.webkitExitFullScreen) {document.webkitExitFullScreen();	}
 	};
     
-    my.resize = function() {   	
+    my.resize = function() { 
     	//check screen full status
 		if (!my.isFullscreen()) {my.screenStatus.isFull = false;
 		} else {my.screenStatus.isFull = true;}
@@ -102,7 +101,7 @@ var PANEL = (function(my) {
 		$('#backgound_canvas').width(window.innerWidth); $('#backgound_canvas').height(window.innerHeight);
 		var bgcanvas = document.getElementById('backgound_canvas');
 		bgcanvas.width = w; bgcanvas.height = h;
-		
+	
 		my.bgeffects();
 	}
     
@@ -116,18 +115,23 @@ var PANEL = (function(my) {
 		my.dimension.width = w;
 		my.dimension.height = h;
 		my.dimension.hwidth = w;
-		my.dimension.hheight = hmatrix.get(w);
-		var adim = amatrix.get(w).split(',');
+		for (var h in hmatrix)
+		{ if (hmatrix[h][0] == w) {my.dimension.hheight = hmatrix[h][1];break;}}
+		var adim;
+		for (var a in amatrix)
+		{ if (amatrix[a][0] == w) {adim = amatrix[a][1].split(',');break;}}
 		my.dimension.awidth = parseInt(adim[0]);
 		my.dimension.aheight = parseInt(adim[1]);
 		my.dimension.swdith = w;
 		my.dimension.sheight = my.dimension.aheight;
-		var sy = my.dimension.height = h;
-		
-		PANEL.header.resize(0, 0, my.dimension.hwidth, my.dimension.hheight);
+		var sy = my.dimension.hheight;
+		var ax = w - my.dimension.awidth;
+		var ay = sy;
+		//sub object resize
 		PANEL.screen.resize(0, sy, my.dimension.swdith, my.dimension.sheight);
+		PANEL.assist.resize(ax, ay, my.dimension.awidth, my.dimension.aheight);
+		PANEL.header.resize(0, 0, my.dimension.hwidth, my.dimension.hheight);
 	}
-	
 	return my;
 }(PANEL || {}));
 
@@ -145,7 +149,7 @@ PANEL.header = (function() {
 	my.container.addChild(my.Label2);
 	my.stage = new createjs.Stage(PANEL.panelId);
 	my.stage.addChild(my.container);
-	my.stage.alpha = 0.8;
+	my.stage.alpha = 1;
 
 	my.resize = function(x, y, w, h) {
 		var idx = my.container.getChildIndex(my.square);
@@ -155,12 +159,35 @@ PANEL.header = (function() {
 		my.square.x = 0; my.square.y = 0;
 		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
 		my.Label1.x = 10; my.Label1.y = (h - 16) / 2;
-		my.Label1.text="NGO KidsMath " + PANEL.dimension.hwidth+"X"+PANEL.dimension.hheight+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
+		my.Label1.text="NGO KidsMath " + PANEL.dimension.width+"X"+PANEL.dimension.height+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.alpha = 0.9;
 		my.stage.update();
 	};
+	return my;
+}());
+
+/**
+ * panel assist sub-module
+ */
+PANEL.assist = (function() {
+	var my = {};
+	my.container = new createjs.Container();
+	my.square = new createjs.Shape();
+	my.container.addChild(my.square);
+	my.stage = new createjs.Stage(PANEL.panelId);
+	my.stage.addChild(my.container);
+	my.stage.alpha = 0.9;
 	
+	my.resize = function(x, y, w, h) {
+		var idx = my.container.getChildIndex(my.square);
+		my.container.removeChild(my.square);
+		my.square = new createjs.Shape();
+		my.container.addChildAt(my.square, idx);
+		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
+		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
+		my.stage.update();
+	};
 	return my;
 }());
 
@@ -179,7 +206,7 @@ PANEL.screen = (function() {
 	my.container.addChild(my.enlarge);
 	my.stage = new createjs.Stage(PANEL.panelId);
 	my.stage.addChild(my.container);
-	my.stage.alpha = 0.1;
+	my.stage.alpha = 0.6;
 	
 	my.resize = function(x, y, w, h) {
 		var idx = my.container.getChildIndex(my.square);
@@ -234,7 +261,7 @@ var MAIMUI = (function() {
 	function onOrientationChange() {
 		if (window.orientation === 180 || window.orientation === 0) {
 			PANEL.screenStatus.orientation = 1;
-			alert('当前为【竖屏】，请切换为【横屏】以获得更好的显示效果！');
+			alert('当前为竖屏，请切换为横屏以获得更好的显示效果！');
 		}
 		if (window.orientation === 90 || window.orientation === -90) {
 			PANEL.screenStatus.orientation = 0;

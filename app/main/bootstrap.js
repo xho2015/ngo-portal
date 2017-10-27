@@ -10,7 +10,8 @@ $.extend({ngoModule: function(module) {
 var AppBootstrap = $.ngoModule(function() {
 	
 	function init() {
-		loadScript("mainlibs", "main.min.ngjs");
+		//TODO: change to ngjs version
+		loadScript("mainapp", "main.js");
 	};
 
 	var ok = function() {
@@ -68,9 +69,7 @@ var AppBootstrap = $.ngoModule(function() {
 	function loadScript1(sid, url, ok, error) {
 		var script = createScript(sid);
 		
-		//TODO: remove this debug mode
-		var debugUrl = AppSettings.debug ? url.replace('min.ngjs', 'js') : url;
-		script.src = debugUrl;
+		script.src = url;
 		script.async = false;
 
 		// Then bind the event to the callback function.
@@ -79,14 +78,17 @@ var AppBootstrap = $.ngoModule(function() {
 		script.onload = ok;
 		script.onerror = error;
 
+		
 		// Fire the loading
 		var head = document.getElementsByTagName('head')[0];
 		head.appendChild(script);
+		bulkState.current=url;	
 	};
 
 	
 	// -------below for loading  Bulk of scripts
 	var bulkState = {
+		links: [],
 		remains: 0,
 		ok : null,
 		fail : null
@@ -99,7 +101,8 @@ var AppBootstrap = $.ngoModule(function() {
 	};
 	
 	var errorBulk = function() {
-		alert("bulk load script error, state="+bulkState);
+		var eidx = bulkState.links.length - bulkState.remains;
+		alert("bulk load script error, current="+bulkState.links[eidx]);
 		bulkState.fail();
 	};
 	
@@ -108,8 +111,10 @@ var AppBootstrap = $.ngoModule(function() {
 		bulkState.ok = ok;
 		bulkState.fail = error;
 		bulkState.remains = 0;
+		bulkState.links = [];
 		for (var r in resource) {
 			bulkState.remains++;
+			bulkState.links.push(resource[r].url+"?"+resource[r].ver);
 		}
 		for (var r in resource) {
 			loadScript(resource[r].name, resource[r].url+"?"+resource[r].ver, okBulk, errorBulk);
