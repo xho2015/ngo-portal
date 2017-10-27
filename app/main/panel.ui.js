@@ -23,8 +23,14 @@ var PANEL = (function(my) {
 	my.panelId = 'panel_canvas';
 	my.panel = $('<canvas>').addClass('panel_canvas').attr({id : my.panelId}).appendTo($('#ngcontainer'));
 
+	//screen status
     my.screenStatus = {	isFull : false,	orientation : 0	};
+    my.panelDimension = [];
+    var matrix = [ [ 1600, 900 ], [ 1440, 810 ], [ 1280, 720 ],
+		[ 1120, 630 ], [ 960, 540 ], [ 800, 450 ], [ 640, 360 ],
+		[ 600, 340 ], [ 340, 240 ] ];
     
+    //full screen checker
     my.isFullscreen = function () {
 		return document.fullscreenElement || document.msFullscreenElement
 				|| document.mozFullScreenElement
@@ -58,14 +64,13 @@ var PANEL = (function(my) {
 		// match resolution matrix by current window dimension
 		var winWidth = window.innerWidth;
 		var winHeight = window.innerHeight;
-		var matrix = [ [ 1600, 900 ], [ 1440, 810 ], [ 1280, 720 ],
-				[ 1120, 630 ], [ 960, 540 ], [ 800, 450 ], [ 640, 360 ],
-				[ 600, 340 ], [ 340, 240 ] ];
+		
 		for (m in matrix) {
 			if (winWidth > matrix[m][0] && winHeight > matrix[m][1]) {
+				my.panelDimension = [];
+				my.panelDimension.push(matrix[m][0], matrix[m][1]);
 				backgroundResize(matrix[m][0], matrix[m][1]);   	
 				panelResize(matrix[m][0], matrix[m][1]);
-				redraw(matrix[m][0], matrix[m][1]);
 				console.log("panel dimension change, width="+matrix[m][0]+", height="+matrix[m][1]);
 				break;
 			}
@@ -88,16 +93,10 @@ var PANEL = (function(my) {
 		$('#'+my.panelId).width(w); $('#'+my.panelId).height(h);
 		var canvas = document.getElementById(my.panelId);
 		canvas.width = w; canvas.height = h;
-	}
-	
-	/**
-	 * orientation: false - portrait, true - landscape
-	 */
-	function redraw(width, height, orientation) {
-		var hw = width;	var hh = Math.abs(height / 10);
-		hh = hh < 32 ? 32 : hh;
-
-		var sw = width;	var sh = height - hh;
+		
+		var hw = w;	var hh = Math.abs(h / 10);
+		hh = hh < 40 ? 40 : hh;
+		var sw = w;	var sh = h - hh;
 
 		PANEL.header.resize(0, 0, hw, hh);
 		PANEL.screen.resize(0, hh, sw, sh);
@@ -114,7 +113,7 @@ PANEL.header = (function() {
 	my.container = new createjs.Container();
 	my.square = new createjs.Shape();
 	my.container.addChild(my.square);
-	my.Label1 = new createjs.Text("NGO KidsMath", "17px Arial", "#eeffff");
+	my.Label1 = new createjs.Text("", "17px Arial", "#eeffff");
 	my.Label1.shadow = new createjs.Shadow("#090909", 1, 1, 6);
 	my.container.addChild(my.Label1);
 	my.container.addChild(my.Label2);
@@ -130,6 +129,7 @@ PANEL.header = (function() {
 		my.square.x = 0; my.square.y = 0;
 		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
 		my.Label1.x = 10; my.Label1.y = (h - 16) / 2;
+		my.Label1.text="NGO KidsMath " + PANEL.panelDimension[0]+"X"+PANEL.panelDimension[1];
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.alpha = 0.9;
 		my.stage.update();
@@ -153,7 +153,7 @@ PANEL.screen = (function() {
 	my.container.addChild(my.enlarge);
 	my.stage = new createjs.Stage(PANEL.panelId);
 	my.stage.addChild(my.container);
-	my.stage.alpha = 0.3;
+	my.stage.alpha = 0.1;
 	
 	my.resize = function(x, y, w, h) {
 		var idx = my.container.getChildIndex(my.square);

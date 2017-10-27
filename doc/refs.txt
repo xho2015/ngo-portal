@@ -11,3 +11,8 @@
 	----------
 	320 X 180
 	160 X 90
+	
+	
+2. design site icons
+	https://www.gimpshop.com/tutorials/how-to-create-a-logo
+	https://www.gimp.org/tutorials/Creating_Icons/
