@@ -25,10 +25,29 @@ var PANEL = (function(my) {
 
 	//screen status
     my.screenStatus = {	isFull : false,	orientation : 0	};
-    my.panelDimension = [];
-    var matrix = [ [ 1600, 900 ], [ 1440, 810 ], [ 1280, 720 ],
+    
+    //panel dimensions
+    my.dimension = {
+    	width: 0,  	height: 0, 
+    	nwidth:0,  	nheight: 0,
+    	swidth: 0, 	sheight: 0,
+    	awidth: 0, 	aheight: 0
+    };
+    
+    //screen resolution matrix
+    var pmatrix = [[ 1600, 900 ], [ 1440, 810 ], [ 1280, 720 ],
 		[ 1120, 630 ], [ 960, 540 ], [ 800, 450 ], [ 640, 360 ],
 		[ 600, 340 ], [ 340, 240 ] ];
+    
+    //header resolution matrix
+    var hmatrix = new Map( [[ 1600, 80 ], [ 1440, 80 ], [ 1280, 80 ],
+		[ 1120, 60 ], [ 960, 60 ], [ 800, 40 ], [ 640, 40 ],
+		[ 600, 40 ], [ 340, 40 ] ] );
+    
+    // resolution matrix
+    var amatrix = new Map([[1600, '320,820' ], [ 1440, '320,730' ], [ 1280, '320,640' ],
+		[ 1120, '240,570' ], [ 960, '240,480' ], [ 800, '180,410' ], [ 640, '180,320' ],
+		[ 600, '180,300' ], [ 340, '0,0' ]]);
     
     //full screen checker
     my.isFullscreen = function () {
@@ -65,13 +84,11 @@ var PANEL = (function(my) {
 		var winWidth = window.innerWidth;
 		var winHeight = window.innerHeight;
 		
-		for (m in matrix) {
-			if (winWidth > matrix[m][0] && winHeight > matrix[m][1]) {
-				my.panelDimension = [];
-				my.panelDimension.push(matrix[m][0], matrix[m][1]);
-				backgroundResize(matrix[m][0], matrix[m][1]);   	
-				panelResize(matrix[m][0], matrix[m][1]);
-				console.log("panel dimension change, width="+matrix[m][0]+", height="+matrix[m][1]);
+		for (m in pmatrix) {
+			if (winWidth > pmatrix[m][0] && winHeight > pmatrix[m][1]) {
+				backgroundResize(pmatrix[m][0], pmatrix[m][1]);   	
+				panelResize(pmatrix[m][0], pmatrix[m][1]);
+				console.log("panel dimension change, width="+pmatrix[m][0]+", height="+pmatrix[m][1]);
 				break;
 			}
 		}
@@ -90,16 +107,25 @@ var PANEL = (function(my) {
 	}
     
     function panelResize(w, h) {
+    	//resize canvas
 		$('#'+my.panelId).width(w); $('#'+my.panelId).height(h);
 		var canvas = document.getElementById(my.panelId);
 		canvas.width = w; canvas.height = h;
 		
-		var hw = w;	var hh = Math.abs(h / 10);
-		hh = hh < 40 ? 40 : hh;
-		var sw = w;	var sh = h - hh;
-
-		PANEL.header.resize(0, 0, hw, hh);
-		PANEL.screen.resize(0, hh, sw, sh);
+		//reset dimension
+		my.dimension.width = w;
+		my.dimension.height = h;
+		my.dimension.hwidth = w;
+		my.dimension.hheight = hmatrix.get(w);
+		var adim = amatrix.get(w).split(',');
+		my.dimension.awidth = parseInt(adim[0]);
+		my.dimension.aheight = parseInt(adim[1]);
+		my.dimension.swdith = w;
+		my.dimension.sheight = my.dimension.aheight;
+		var sy = my.dimension.height = h;
+		
+		PANEL.header.resize(0, 0, my.dimension.hwidth, my.dimension.hheight);
+		PANEL.screen.resize(0, sy, my.dimension.swdith, my.dimension.sheight);
 	}
 	
 	return my;
@@ -129,7 +155,7 @@ PANEL.header = (function() {
 		my.square.x = 0; my.square.y = 0;
 		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
 		my.Label1.x = 10; my.Label1.y = (h - 16) / 2;
-		my.Label1.text="NGO KidsMath " + PANEL.panelDimension[0]+"X"+PANEL.panelDimension[1];
+		my.Label1.text="NGO KidsMath " + PANEL.dimension.hwidth+"X"+PANEL.dimension.hheight+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.alpha = 0.9;
 		my.stage.update();
