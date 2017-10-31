@@ -11,7 +11,7 @@ var AppBootstrap = $.ngoModule(function() {
 	
 	function init() {
 		//TODO: change to ngjs version
-		loadScript("mainapp", "main.js");
+		loadScript("mainapp", "main.min.ngjs?1");
 	};
 
 	var ok = function() {

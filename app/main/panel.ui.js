@@ -227,7 +227,7 @@ PANEL.screen = (function() {
 		my.container.addChildAt(my.square, idx);
 		my.square.graphics.beginFill("#1F1F1F").drawRect(x, y, w, h);
 		my.Label1.x = x; my.Label1.y = y+10;
-		my.Label1.text = "Click下面图标切换到全屏模式！";
+		my.Label1.text = "Please Click Enlarge 图标切换到全屏模式！";
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.update();
 	};

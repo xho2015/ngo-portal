@@ -135,6 +135,8 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	
 	
 	
+--11.1
+1. load module javascript in order.	
 	
 	
 	
@@ -149,46 +151,4 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	
 	
 	
-	
-
-			
-[T?] Enable both HTTP and HTTPS in Tomcat 
-	https://stackoverflow.com/questions/41819962/how-to-enable-both-http-and-https-in-tomcat-without-redirect
-	
- 	[pending] 1. enable HTTPS in Tomcat  until registered domain name take into effect
-
-
-[T?] Tomcat security setup
-		1. change manager context to another one
-		
-		
-[T?] Tomcat connector settings
-	https://stackoverflow.com/questions/5388210/measuring-the-number-of-queued-requests-for-tomcat/5391417#5391417
-
-
-[T?] Tomcat QoS filter
-	https://www.eclipse.org/jetty/documentation/current/qos-filter.html
-	
-	
-[T?] Javascript memory management (avoid leak) 
-	https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/
-	https://addyosmani.com/resources/essentialjsdesignpatterns/book/#constructorpatternjavascript
-	
-	
-[T?] jQuery cdn in china
-	https://www.huoduan.com/jquery-cdn.html	
-	
-	
-[T?] server jar library, spring MVC + mybitis + Json parser 
-	http://repo.spring.io/release/org/springframework/spring/
-	https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-core-asl/1.9.13
-	https://docs.spring.io/spring/docs/4.1.x/spring-framework-reference/html/
-	
-	
-[T?] MyBatis 3
-	http://www.mybatis.org/mybatis-3/zh/configuration.html
-
-
-[T?] Java In-Memory cache
-	https://github.com/google/guava/wiki/CachesExplained
 	

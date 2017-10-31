@@ -3,10 +3,10 @@ createjs-0-8-2-min-ngjs|/app/lib/createjs-0.8.2.min.ngjs||5f47459d9f1675391d1476
 dat-gui-min-ngjs|/app/lib/dat.gui.min.ngjs||20e4b1e163d82d70c99ba1d25491be22
 jquery-1-9-1-min-ngjs|/app/lib/jquery-1.9.1.min.ngjs||2b7cf2de286a2cb1ed594994d6b164c6
 three-min-ngjs|/app/lib/three.min.ngjs||5157c9c4f3a1103504e8ba840e2ffd2a
-bootstrap-min-ngjs|/app/main/bootstrap.min.ngjs||75901b993db887fa1e92c9a145123afb
+bootstrap-min-ngjs|/app/main/bootstrap.min.ngjs||96616ef22a14126953a9789a735876d3
 common-min-ngjs|/app/main/common.min.ngjs||f54e5723e5dfc18f04552ba7f564fe57
 main-min-ngjs|/app/main/main.min.ngjs||a20df17a269d4dc9874cf24429dbf30e
-panel-ui-min-ngjs|/app/main/panel.ui.min.ngjs||09835e4437f647913916aced6ab806c5
+panel-ui-min-ngjs|/app/main/panel.ui.min.ngjs||1e7029472ea705ece005a0b11d3deb5c
 css1-ngcss|/app/test/css1.ngcss||1ea24e11abfbb500bddfff705a2ea564
 demo1-min-ngjs|/app/test/demo1.min.ngjs||c9e483e171c177a9c4014f0e71c1de98
 ngfun-min-ngjs|/app/test/ngfun.min.ngjs||32c3acdd7144407481af0f2d90a45f3a
