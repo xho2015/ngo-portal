@@ -67,7 +67,7 @@
 
 	<!-- NGO resource package -->
 	<target name="jsConfusion" description="Javascript Confusion">
-		<confusion include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
+		<confusion ignore="\app\lib\dat.gui.js|\app\lib\three.js" include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
 	</target>
 
 	<target name="jsGzip" description="Confusion and Gzip for javascript " depends="jsConfusion">

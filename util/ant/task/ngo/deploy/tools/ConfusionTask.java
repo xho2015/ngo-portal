@@ -1,10 +1,15 @@
 package ngo.deploy.tools;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.tools.ant.BuildException;
+
+
+
 import ngo.deploy.tools.YuiCompressor.Options;
 
 /**
@@ -14,14 +19,28 @@ import ngo.deploy.tools.YuiCompressor.Options;
  *
  */
 public class ConfusionTask extends org.apache.tools.ant.Task {
+	
+	private List<String> ignores = new ArrayList<String>();
+	
 
 	private String path;
 
 	private String include;
+	
+	private String ignore;
 
 	private String exclude;
 
 	private String fileExtension;
+
+	
+	public String getIgnore() {
+		return ignore;
+	}
+
+	public void setIgnore(String ignore) {
+		this.ignore = ignore;
+	}
 
 	public String getPath() {
 		return path;
@@ -64,21 +83,23 @@ public class ConfusionTask extends org.apache.tools.ant.Task {
 	private void handleFile(File file) {
 
 		String fileName = file.getAbsolutePath();
-		if (!match(include, fileName) || match(exclude, fileName))
+		
+		if (!match(include, fileName) || match(exclude, fileName) || ignores.contains(fileName))
 			return;
 
+		System.out.println("YUI compressor for: " + fileName);
+		
 		String extension = "";
 		int i = fileName.lastIndexOf('.');
 		if (i > 0) {
 			extension = fileName.substring(i + 1);
 		}
-
+		
 		String inputFilename = fileName;
 		String outputFilename = fileName.replace("." + extension, "." + this.fileExtension);
 
 		try {
-			YuiCompressor.compressJavaScript(inputFilename, outputFilename, new Options());
-			System.out.println("YUI compressor for: " + outputFilename);
+			YuiCompressor.compressJavaScript(inputFilename, outputFilename, new Options());	
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 			throw new BuildException(e.getMessage());
@@ -98,7 +119,15 @@ public class ConfusionTask extends org.apache.tools.ant.Task {
 
 	@Override
 	public void execute() throws BuildException {
-		File[] files = new File(this.path).listFiles();
+		File root = new File(this.path);
+		for (String f : this.ignore.split("\\|"))
+		{
+			String af = root.getAbsolutePath() + f;
+			System.out.println("DEBUG: ignore="+af);		
+			ignores.add(af);
+		}
+		
+		File[] files = root.listFiles();
 		iterateFiles(files);
 	}
 }

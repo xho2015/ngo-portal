@@ -233,28 +233,6 @@
 		    return Math.floor(Math.random() * (max - min + 1)) + min;
 		}
 
-		// EVENT HANDLERS
-		/*
-		$this.mousemove(
-			function (e) {
-				var $this = $(this);
-				var offset = $this.offset();
-				var centerX = width / 2;
-				var centerY = height / 2;
-				var distanceX = ((e.pageX - offset.left) - centerX);
-				var distanceY = ((e.pageY - offset.top) - centerY);
-				deltaX = Math.round(settings.mouseScale * (distanceX / 40));
-				deltaY = Math.round(settings.mouseScale * (distanceY / 40));
-			}
-		);
-		 
-		(function animloop() {
-			requestAnimationFrame(animloop);
-			recalcMovement();
-			draw();
-		})();
-		*/
-		
 		function animate() {
 			recalcMovement();
 			draw();
@@ -264,7 +242,7 @@
 			AppCommon.limitLoop(animate, settings.framerate);
 			lunched = true;
 		}
-			
+
 		return this;
 	};
 
