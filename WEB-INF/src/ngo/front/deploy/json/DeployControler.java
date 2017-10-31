@@ -34,68 +34,75 @@ public class DeployControler {
 	@Autowired
     private BomService bomService;
 	
-	//@Autowired 
-	//private ServletContext servletContext;
+	@Autowired 
+	private ServletContext servletContext;
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
     
-    @RequestMapping(value = "/deploy/bom", method = RequestMethod.GET)
-    public ResponseEntity<String> bom(HttpServletRequest request, @RequestParam("path") String bomPath, @RequestParam("token") String token) {
+    @RequestMapping(value = "/json/deploy", method = RequestMethod.GET)
+    public ResponseEntity<String> deploy(@RequestParam("path") String bomPath, @RequestParam("token") String token) {
         try {
+        	//TODO: validate token here
+        	
+        	
         	//0 - helpers
-        	Map<String, String> uploadBoms = new HashMap<String, String>();
+        	Map<String, Bom> uploadedBoms = new HashMap<String, Bom>();
         	Map<String, Bom> storedBoms = new HashMap<String, Bom>();
         	Map<String, Bom> toBeInsertBoms = new HashMap<String, Bom>();
         	Map<String, Bom> toBeUpdateBoms = new HashMap<String, Bom>();
         	
-        	
         	//1. load the bom file from webapp root/bom folder
-        	ServletContext servletContext = request.getServletContext();
         	String filePath = servletContext.getRealPath(bomPath);
-        	FileReader fr =new FileReader(filePath);
-        	BufferedReader br = new BufferedReader(fr);
-        	String line[], fileId, url, md5, grade, module;
-        	while(br.read()!=-1)
-            {
-            	line=br.readLine().split("\\|");
-            	fileId = line[0];
-            	url = line[1];
-            	grade = line[2].split("/")[0];
-            	module = line[2].split("/")[1];
-            	md5 = line[3];
-            	uploadBoms.put(url, new Bom());
-            }
+        	BufferedReader br = new BufferedReader(new FileReader(filePath));
+        	String line, row[], fileId, url, md5, temp[], grade, module;
+        	line = br.readLine();
+            while (line!=null && line.length() > 0) {
+        		row = line.split("\\|");
+        		fileId = row[0];
+            	url = row[1];
+            	temp = row[2].split("/");
+            	grade = temp.length == 2 ? temp[0] : "";
+            	module = temp.length == 2 ? temp[1] : "";
+            	md5 = row[3];
+            	uploadedBoms.put(url, new Bom(fileId, url, grade, module, md5));
+            	line = br.readLine();
+            } 
             
         	//2. load the bom info from db
         	List<Bom> dbBoms = bomService.getAllBomObjects();
         	for (Bom b : dbBoms)
         		storedBoms.put(b.getUrl(), b);
         	
-        	//3. insertion or updating
-        	uploadBoms.entrySet().stream().forEach(s -> {
+        	//3. find bom to be inserted or updated
+        	uploadedBoms.entrySet().stream().forEach(s -> {
         		Bom entry = storedBoms.get(s.getKey());
         		if (entry == null)
         		{
-        			entry = new Bom();
-        			entry.setName("");
-        			
-        			entry.setMd5(s.getValue());
-        			entry.setUrl(s.getKey());
-        			
-        			toBeInsertBoms.put(s.getKey(), entry);
+        			s.getValue().setVer("1");
+        			toBeInsertBoms.put(s.getKey(), s.getValue());
         		}
-        		else if (entry != null && !entry.getMd5().equalsIgnoreCase(s.getValue()))
+        		else 
         		{
-        			//update version by increase 1
-        			entry.setMd5(s.getValue());
-        			entry.setVer(String.valueOf(Integer.parseInt(entry.getVer()) + 1));
-        			toBeUpdateBoms.put(s.getKey(), entry);
-        		} 
-        				
-        		
+        			Bom u = s.getValue(); 
+        			if (!u.getMd5().equalsIgnoreCase(entry.getMd5()))
+        			{
+        				//update version by increase 1
+            			entry.setMd5(u.getMd5());
+            			entry.setVer(String.valueOf(Integer.parseInt(entry.getVer()) + 1));
+            			toBeUpdateBoms.put(s.getKey(), entry);	
+        			}
+        		}
         	});
         	
-        	return ResponseEntity.ok("");
+        	//4. do insertion and updating
+        	toBeUpdateBoms.entrySet().stream().forEach(s -> {
+        		bomService.updateBomObject(s.getValue());
+            });
+        	toBeInsertBoms.entrySet().stream().forEach(s -> {
+        		bomService.addBomObject(s.getValue());
+            });
+        	
+        	return ResponseEntity.ok("Bom daploy done. Inserted:"+toBeInsertBoms.size()+",Updated:"+toBeUpdateBoms.size());
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

@@ -45,7 +45,10 @@ public class LocalCache {
 
 	private Object loadObject(String key) {
 		
-		CachingLoader loader = registra.get(key);
+		//retrieve the root key
+		String keys[] = key.split("\\.");
+		String root = keys.length > 0 ? keys[0] : "";
+		CachingLoader loader = registra.get(root);
 		if (loader==null)
 			logger.error("Localcache: key ["+key+"] don't have a caching loader");			
 		else

@@ -109,8 +109,9 @@
 
 	<servlet-mapping>
 		<servlet-name>spring-dispatcher</servlet-name>
-		<url-pattern>/json/bom/list</url-pattern>
+		<url-pattern>/json/bom</url-pattern>
 		<url-pattern>/json/cache</url-pattern>
+		<url-pattern>/json/deploy</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>

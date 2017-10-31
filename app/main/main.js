@@ -15,7 +15,7 @@ var MAINAPP = $.ngoModule(function() {
 			async : false,
 			cache : false,
 			dataType : "json",
-			url : "/json/bom/list",
+			url : "/json/bom",
 			data : {
 				token : "ses001",
 				module : "main"

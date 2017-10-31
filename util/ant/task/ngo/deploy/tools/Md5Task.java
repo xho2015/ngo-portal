@@ -43,6 +43,15 @@ public class Md5Task extends org.apache.tools.ant.Task {
 	
 	private String bomRoot;
 	
+	private String appRoot;
+
+	public String getAppRoot() {
+		return appRoot;
+	}
+
+	public void setAppRoot(String appRoot) {
+		this.appRoot = appRoot;
+	}
 
 	public String getBomRoot() {
 		return bomRoot;
@@ -136,13 +145,14 @@ public class Md5Task extends org.apache.tools.ant.Task {
 		String relativeFilename = fileName.replace("\\","/").replace(this.path, "");
 		String fileId = file.getName().replaceAll("\\.", "-");
 		String bomPath = (relativeFilename.startsWith(bomRoot) ? folderName : "").replaceAll(bomRoot, "");
+		String appPath = (relativeFilename.startsWith(appRoot) ? folderName : "").replaceAll(appRoot, "");
 
 		// try to calculate md5 for file
 		try {
 			FileInputStream fis = new FileInputStream(new File(fileName));
 			String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
 			fis.close();
-			ngoBom.add(fileId + this.spliter + relativeFilename + this.spliter + bomPath + this.spliter + md5);
+			ngoBom.add(fileId + this.spliter + relativeFilename + this.spliter + (bomPath.length() > 0 ? bomPath : appPath) + this.spliter + md5);
 			System.out.println("File: "+ relativeFilename +", md5=" + md5) ;
 		} catch (IOException ioe) {
 			ioe.printStackTrace(System.out);

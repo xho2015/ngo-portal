@@ -25,7 +25,7 @@ public class BomControler {
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
     
-    @RequestMapping(value = "/json/bom/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/json/bom", method = RequestMethod.GET)
     public ResponseEntity<String> bom(@RequestParam("module") String moduleId, @RequestParam("token") String token) {
         try {
         	//it's not necessary do request param validity as spring framework will handle it

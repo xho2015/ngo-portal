@@ -12,5 +12,6 @@
          http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <context:component-scan base-package="ngo.front.web.json" />
+    <context:component-scan base-package="ngo.front.deploy.json" />
     <mvc:annotation-driven />
 </beans>

@@ -172,7 +172,7 @@ PANEL.header = (function() {
 		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
 		my.Label1.x = 10; my.Label1.y = (h - 16) / 2;
 		my.Label1.text="NGO KidsMath " + PANEL.dimension.width+"X"+PANEL.dimension.height+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
-		my.enlarge.x = (w - my.enlarge.image.width - 60);
+		my.enlarge.x = (w - my.enlarge.image.width - 20);
 		my.enlarge.y = (h - my.enlarge.image.height) / 2;
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.alpha = 0.9;

@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ngo.front.storage.orm.BomMapper">
-	<select id="getBom" parameterType="String"	resultType="ngo.front.storage.entity.Bom">
-		select * from bom where id=#{id}
+	<select id="getByModuleId" parameterType="String" resultType="ngo.front.storage.entity.Bom">
+		select name,ver,url,md5,grade,module,category from bom where module=#{module}
 	</select>
 	
-	<select id="getAllBom" resultType="ngo.front.storage.entity.Bom">
+	<select id="getByGradeId" parameterType="String" resultType="ngo.front.storage.entity.Bom">
+		select name,ver,url,md5,grade,module,category from bom where grade=#{grade}
+	</select>
+	
+	<select id="getAll" resultType="ngo.front.storage.entity.Bom">
 		select name,ver,url,md5,grade,module,category from bom
 	</select>
 	
+	<update id="update" parameterType="ngo.front.storage.entity.Bom">
+        update bom set md5=#{md5},ver=#{ver} where name=#{name}
+    </update>
+    
+    <insert id="insert" parameterType="ngo.front.storage.entity.Bom" useGeneratedKeys="true" keyProperty="rid">
+        insert into bom(name,ver,url,md5,grade,module) values(#{name},#{ver},#{url},#{md5},#{grade},#{module})
+    </insert>
+    
 </mapper>
