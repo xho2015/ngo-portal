@@ -40,6 +40,17 @@ public class Md5Task extends org.apache.tools.ant.Task {
 	private String outFile;
 
 	private String spliter;
+	
+	private String bomRoot;
+	
+
+	public String getBomRoot() {
+		return bomRoot;
+	}
+
+	public void setBomRoot(String bomRoot) {
+		this.bomRoot = bomRoot;
+	}
 
 	public String getPath() {
 		return path;
@@ -116,20 +127,22 @@ public class Md5Task extends org.apache.tools.ant.Task {
 		System.out.println("NGO bom File: "+ outputFilename +" is generated!");
 	}
 	
-	private void handleFileByAPI(File file) {
+	private void handleFileByAPI(File file, String folderName) {
 
 		String fileName = file.getAbsolutePath();
 		if (!match(include, fileName) || match(exclude, fileName))
 			return;
 
 		String relativeFilename = fileName.replace("\\","/").replace(this.path, "");
-		
+		String fileId = file.getName().replaceAll("\\.", "-");
+		String bomPath = (relativeFilename.startsWith(bomRoot) ? folderName : "").replaceAll(bomRoot, "");
+
 		// try to calculate md5 for file
 		try {
 			FileInputStream fis = new FileInputStream(new File(fileName));
 			String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
 			fis.close();
-			ngoBom.add(relativeFilename + this.spliter + md5);
+			ngoBom.add(fileId + this.spliter + relativeFilename + this.spliter + bomPath + this.spliter + md5);
 			System.out.println("File: "+ relativeFilename +", md5=" + md5) ;
 		} catch (IOException ioe) {
 			ioe.printStackTrace(System.out);
@@ -137,13 +150,13 @@ public class Md5Task extends org.apache.tools.ant.Task {
 		}
 	}
 
-	private void iterateFiles(File[] files) {
+	private void iterateFiles(File[] files, String folderName) {
 		for (File file : files) {
 			if (file.isDirectory()) {
 				// traverse the folder tree
-				iterateFiles(file.listFiles());
+				iterateFiles(file.listFiles(), folderName + "/"+ file.getName());
 			} else {
-				handleFileByAPI(file);
+				handleFileByAPI(file, folderName);
 			}
 		}
 	}
@@ -151,7 +164,7 @@ public class Md5Task extends org.apache.tools.ant.Task {
 	@Override
 	public void execute() throws BuildException {
 		File[] files = new File(this.path).listFiles();
-		iterateFiles(files);
+		iterateFiles(files, "");
 		//dump file + md5 into out file
 		dumpOutFile();
 	}

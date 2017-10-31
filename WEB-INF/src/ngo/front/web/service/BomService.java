@@ -4,8 +4,11 @@ import org.springframework.stereotype.Service;
 
 import ngo.front.common.service.JSonService;
 import ngo.front.common.service.LocalCache;
+import ngo.front.storage.entity.Bom;
 import ngo.front.storage.entity.Resource;
 import ngo.front.storage.orm.BomDAO;
+
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -32,6 +35,15 @@ public class BomService implements LocalCache.CachingLoader{
 	{
 		localCache.register(CACHE_KEY, this);
 		logger.info("BomService registered as caching loader for ["+CACHE_KEY+"]");				
+	}
+	
+	/**
+	 * retrive all Bom data from DAO
+	 * @return list of Bom object
+	 */
+	public List<Bom> getAllBomObjects()
+	{
+		return bomDAO.getAllBom();
 	}
 	
 	public String getModuleBom(String moduleId, String token)
