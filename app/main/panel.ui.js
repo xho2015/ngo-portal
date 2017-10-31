@@ -147,10 +147,22 @@ PANEL.header = (function() {
 	my.Label1.shadow = new createjs.Shadow("#090909", 1, 1, 6);
 	my.container.addChild(my.Label1);
 	my.container.addChild(my.Label2);
+	
+	my.enlarge = new createjs.Bitmap("/app/res/icons_enlarge40.png");
+	my.enlarge.shadow = new createjs.Shadow("#090909", 1, 1, 2);
+	my.container.addChild(my.enlarge);
+	
 	my.stage = new createjs.Stage(PANEL.panelId);
 	my.stage.addChild(my.container);
 	my.stage.alpha = 1;
-
+	
+	my.enlarge.on("click", function(evt) {
+		if (PANEL.isFullscreen())
+			PANEL.exitFullScreen();
+		else
+			PANEL.fullScreen();
+	});
+	
 	my.resize = function(x, y, w, h) {
 		var idx = my.container.getChildIndex(my.square);
 		my.container.removeChild(my.square);
@@ -160,6 +172,8 @@ PANEL.header = (function() {
 		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
 		my.Label1.x = 10; my.Label1.y = (h - 16) / 2;
 		my.Label1.text="NGO KidsMath " + PANEL.dimension.width+"X"+PANEL.dimension.height+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
+		my.enlarge.x = (w - my.enlarge.image.width - 60);
+		my.enlarge.y = (h - my.enlarge.image.height) / 2;
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.alpha = 0.9;
 		my.stage.update();
@@ -201,9 +215,7 @@ PANEL.screen = (function() {
 	my.container.addChild(my.square);
 	my.Label1 = new createjs.Text("info", "16px Arial", "#F0FFF0");
 	my.container.addChild(my.Label1);
-	my.enlarge = new createjs.Bitmap("/app/res/enlarge_screen.png");
-	my.enlarge.shadow = new createjs.Shadow("#090909", 3, 3, 6);
-	my.container.addChild(my.enlarge);
+	
 	my.stage = new createjs.Stage(PANEL.panelId);
 	my.stage.addChild(my.container);
 	my.stage.alpha = 0.6;
@@ -214,22 +226,11 @@ PANEL.screen = (function() {
 		my.square = new createjs.Shape();
 		my.container.addChildAt(my.square, idx);
 		my.square.graphics.beginFill("#1F1F1F").drawRect(x, y, w, h);
-		
 		my.Label1.x = x; my.Label1.y = y+10;
 		my.Label1.text = "Click下面图标切换到全屏模式！";
-		my.enlarge.x = (w - my.enlarge.image.width) / 2;
-		my.enlarge.y = (h - my.enlarge.image.height) / 2;
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.update();
 	};
-
-	my.enlarge.on("click", function(evt) {
-		if (PANEL.isFullscreen())
-			PANEL.exitFullScreen();
-		else
-			PANEL.fullScreen();
-	});
-	
 	return my;
 }());
 
