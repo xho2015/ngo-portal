@@ -67,7 +67,7 @@
 
 	<!-- NGO resource package -->
 	<target name="jsConfusion" description="Javascript Confusion">
-		<confusion include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
+		<confusion ignore="\app\lib\dat.gui.js|\app\lib\three.js" include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
 	</target>
 
 	<target name="jsGzip" description="Confusion and Gzip for javascript " depends="jsConfusion">
@@ -85,7 +85,7 @@
 
 	<!--new NG resouce needs to be registered in include-->
 	<target name="ngoMd5" description="generate md5 checksum for NGO resource and dump to file">
-		<ngmd5 include=".*\.ng(js|css)" exclude="__NOMATCH__" outFile="/bom/ngo.bom" path="${project.root}"  spliter="|"/>
+		<ngmd5 include=".*\.ng(js|css)" exclude="__NOMATCH__" bomRoot="/bom/" outFile="/bom/ngo.bom" path="${project.root}"  spliter="|"/>
 	</target>
 
 

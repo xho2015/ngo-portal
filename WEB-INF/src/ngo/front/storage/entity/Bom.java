@@ -22,6 +22,15 @@ public class Bom {
 	{
 	}
 	
+	public Bom(String fid, String url, String grade, String module, String md5)
+	{
+		this.name = fid;
+		this.url = url;
+		this.grade = grade;
+		this.module = module;
+		this.md5 = md5;
+	}
+	
 	public String getName() {
 		return name;
 	}
