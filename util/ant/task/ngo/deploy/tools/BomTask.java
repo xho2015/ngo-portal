@@ -244,7 +244,7 @@ public class BomTask extends org.apache.tools.ant.Task {
 	{
 		//process meta.txt
 		File meta = new File(file.getAbsolutePath() + "/meta.txt");
-		if (meta!=null && meta.exists()) 
+		if (meta.exists()) 
 		{
 			System.out.println("meta.txt: "+file.getAbsolutePath());
 			BufferedReader br = new BufferedReader(new FileReader(meta));
