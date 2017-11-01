@@ -14,3 +14,6 @@ prototype-ngjs|/app/test/prototype.ngjs|test|44d29c7f46a489ee7cfb3ea079c2fe6f
 screen-min-ngjs|/app/test/screen.min.ngjs|test|b2adc402ab54e168c13cd739decda530
 test-min-ngjs|/app/test/test.min.ngjs|test|7fe5e47b46bdcb4d74f114f5575d99d1
 demo1-min-ngjs|/bom/g1/g1m1/demo1.min.ngjs|g1/g1m1|59bb15c24d4f415c820e44dcdf6ca07e
+loader-min-ngjs|/bom/g1/g1m1/loader.min.ngjs|g1/g1m1|63b64496956dfc510f36588a7cecabee
+loader-min-ngjs|/bom/g1/g1m2/loader.min.ngjs|g1/g1m2|517b9688e6aa07ed10a61a46a66d9ee4
+loader-min-ngjs|/bom/g2/g2m1/loader.min.ngjs|g2/g2m1|529380ac5cca45420cc0380df4970726

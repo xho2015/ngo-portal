@@ -1,0 +1,4 @@
+type=G
+id=g2
+name=二年级
+desc=包括二年级描述

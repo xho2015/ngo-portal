@@ -1,0 +1,4 @@
+type=M
+id=g1/g1m2
+name=减法基础
+desc=包括基础减法描述

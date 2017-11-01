@@ -248,20 +248,35 @@ public class BomTask extends org.apache.tools.ant.Task {
 		{
 			System.out.println("meta.txt: "+file.getAbsolutePath());
 			BufferedReader br = new BufferedReader(new FileReader(meta));
-        	String line, row[], temp = "";
+        	String line, row[], temp = "", type=null;
         	
         	line = br.readLine();
         	row = line.split("=");
         	List<String> out = null;         
     		if (row[0].equals("type") && row[1].equalsIgnoreCase("G")){	
-    			out = this.ngoGradeBom;       			
+    			out = this.ngoGradeBom;  type = "G";     			
     		} else if (row[0].equals("type") && row[1].equalsIgnoreCase("M")) {
-    			out = this.ngoModuleBom;    
+    			out = this.ngoModuleBom;  type = "M";  
     		}
     		line = br.readLine();
         	while (line!=null && line.length() > 0) {       		
         		row = line.split("=");
-        		temp += row[1]+"|";
+        		if (row[0].equals("id")) {
+        			if (type.equals("G")) {
+        				temp += row[1]+"|";
+        			} else if (type.equals("M")){
+        				temp += row[1].split("/")[0]+"|"+row[1].split("/")[1]+"|";            				
+        			}
+        			//validate
+            		if (this.validate.equals("true")){
+            			String currentFolder = meta.getAbsolutePath().replace("\\","/").replace(this.path, "");
+            			currentFolder = currentFolder.replace(bomRoot, "").replace("/meta.txt", "");
+            			if (!row[1].equalsIgnoreCase(currentFolder))
+            				throw new IllegalStateException("id ["+ row[1]+"] is not valid in "+meta.getAbsolutePath());
+            		}
+        		} else {
+        			temp += row[1]+"|";
+        		}
         		line = br.readLine();
             }        	
         	out.add(temp.substring(0, temp.length()-1)); 
