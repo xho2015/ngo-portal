@@ -1,0 +1,5 @@
+type=M
+gid=g1
+id=g1m1
+name=加法基础
+desc=包括基础加法描述

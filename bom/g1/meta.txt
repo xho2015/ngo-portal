@@ -1,0 +1,4 @@
+type=G
+id=g1
+name=一年级
+desc=包括一年级描述

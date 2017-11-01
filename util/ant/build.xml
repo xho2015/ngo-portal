@@ -84,8 +84,8 @@
 	</target>
 
 	<!--new NG resouce needs to be registered in include-->
-	<target name="ngoMd5" description="generate md5 checksum for NGO resource and dump to file">
-		<ngmd5 include=".*\.ng(js|css)" exclude="__NOMATCH__" bomRoot="/bom/" outFile="/bom/ngo.bom" path="${project.root}"  spliter="|"/>
+	<target name="genBoms" description="generate bom pack and md5 checksum for NGO resource and dump to file">
+		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" bomRoot="/bom/" appRoot="/app/" outFile="/bom/boms.txt" moduleOutput="/bom/modules.txt" gradeOutput="/bom/grades.txt" path="${project.root}"  spliter="|"/>
 	</target>
 
 
