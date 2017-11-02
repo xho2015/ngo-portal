@@ -9,7 +9,12 @@ $.extend({ngoModule: function(module) {
 var LIBRARY = (function() {
 	var my = {};
 	
+	/**
+	 * load single script without cache versioning 
+	 */
 	my.loadScript = function (url, ok, fail){
+		//enable caching
+		$.ajaxSetup({ cache : true});
 		$.getScript(url, ok, fail )
 		  .done(function( script, textStatus ) {
 		    if (ok) ok();
@@ -22,9 +27,10 @@ var LIBRARY = (function() {
 	
 	my.loadScripts = function(urls, ok, fail) {
 	    var i = 0;
+	    $.ajaxSetup({ cache : true});
 	    (function loadNextScript() {
 	         if (i < urls.length) {
-	              $.getScript(urls[i].url)
+	              $.getScript(urls[i].url + "?"+urls[i].ver)
 	              .done(function() {
 	                  ++i;
 	                  loadNextScript();
@@ -57,11 +63,12 @@ var LIBRARY = (function() {
 	
 	my.loadScriptsRetry = function(urls, ok, fail) {
 		formalize(urls);
-	    var i = 0, r = 0;
+		var i = 0, r = 0;
+		$.ajaxSetup({ cache : true});
 	    (function loadNextScript() {
 	         if (i < urls.length) {
 	        	  var url = (r == 0 ?  urls[i].url : urls[i].retry[r]);
-	              $.getScript(url)
+	              $.getScript(url + "?" +urls[i].ver)
 	              .done(function() {
 	                  ++i;
 	                  r = 0; //reset retry flag
@@ -110,7 +117,8 @@ var LIBRARY = (function() {
 	 */
 	my.requirea = function (module, ok) {
 		var api = "/json/bom?token=t1&module="+module;
-		$.getJSON(api, {
+		$.ajaxSetup({ cache : false});
+	    $.getJSON(api, {
 	    	format: "json"
 		}).done(function(data){
 			  if (ok) ok(data);

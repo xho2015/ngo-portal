@@ -1,4 +1,4 @@
-<project name="NGO.km Ant Deployment Utility" default="ngoEcho" basedir=".">
+<project name="NGO.km Ant Deployment Utility" default="ngo.echo" basedir=".">
 
 	<property file="build.properties" />
 
@@ -37,18 +37,18 @@
 	</taskdef>
 
 	<!--default-->
-	<target name="ngoEcho">
+	<target name="ngo.echo">
 		<echo message="${project.name} ${project.ver},  basedir=${basedir}, project.root=${project.root}" />
 	</target>
 
 
 	<!-- basic targets -->
-	<target name="clean">
+	<target name="project.clean">
 		<delete dir="${dest.dir}" />
 	</target>
 
 
-	<target name="war" description="build war" depends="clean">
+	<target name="project.war" description="build war" depends="project.clean">
 		<mkdir dir="${dist.dir}" />
 		<war destfile="${dist.dir}/ROOT.war" webxml="${project.root}/WEB-INF/web.xml">
 			<classes dir="${project.root}/WEB-INF/classes" />
@@ -66,42 +66,51 @@
 	</target>
 
 	<!-- NGO resource package -->
-	<target name="jsConfusion" description="Javascript Confusion">
+	<target name="js.confusion" description="Javascript Confusion">
 		<confusion ignore="\app\lib\dat.gui.js|\app\lib\three.js" include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
 	</target>
 
-	<target name="jsGzip" description="Confusion and Gzip for javascript " depends="jsConfusion">
+	<target name="js.gzip" description="Confusion and Gzip for javascript " depends="js.confusion">
 		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}" />
 	</target>
 	
-	<target name="cssGzip" description="Gzip for css">
+	<target name="css.gzip" description="Gzip for css">
 			<ngzip include=".*\.css" exclude="__NOMATCH__" fileExtension="ngcss" path="${project.root}" />
 		</target>
 
 	<!--This task is only for DEV debug purpose only-->
-	<target name="jsGzip-DEV" description="Javascript Gzip with raw javascript">
+	<target name="js.gzip.DEV" description="Javascript Gzip without confusion">
 		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${project.root}" />
 	</target>
 
 	<!--new NG resouce needs to be registered in include-->
-	<target name="genBoms" description="generate bom pack and md5 checksum for NGO resource and dump to file">
+	<target name="bom" description="" depends="js.gzip">
 		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" bomRoot="/bom/" appRoot="/app/" outFile="/bom/boms.txt" moduleOutput="/bom/modules.txt" gradeOutput="/bom/grades.txt" path="${project.root}"  spliter="|"/>
 	</target>
 
+	<target name="bom.DEV" description="" depends="js.gzip.DEV">
+		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" bomRoot="/bom/" appRoot="/app/" outFile="/bom/boms.txt" moduleOutput="/bom/modules.txt" gradeOutput="/bom/grades.txt" path="${project.root}"  spliter="|"/>
+	</target>
+	
 
-	<!-- NGO web manager interface -->
-
+	<!-- NGO web manager interface - caching -->
+	<target name="bom.push.DEV" description="" depends="bom.DEV">
+		<get src="http://localhost/json/deploy?token=123&amp;path=/bom/boms.txt" dest="${project.root}/bom/push.log" username="ngoScript" password="1234"/>
+		<loadfile property="push.output" srcFile="${project.root}/bom/push.log"/>
+		<echo message="${push.output}" />
+	</target>
+	
 
 	<!-- Tomcat manager interface -->
-	<target name="deploy" description="Install web application" depends="">
+	<target name="tomcat.deploy" description="Install web application" depends="">
 		<deploy url="${url}" username="${username}" password="${password}" path="${path}" war="${dist.dir}/ROOT.war" />
 	</target>
 
-	<target name="reload" description="Reload web application" depends="">
+	<target name="tomcat.reload" description="Reload web application" depends="">
 		<reload url="${url}" username="${username}" password="${password}" path="${path}" />
 	</target>
 
-	<target name="undeploy" description="Remove web application">
+	<target name="tomcat.undeploy" description="Remove web application">
 		<undeploy url="${url}" username="${username}" password="${password}" path="${path}" />
 	</target>
 

@@ -149,7 +149,9 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	a. CDN.txt to be integrated for generate url
 	
 	
-	
+4. ant task get implemented
+	https://ant.apache.org/manual/Tasks/get.html
+	[a]. add push task to invoke deploy interface on server	
 	
 	
 	
