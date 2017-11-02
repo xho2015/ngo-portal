@@ -149,9 +149,15 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	a. CDN.txt to be integrated for generate url
 	
 	
-4. ant task get implemented
+4. ant task get
 	https://ant.apache.org/manual/Tasks/get.html
 	[a]. add push task to invoke deploy interface on server	
+	
+
+4. ant FTP task 
+	https://ant.apache.org/manual/Tasks/ftp.html
+	a. added task, but with 425 error, try below solution
+		https://stackoverflow.com/questions/8015807/ant-ftp-upload-file-425-unable-to-build-data-connection-connection-timed-out
 	
 	
 	

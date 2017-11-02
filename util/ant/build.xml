@@ -20,6 +20,8 @@
 	<path id="ngo-ant-classpath">
 		<fileset dir="${project.root}/util/ant/lib">
 			<include name="ngotask.jar" />
+			<include name="commons-net-1.4.1.jar" />
+			<include name="jakarta-oro-2.0.8.jar" />
 		</fileset>
 		<fileset dir="${project.root}/util/jsc">
 			<include name="yuicompressor-2.4.8.jar" />
@@ -32,6 +34,7 @@
 			<include name="commons-codec-1.10.jar" />
 		</fileset>
 	</path>
+	
 	<taskdef file="${project.root}/util/ant/ngoTasks.properties">
 		<classpath refid="ngo-ant-classpath" />
 	</taskdef>
@@ -100,6 +103,39 @@
 		<echo message="${push.output}" />
 	</target>
 	
+	<target name="ftp.app.DEV" description="upload client pack to web server" depends="">
+		<ftp server="39.106.1.237"
+		       remotedir="/dev/apache-tomcat-8.0.46/webapps/ROOT"
+		       userid="ngoftpd1"
+		       password="Up!0ad2km$"
+			   passive="no"
+			   depends="no"
+			   binary="no"
+		       verbose="yes">
+			<fileset dir="${project.root}">
+				<exclude name="WEB-INF/**" />
+				<exclude name="META-INF/**" />
+				<exclude name="doc/**" />
+				<exclude name="util/**" />
+			</fileset>
+		</ftp>
+	</target>
+	
+	<target name="ftp.java.DEV" description="upload client pack to web server" depends="">
+			<ftp server="39.106.1.237"
+			       remotedir="/dev/apache-tomcat-8.0.46/webapps/ROOT"
+			       userid="ngoftpd1"
+			       password="Up!0ad2km$"
+			       separator="\"
+			       verbose="yes">
+				<fileset dir="${project.root}">
+					<exclude name="app/**" />
+					<exclude name="bom/**" />
+					<exclude name="doc/**" />
+					<exclude name="util/**" />
+				</fileset>
+			</ftp>
+		</target>
 
 	<!-- Tomcat manager interface -->
 	<target name="tomcat.deploy" description="Install web application" depends="">
