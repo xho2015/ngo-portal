@@ -5,16 +5,17 @@ $.extend({ngoModule: function(module) {
 	return module;}
 });
 
-var JSLOADER = (function() {
-	var my = {};	
+
+var LIBRARY = (function() {
+	var my = {};
+	
 	my.loadScript = function (url, ok, fail){
 		$.getScript(url, ok, fail )
 		  .done(function( script, textStatus ) {
-		    console.log( textStatus );
 		    if (ok) ok();
 		  })
 		  .fail(function( jqxhr, settings, exception ) {
-		    console.log( exception );
+		    console.log( exception + " script ["+url+"]");
 		    if (fail) fail(url);
 		});
 	};
@@ -40,14 +41,14 @@ var JSLOADER = (function() {
 	};
 	
 	/**
-	 * fomalize json response, if CDN or retry url existed, 
+	 * inject "retry" to link objects, in case CDN or retry URL exists, 
 	 */
 	function formalize(links)
 	{
 		for (u in links) {
-			if (links[u].url.indexOf("|") !== -1)
+			if (links[u].url.indexOf("#") !== -1)
 			{
-				var retry = links[u].url.split("|");
+				var retry = links[u].url.split("#");
 				links[u].url = retry[0];
 				links[u].retry = retry;
 			}
@@ -82,16 +83,10 @@ var JSLOADER = (function() {
 	    })();
 	};
 	
-	return my;
-})();
-
-var LIBRARY = (function() {
-	var my = {};
-	
 	/**
 	 * TODO: resolve token here
 	 */
-	my.load = function (module, ok, fail){
+	my.require = function (module, ok, fail){
 		var data;
 		$.ajax({
 			type : "GET", 
@@ -113,7 +108,7 @@ var LIBRARY = (function() {
 	/**
 	 * TODO: resolve token here
 	 */
-	my.loada = function (module, ok) {
+	my.requirea = function (module, ok) {
 		var api = "/json/bom?token=t1&module="+module;
 		$.getJSON(api, {
 	    	format: "json"
@@ -127,7 +122,7 @@ var LIBRARY = (function() {
 
 var BOOTSTRAP = $.ngoModule(function() {
 	function init() {
-		JSLOADER.loadScript(AppSettings.main);
+		LIBRARY.loadScript(AppSettings.main);
 	};	
 	return {
 		init : init

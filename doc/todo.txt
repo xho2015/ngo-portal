@@ -141,9 +141,12 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	  b. add new order column "lorder" in bom table
 	  c. change sqlmapper of bom by adding order by clause
 	
-2. refactor done for bootstrap.js
+2. javascript loader  
+	[a]. retry implemented
 	
 	
+3. ant task ngobom 
+	a. CDN.txt to be integrated for generate url
 	
 	
 	

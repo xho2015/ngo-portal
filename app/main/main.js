@@ -9,8 +9,8 @@ var MAINAPP = $.ngoModule(function() {
 	};
 
 	function init() {
-		var depends = LIBRARY.load("main");
-		JSLOADER.loadScriptsRetry(depends.links, ready, fail);
+		var depends = LIBRARY.require("main");
+		LIBRARY.loadScriptsRetry(depends.links, ready, fail);
 	};
 
 	return {
