@@ -1,7 +1,10 @@
 jquery-starfield-min-ngjs|/app/ext/jquery-starfield.min.ngjs|ext|62f7d2f3a5622864ac707e49d62b6f00
+jstars-min-ngjs|/app/ext/jstars.min.ngjs|ext|ad64e4729ec35167ffb0b0b926a7c14f
 createjs-0-8-2-min-ngjs|/app/lib/createjs-0.8.2.min.ngjs|lib|5f47459d9f1675391d14766cc05f9d78
+createjs82-min-ngjs|/app/lib/createjs82.min.ngjs|lib|5f47459d9f1675391d14766cc05f9d78
 dat-gui-min-ngjs|/app/lib/dat.gui.min.ngjs|lib|20e4b1e163d82d70c99ba1d25491be22
 jquery-1-9-1-min-ngjs|/app/lib/jquery-1.9.1.min.ngjs|lib|2b7cf2de286a2cb1ed594994d6b164c6
+jquery191-mim-min-ngjs|/app/lib/jquery191.mim.min.ngjs|lib|3c36a9a3f89934ee150902b5e9de86fd
 three-min-ngjs|/app/lib/three.min.ngjs|lib|5157c9c4f3a1103504e8ba840e2ffd2a
 bootstrap-min-ngjs|/app/main/bootstrap.min.ngjs|main|96616ef22a14126953a9789a735876d3
 common-min-ngjs|/app/main/common.min.ngjs|main|f54e5723e5dfc18f04552ba7f564fe57
