@@ -1,42 +1,19 @@
 var MAINAPP = $.ngoModule(function() {
 
 	var ready = function() {
-		initUI();		
+		MAIMUI.init();	
 	};
 
-	var error = function() {
-		alert("load script for main AppModule error");
+	var fail = function(url) {
+		alert("load script ("+url+") failed");
 	};
 
 	function init() {
-		var depends;
-		$.ajax({
-			type : "GET",
-			async : false,
-			cache : false,
-			dataType : "json",
-			url : "/json/bom",
-			data : {
-				token : "ses001",
-				module : "main"
-			},
-			success : function(json) {
-				depends = json;
-			},
-			error : function(error) {
-				alert(error.status);
-			}
-		});
-		AppBootstrap.loadBulkScript(depends, ready, error);
-	}
-	;
-
-	function initUI() {
-		MAIMUI.init();
+		var depends = LIBRARY.load("main");
+		JSLOADER.loadScripts(depends.links, ready, fail);
 	};
 
 	return {
 		init : init
 	};
-
 }());

@@ -136,10 +136,12 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	
 	
 --11.1
-1. load module javascript in order.	
+1. load module javascript in orderly manner.	
+	[a]. implemented jquery.getScript from client side. 
+	  b. add new order column "lorder" in bom table
+	  c. change sqlmapper of bom by adding order by clause
 	
-	
-	
+2. 
 	
 	
 	
