@@ -108,11 +108,12 @@
 		       remotedir="${ftp.dev.dir}"
 		       userid="${ftp.dev.user}"
 		       password="${ftp.dev.pass}"
-			   passive="no"
+			   passive="yes"
 			   depends="no"
 			   binary="no"
 		       verbose="yes">
 			<fileset dir="${project.root}">
+				<exclude name="app/test/**" />
 				<exclude name="WEB-INF/**" />
 				<exclude name="META-INF/**" />
 				<exclude name="doc/**" />
