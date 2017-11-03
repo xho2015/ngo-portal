@@ -98,16 +98,16 @@
 
 	<!-- NGO web manager interface - caching -->
 	<target name="bom.push.DEV" description="" depends="bom.DEV">
-		<get src="http://localhost/json/deploy?token=123&amp;path=/bom/boms.txt" dest="${project.root}/bom/push.log" username="ngoScript" password="1234"/>
+		<get src="${push.dev.url}" dest="${project.root}/bom/push.log" username="${push.dev.user}" password="${push.dev.pass}"/>
 		<loadfile property="push.output" srcFile="${project.root}/bom/push.log"/>
 		<echo message="${push.output}" />
 	</target>
 	
 	<target name="ftp.app.DEV" description="upload client pack to web server" depends="">
-		<ftp server="39.106.1.237"
-		       remotedir="/dev/apache-tomcat-8.0.46/webapps/ROOT"
-		       userid="ngoftpd1"
-		       password="Up!0ad2km$"
+		<ftp server="${ftp.dev.ip}"
+		       remotedir="${ftp.dev.dir}"
+		       userid="${ftp.dev.user}"
+		       password="${ftp.dev.pass}"
 			   passive="no"
 			   depends="no"
 			   binary="no"
