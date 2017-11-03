@@ -25,7 +25,7 @@ public class CacheControler {
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
     
-    @RequestMapping(value = "/json/cache", method = RequestMethod.GET)
+    @RequestMapping(value = "/base/cache", method = RequestMethod.GET)
     public ResponseEntity<String> cache(@RequestParam("token") String token, @RequestParam("action") String action, @RequestParam("key") String key) {
         try {
         	//TODO: validate token here

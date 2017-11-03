@@ -38,6 +38,11 @@
 	https://github.com/mrdoob/three.js/releases
 	http://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.min.js
 
+
+. tomcat 8 reference
+	http://tomcat.apache.org/tomcat-8.0-doc/
+
+
 	
 [T?] Enable both HTTP and HTTPS in Tomcat 
 	https://stackoverflow.com/questions/41819962/how-to-enable-both-http-and-https-in-tomcat-without-redirect

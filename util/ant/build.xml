@@ -49,24 +49,19 @@
 	<target name="project.clean">
 		<delete dir="${dest.dir}" />
 	</target>
-
-
-	<target name="project.war" description="build war" depends="project.clean">
-		<mkdir dir="${dist.dir}" />
-		<war destfile="${dist.dir}/ROOT.war" webxml="${project.root}/WEB-INF/web.xml">
-			<classes dir="${project.root}/WEB-INF/classes" />
-			<fileset dir="${project.root}">
-				<exclude name="WEB-INF/web.xml" />
-				<exclude name="WEB-INF/classes/**" />
-				<exclude name="WEB-INF/lib/**" />
-				<exclude name="WEB-INF/src/**" />
-				<exclude name="**/*.js" />
-				<exclude name="doc/**" />
-				<exclude name="util/**" />
-			</fileset>
-			<lib dir="${project.root}/WEB-INF/lib" />
-		</war>
-	</target>
+	
+	<target name="project.war2" description="build war" depends="project.clean">
+			<mkdir dir="${dist.dir}" />
+			<war destfile="${dist.dir}/ROOT.war">
+				<fileset dir="${project.root}">
+					<exclude name="WEB-INF/src/**"/>
+					<exclude name="WEB-INF/sql/**"/>
+					<exclude name="**/*.js" />
+					<exclude name="ref/**" />
+					<exclude name="util/**" />
+				</fileset>
+			</war>
+		</target>
 
 	<!-- NGO resource package -->
 	<target name="js.compress" description="Javascript compression">
@@ -127,32 +122,35 @@
 			   binary="no"
 		       verbose="yes">
 			<fileset dir="${project.root}">
+				<exclude name="**/*.js" />
 				<exclude name="app/test/**" />
 				<exclude name="WEB-INF/**" />
 				<exclude name="META-INF/**" />
-				<exclude name="doc/**" />
+				<exclude name="ref/**" />
 				<exclude name="util/**" />
 			</fileset>
 		</ftp>
 	</target>
 	
 	<target name="ftp.java.km" description="upload client pack to web server" depends="">
-			<ftp server="${ftp.dev.ip}"
-			       remotedir="${ftp.dev.dir}"
-			       userid="${ftp.dev.user}"
-			       password="${ftp.dev.pass}"
-				   passive="yes"
-				   depends="no"
-				   binary="no"
-			       verbose="yes">
-				<fileset dir="${project.root}">
-					<exclude name="app/**" />
-					<exclude name="bom/**" />
-					<exclude name="doc/**" />
-					<exclude name="util/**" />
-				</fileset>
-			</ftp>
-		</target>
+		<ftp server="${ftp.dev.ip}"
+		       remotedir="${ftp.dev.dir}"
+		       userid="${ftp.dev.user}"
+		       password="${ftp.dev.pass}"
+			   passive="yes"
+			   depends="no"
+			   binary="no"
+		       verbose="yes">
+			<fileset dir="${project.root}">
+				<exclude name="WEB-INF/src/**"/>
+				<exclude name="WEB-INF/sql/**"/>
+				<exclude name="app/**" />
+				<exclude name="bom/**" />
+				<exclude name="ref/**" />
+				<exclude name="util/**" />
+			</fileset>
+		</ftp>
+	</target>
 
 	<!-- Tomcat manager interface -->
 	<target name="tomcat.deploy" description="Install web application" depends="">

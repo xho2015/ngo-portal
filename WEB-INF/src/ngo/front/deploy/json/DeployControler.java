@@ -39,7 +39,7 @@ public class DeployControler {
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
     
-    @RequestMapping(value = "/json/deploy", method = RequestMethod.GET)
+    @RequestMapping(value = "/base/deploy", method = RequestMethod.GET)
     public ResponseEntity<String> deploy(@RequestParam("path") String bomPath, @RequestParam("token") String token) {
         try {
         	//TODO: validate token here
@@ -53,17 +53,17 @@ public class DeployControler {
         	//1. load the bom file from webapp root/bom folder
         	String filePath = servletContext.getRealPath(bomPath);
         	BufferedReader br = new BufferedReader(new FileReader(filePath));
-        	String line, row[], fileId, url, md5, temp[], grade, module;
+        	String line, row[], name, url, md5, temp[], grade, module;
         	line = br.readLine();
             while (line!=null && line.length() > 0) {
         		row = line.split("\\|");
-        		fileId = row[0];
+        		name = row[0];
             	url = row[1];
             	temp = row[2].split("/");
             	grade = temp.length == 2 ? temp[0] : "";
             	module = temp.length == 2 ? temp[1] : "";
             	md5 = row[3];
-            	uploadedBoms.put(url, new Bom(fileId, url, grade, module, md5));
+            	uploadedBoms.put(url, new Bom(name, url, grade, module, md5));
             	line = br.readLine();
             } 
             
@@ -101,7 +101,7 @@ public class DeployControler {
         		bomService.addBomObject(s.getValue());
             });
         	
-        	return ResponseEntity.ok("["+new java.util.Date()+"] Bom daploy on ["+ servletContext.getServerInfo() +"], Inserted:"+toBeInsertBoms.size()+", Updated:"+toBeUpdateBoms.size());
+        	return ResponseEntity.ok("["+new java.util.Date()+"] Bom daployed on ["+ servletContext.getVirtualServerName() +"], Inserted:"+toBeInsertBoms.size()+", Updated:"+toBeUpdateBoms.size());
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

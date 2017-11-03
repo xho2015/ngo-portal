@@ -110,8 +110,8 @@
 	<servlet-mapping>
 		<servlet-name>spring-dispatcher</servlet-name>
 		<url-pattern>/json/bom</url-pattern>
-		<url-pattern>/json/cache</url-pattern>
-		<url-pattern>/json/deploy</url-pattern>
+		<url-pattern>/base/cache</url-pattern>
+		<url-pattern>/base/deploy</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
@@ -128,6 +128,28 @@
 	</servlet-mapping>
   
  
+	<security-constraint>
+	   <web-resource-collection>
+	     <web-resource-name>NGO Text Manager interface (for scripts)</web-resource-name>
+	     <url-pattern>/base/*</url-pattern>
+	   </web-resource-collection>
+	   <auth-constraint>
+	      <role-name>base-script</role-name>
+	   </auth-constraint>
+	 </security-constraint>
+	 
+	 <login-config>
+	    <auth-method>BASIC</auth-method>
+	    <realm-name>NGO.km realm</realm-name>
+	  </login-config>
+ 
+	 <!-- Security roles referenced by this web application -->
+	  <security-role>
+	    <description>
+	      The role that is required to access the ngo base management interfaces
+	    </description>
+	    <role-name>base-script</role-name>
+	  </security-role>
     
   <error-page>
     <error-code>401</error-code>
