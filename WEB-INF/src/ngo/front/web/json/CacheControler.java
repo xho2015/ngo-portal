@@ -29,22 +29,25 @@ public class CacheControler {
     public ResponseEntity<String> cache(@RequestParam("token") String token, @RequestParam("action") String action, @RequestParam("key") String key) {
         try {
         	//TODO: validate token here
+        	
+        	String timestamp = "["+new java.util.Date().toString()+"] ";
+        	
         	if (action.equalsIgnoreCase("refresh"))
         	{	
         		localCache.refreshObject(key);
-        		return ResponseEntity.ok("refresh cache key ["+key+"] done.");
+        		return ResponseEntity.ok(timestamp+"refresh cache key ["+key+"] done.");
         	}
         	else if (action.equalsIgnoreCase("remove"))
         	{	localCache.removeObject(key);
-        		return ResponseEntity.ok("remove cache key ["+key+"] done.");
+        		return ResponseEntity.ok(timestamp+"remove cache key ["+key+"] done.");
         	}
         	else if (action.equalsIgnoreCase("removeAll"))
         	{	localCache.removeAllObject();
-        		return ResponseEntity.ok("removed All cache key done.");
+        		return ResponseEntity.ok(timestamp+"removed All cache key done.");
         	}
         	else if (action.equalsIgnoreCase("state"))
         	{	String state = localCache.cacheState();
-        		return ResponseEntity.ok(state);
+        		return ResponseEntity.ok(timestamp+state);
         	}
         	return ResponseEntity.ok("N/A");
         } catch (Exception e) {

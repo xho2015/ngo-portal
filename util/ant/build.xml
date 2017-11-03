@@ -93,9 +93,15 @@
 
 	<!-- NGO web manager interface - caching -->
 	<target name="push.DEV" description="" depends="bom.DEV">
-		<get src="${dev.push.url}" dest="${project.root}/bom/push.log" username="${dev.push.user}" password="${dev.push.pass}"/>
+		<get src="${dev.push.url}" dest="${project.root}/bom/push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="push.output" srcFile="${project.root}/bom/push.log"/>
 		<echo message="${push.output}" />
+	</target>
+	
+	<target name="cache.DEV" description="" depends="">
+		<get src="${dev.cache.url}" dest="${project.root}/bom/cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="cache.output" srcFile="${project.root}/bom/cache.log"/>
+		<echo message="${cache.output}" />
 	</target>
 	
 	

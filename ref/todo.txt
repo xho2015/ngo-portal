@@ -162,14 +162,17 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	
 	
 --11.03
-1. secure the ngo text interface.
-	a. add BASIC authentication protection	
+1. secure the role (base-script) based interface.
+	[a]. added security-constrains to /base/* and BASIC authentication protection	
+	
+	b. digest the clear-text password for base-script users
+		http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#Digested_Passwords
+
+2. cache refresh ant task 
+	[a]. added cache.DEV ant task for refresh main module
 
 
-2. deployment of modules.txt
-
-
-3. deployment of grades.txt
+3. deployment of modules.txt + deployment of grades.txt
 	
 	
 	
