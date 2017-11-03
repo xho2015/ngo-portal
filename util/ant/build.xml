@@ -103,7 +103,15 @@
 		<echo message="${push.output}" />
 	</target>
 	
-	<target name="ftp.app.DEV" description="upload client pack to web server" depends="">
+	
+	<!-- NGO web manager interface - caching -->
+		<target name="km.bom.push" description="" depends="km.ftp.app">
+			<get src="${km.push.url}" dest="${project.root}/bom/km.push.log" username="${km.push.user}" password="${km.push.pass}"/>
+			<loadfile property="push.output" srcFile="${project.root}/bom/km.push.log"/>
+			<echo message="KisMath push result: ${push.output}" />
+		</target>
+	
+	<target name="km.ftp.app" description="upload client pack to web server" depends="bom">
 		<ftp server="${ftp.dev.ip}"
 		       remotedir="${ftp.dev.dir}"
 		       userid="${ftp.dev.user}"
@@ -122,12 +130,14 @@
 		</ftp>
 	</target>
 	
-	<target name="ftp.java.DEV" description="upload client pack to web server" depends="">
+	<target name="km.ftp.java" description="upload client pack to web server" depends="">
 			<ftp server="39.106.1.237"
 			       remotedir="/dev/apache-tomcat-8.0.46/webapps/ROOT"
 			       userid="ngoftpd1"
 			       password="Up!0ad2km$"
-			       separator="\"
+				   passive="yes"
+				   depends="no"
+				   binary="yes"
 			       verbose="yes">
 				<fileset dir="${project.root}">
 					<exclude name="app/**" />
