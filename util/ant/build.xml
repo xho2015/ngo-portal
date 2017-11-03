@@ -69,11 +69,11 @@
 	</target>
 
 	<!-- NGO resource package -->
-	<target name="js.confusion" description="Javascript Confusion">
-		<confusion ignore="\app\lib\dat.gui.js|\app\lib\three.js" include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
+	<target name="js.compress" description="Javascript compression">
+		<compress ignore="\app\lib\dat.gui.js|\app\lib\three.js" include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
 	</target>
 
-	<target name="js.gzip" description="Confusion and Gzip for javascript " depends="js.confusion">
+	<target name="js.gzip" description="javascript compress, then gzip" depends="js.compress">
 		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}" />
 	</target>
 	
@@ -82,7 +82,7 @@
 		</target>
 
 	<!--This task is only for DEV debug purpose only-->
-	<target name="js.gzip.DEV" description="Javascript Gzip without confusion">
+	<target name="js.gzip.DEV" description="Javascript gzip without compress">
 		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${project.root}" />
 	</target>
 
@@ -97,21 +97,27 @@
 	
 
 	<!-- NGO web manager interface - caching -->
-	<target name="bom.push.DEV" description="" depends="bom.DEV">
-		<get src="${push.dev.url}" dest="${project.root}/bom/push.log" username="${push.dev.user}" password="${push.dev.pass}"/>
+	<target name="push.DEV" description="" depends="bom.DEV">
+		<get src="${dev.push.url}" dest="${project.root}/bom/push.log" username="${dev.push.user}" password="${dev.push.pass}"/>
 		<loadfile property="push.output" srcFile="${project.root}/bom/push.log"/>
 		<echo message="${push.output}" />
 	</target>
 	
 	
 	<!-- NGO web manager interface - caching -->
-		<target name="km.bom.push" description="" depends="km.ftp.app">
-			<get src="${km.push.url}" dest="${project.root}/bom/km.push.log" username="${km.push.user}" password="${km.push.pass}"/>
-			<loadfile property="push.output" srcFile="${project.root}/bom/km.push.log"/>
-			<echo message="KisMath push result: ${push.output}" />
-		</target>
+	<target name="push.km" description="" depends="ftp.app.km">
+		<get src="${km.push.url}" dest="${project.root}/bom/km.push.log" username="${km.push.user}" password="${km.push.pass}"/>
+		<loadfile property="push.output" srcFile="${project.root}/bom/km.push.log"/>
+		<echo message="KisMath push result: ${push.output}" />
+	</target>
 	
-	<target name="km.ftp.app" description="upload client pack to web server" depends="bom">
+	<!-- TODO: check the accessibility of  cdn files in cdn.txt -->
+	<target name="validate.cdn">
+		
+	</target>
+	
+	
+	<target name="ftp.app.km" description="upload client pack to web server" depends="bom">
 		<ftp server="${ftp.dev.ip}"
 		       remotedir="${ftp.dev.dir}"
 		       userid="${ftp.dev.user}"
@@ -130,14 +136,14 @@
 		</ftp>
 	</target>
 	
-	<target name="km.ftp.java" description="upload client pack to web server" depends="">
-			<ftp server="39.106.1.237"
-			       remotedir="/dev/apache-tomcat-8.0.46/webapps/ROOT"
-			       userid="ngoftpd1"
-			       password="Up!0ad2km$"
+	<target name="ftp.java.km" description="upload client pack to web server" depends="">
+			<ftp server="${ftp.dev.ip}"
+			       remotedir="${ftp.dev.dir}"
+			       userid="${ftp.dev.user}"
+			       password="${ftp.dev.pass}"
 				   passive="yes"
 				   depends="no"
-				   binary="yes"
+				   binary="no"
 			       verbose="yes">
 				<fileset dir="${project.root}">
 					<exclude name="app/**" />

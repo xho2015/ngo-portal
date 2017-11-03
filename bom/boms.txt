@@ -1,8 +1,8 @@
 jstars-min-ngjs|/app/ext/jstars.min.ngjs|ext|ad64e4729ec35167ffb0b0b926a7c14f
-createjs-0-8-2-min-ngjs|/app/lib/createjs-0.8.2.min.ngjs|lib|5f47459d9f1675391d14766cc05f9d78
+createjs-0-8-2-min-ngjs|http://code.createjs.com/easeljs-0.8.2.min.js#/app/lib/createjs-0.8.2.min.ngjs|lib|725e6461e58316e4fc9510abfee9bf06
 dat-gui-min-ngjs|/app/lib/dat.gui.min.ngjs|lib|20e4b1e163d82d70c99ba1d25491be22
 jquery-1-9-1-min-ngjs|/app/lib/jquery-1.9.1.min.ngjs|lib|2b7cf2de286a2cb1ed594994d6b164c6
-three-min-ngjs|/app/lib/three.min.ngjs|lib|5157c9c4f3a1103504e8ba840e2ffd2a
+three-min-ngjs|http://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.min.js#/app/lib/three.min.ngjs|lib|5157c9c4f3a1103504e8ba840e2ffd2a
 bootstrap-min-ngjs|/app/main/bootstrap.min.ngjs|main|f8574111338f140ff3d56c736511929e
 common-min-ngjs|/app/main/common.min.ngjs|main|f54e5723e5dfc18f04552ba7f564fe57
 main-min-ngjs|/app/main/main.min.ngjs|main|668dc889373a38ddb769a6121aea59a2

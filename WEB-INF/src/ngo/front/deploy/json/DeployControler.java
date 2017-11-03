@@ -43,8 +43,7 @@ public class DeployControler {
     public ResponseEntity<String> deploy(@RequestParam("path") String bomPath, @RequestParam("token") String token) {
         try {
         	//TODO: validate token here
-        	
-        	
+        	     	
         	//0 - helpers
         	Map<String, Bom> uploadedBoms = new HashMap<String, Bom>();
         	Map<String, Bom> storedBoms = new HashMap<String, Bom>();
@@ -102,7 +101,7 @@ public class DeployControler {
         		bomService.addBomObject(s.getValue());
             });
         	
-        	return ResponseEntity.ok("Bom daploy done. Inserted:"+toBeInsertBoms.size()+",Updated:"+toBeUpdateBoms.size());
+        	return ResponseEntity.ok("["+new java.util.Date()+"] Bom daploy on ["+ servletContext.getServerInfo() +"], Inserted:"+toBeInsertBoms.size()+", Updated:"+toBeUpdateBoms.size());
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

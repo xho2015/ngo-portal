@@ -1,1 +1,2 @@
-createjs82.min.ngjs=http://code.createjs.com/easeljs-0.8.2.min.js#/app/lib/createjs82.min.ngjs
+/app/lib/createjs-0.8.2.min.ngjs=http://code.createjs.com/easeljs-0.8.2.min.js#/app/lib/createjs-0.8.2.min.ngjs
+/app/lib/three.min.ngjs=http://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.min.js#/app/lib/three.min.ngjs

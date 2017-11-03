@@ -22,11 +22,23 @@
 	http://www.cnblogs.com/zivxiaowei/p/4356571.html
 	
 	
-	
 4. ant FTP task 
 	https://ant.apache.org/manual/Tasks/ftp.html
 
-			
+		
+5. jvisualvm plugins
+	https://visualvm.github.io/pluginscenters.html
+	
+
+. createjs CDN
+	http://code.createjs.com/easeljs-0.8.2.min.js
+
+
+. three.js r88 CDN
+	https://github.com/mrdoob/three.js/releases
+	http://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.min.js
+
+	
 [T?] Enable both HTTP and HTTPS in Tomcat 
 	https://stackoverflow.com/questions/41819962/how-to-enable-both-http-and-https-in-tomcat-without-redirect
 	
@@ -66,3 +78,5 @@
 
 [T?] Java In-Memory cache
 	https://github.com/google/guava/wiki/CachesExplained
+	
+	

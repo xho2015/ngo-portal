@@ -1,30 +1,33 @@
 package ngo.deploy.tools;
 
-import java.io.BufferedOutputStream;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.tools.ant.BuildException;
 
-import ngo.front.storage.entity.Bom;
 
 /**
- * NGO Customized task for 1. calculate md5 checksum for all NGO resource.
- * (ngjs, ngcss, ngdom etc.) 2. gather filename + "|" + md5 of all NGO resource
- * and write into /ngo.bom file
+ * NGO Customized task for Bom, it includes
+ * 
+ * 	1. generate boms.txt which includes ngo resource meta info. (e.g. name, path, desc, md5, module, grade .etc.)
+ * 	2. generate module meta file.
+ * 	3. generate grade meta file.
+ * 	4. validate the meta.txt in bom path
+ * 	5. merge CDN info to url of ngo resource
+ * 
  * 
  * This task is based on ant 1.9.9
  * 
@@ -36,6 +39,7 @@ public class BomTask extends org.apache.tools.ant.Task {
 	private List<String> ngoBom = new ArrayList<String>();
 	private List<String> ngoModuleBom = new ArrayList<String>();
 	private List<String> ngoGradeBom = new ArrayList<String>();
+	private Map<String,String> ngoCDN = new HashMap<String,String>();
 
 	private String validate;
 	private String path;
@@ -215,7 +219,6 @@ public class BomTask extends org.apache.tools.ant.Task {
 		System.out.println("Module File: "+ outputFilename +" is generated");
 	}
 	
-	
 	private void handleFileByAPI(File file, String folderName) {
 
 		String fileName = file.getAbsolutePath();
@@ -231,8 +234,15 @@ public class BomTask extends org.apache.tools.ant.Task {
 		try {
 			FileInputStream fis = new FileInputStream(new File(fileName));
 			String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
-			fis.close();
-			ngoBom.add(fileId + this.spliter + relativeFilename + this.spliter + (bomPath.length() > 0 ? bomPath : appPath) + this.spliter + md5);
+			String cdn = relativeFilename;
+			fis.close();			
+			//try merge CDN
+			if (ngoCDN.containsKey(relativeFilename)) {
+				cdn = ngoCDN.get(relativeFilename);
+				System.out.println("CDN merged: "+ cdn);
+			}
+			//pub content in temp array
+			ngoBom.add(fileId + this.spliter + cdn + this.spliter + (bomPath.length() > 0 ? bomPath : appPath) + this.spliter + md5);
 			System.out.println("File: "+ relativeFilename +", md5=" + md5) ;
 		} catch (IOException ioe) {
 			ioe.printStackTrace(System.out);
@@ -293,12 +303,33 @@ public class BomTask extends org.apache.tools.ant.Task {
 		}
 		
 	}
+	
+	
+	private void handleCDNFile(File file, String folderName) throws IOException
+	{
+		//process cdn.txt
+		File cdn = new File(file.getAbsolutePath() + "/cdn.txt");
+		if (cdn.exists()) 
+		{
+			System.out.println("cdn.txt: "+file.getAbsolutePath());
+			BufferedReader br = new BufferedReader(new FileReader(cdn));
+        	String line, row[];        	
+        	line = br.readLine();     	
+        	while (line!=null && line.length() > 0) {       		
+        		row = line.split("=");   		
+        		ngoCDN.put(row[0], row[1]);
+        		line = br.readLine(); 
+        	}		
+		}	
+	}
+	
 
 	private void iterateFiles(File[] files, String folderName) throws IOException  {
 		for (File file : files) {
 			if (file.isDirectory()) {
-				//process with meta.txt
-				handleMetaFile(file, folderName);
+				//process with meta.txt in bom path and CDN file in app path
+				handleCDNFile(file, folderName);
+				handleMetaFile(file, folderName);				
 				// traverse the folder tree
 				iterateFiles(file.listFiles(), folderName + "/"+ file.getName());
 			} else {
@@ -314,7 +345,6 @@ public class BomTask extends org.apache.tools.ant.Task {
 		try {
 			iterateFiles(files, "");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//dump file + md5 into out file

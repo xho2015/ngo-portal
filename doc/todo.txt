@@ -142,11 +142,11 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	  c. change sqlmapper of bom by adding order by clause
 	
 2. javascript loader  
-	[a]. retry implemented
+	[a]. retry implemented by jQuery.getScript
 	
 	
 3. ant task ngobom 
-	a. CDN.txt to be integrated for generate url
+	[a]. CDN.txt to be integrated for generate CDN/retry url
 	
 	
 4. ant task get
@@ -154,14 +154,21 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	[a]. add push task to invoke deploy interface on server	
 	
 
-4. ant FTP task 
+5. ant FTP task 
 	https://ant.apache.org/manual/Tasks/ftp.html
-	a. added task, but with 425 error, try below solution
+	[a]. added task, but with 425 error, try below solution
 		https://stackoverflow.com/questions/8015807/ant-ftp-upload-file-425-unable-to-build-data-connection-connection-timed-out
+	[b] issue fixed by enabled PASV ftp mode in both server and ant ftp client.
 	
 	
-	
-	
+--11.03
+1. ant Task validate accessibility of CDNs	
+
+
+2. deployment of modules.txt
+
+
+3. deployment of grades.txt
 	
 	
 	
