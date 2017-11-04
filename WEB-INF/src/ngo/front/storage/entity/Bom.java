@@ -12,35 +12,48 @@ public class Bom {
 	private String category;
 	
 	private String name;
-	private String ver;
+	private int ver;
 	private String url;
 	
 	@JsonIgnore
 	private String md5;
 	
+	private int lorder;
+	
 	public Bom()
 	{
 	}
 	
-	public Bom(String fid, String url, String grade, String module, String md5)
+	public Bom(String fid, String url, String grade, String module, String md5, int lorder)
 	{
 		this.name = fid;
 		this.url = url;
 		this.grade = grade;
 		this.module = module;
 		this.md5 = md5;
+		this.lorder = lorder;
 	}
 	
+	
+	
+	public int getLorder() {
+		return lorder;
+	}
+
+	public void setLorder(int lorder) {
+		this.lorder = lorder;
+	}
+
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getVer() {
+	public int getVer() {
 		return ver;
 	}
-	public void setVer(String version) {
+	public void setVer(int version) {
 		this.ver = version;
 	}
 	public String getUrl() {
@@ -77,7 +90,7 @@ public class Bom {
 	
 	@Override
 	public String toString() {
-		return new StringBuffer(this.name).append(",").append(this.ver).append(",").append(url).toString();
+		return new StringBuffer(this.name).append("#").append(this.ver).append("#").append(url).append("#").append(grade).append("#").append(module).append("#").append(md5).append("#").append(lorder).toString();
 	}
 	
 }

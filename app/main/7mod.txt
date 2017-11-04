@@ -1,0 +1,3 @@
+/app/main/createjs-0.8.2.min.ngjs=common1#1
+/app/main/common.min.ngjs=common1#10
+/app/main/panel.ui.min.ngjs=common1#20

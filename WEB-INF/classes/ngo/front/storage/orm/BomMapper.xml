@@ -10,15 +10,15 @@
 	</select>
 	
 	<select id="getAll" resultType="ngo.front.storage.entity.Bom">
-		select name,ver,url,md5,grade,module,category from bom
+		select name,ver,url,md5,grade,module,category,lorder from bom
 	</select>
 	
 	<update id="update" parameterType="ngo.front.storage.entity.Bom">
-        update bom set md5=#{md5},ver=#{ver} where name=#{name}
+        update bom set md5=#{md5},ver=#{ver},grade=#{grade},module=#{module},lorder=#{lorder} where name=#{name}
     </update>
     
     <insert id="insert" parameterType="ngo.front.storage.entity.Bom" useGeneratedKeys="true" keyProperty="rid">
-        insert into bom(name,ver,url,md5,grade,module) values(#{name},#{ver},#{url},#{md5},#{grade},#{module})
+        insert into bom(name,ver,url,md5,grade,module,lorder) values(#{name},#{ver},#{url},#{md5},#{grade},#{module},#{lorder})
     </insert>
     
 </mapper>

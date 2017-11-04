@@ -40,19 +40,48 @@ public class BomTask extends org.apache.tools.ant.Task {
 	private List<String> ngoModuleBom = new ArrayList<String>();
 	private List<String> ngoGradeBom = new ArrayList<String>();
 	private Map<String,String> ngoCDN = new HashMap<String,String>();
+	private Map<String,String> ngoMod = new HashMap<String,String>();
+	
 
 	private String validate;
 	private String path;
 	private String include;
 	private String exclude;
-	private String outFile;
+	private String bomOutFile;
 	private String moduleOutput;
 	private String gradeOutput;
 	private String spliter;	
 	private String bomRoot;
 	private String appRoot;
+	private String metaName;
+	private String cdnName;
+	private String modName;
+
 	
-	
+	public String getMetaName() {
+		return metaName;
+	}
+
+	public void setMetaName(String metaName) {
+		this.metaName = metaName;
+	}
+
+	public String getCdnName() {
+		return cdnName;
+	}
+
+	public void setCdnName(String cdnName) {
+		this.cdnName = cdnName;
+	}
+
+	public String getModName() {
+		return modName;
+	}
+
+	public void setModName(String orderName) {
+		this.modName = orderName;
+	}
+
 	public String getValidate() {
 		return validate;
 	}
@@ -117,12 +146,12 @@ public class BomTask extends org.apache.tools.ant.Task {
 		this.exclude = exclude;
 	}
 
-	public String getOutFile() {
-		return outFile;
+	public String getBomOutFile() {
+		return bomOutFile;
 	}
 
-	public void setOutFile(String outFile) {
-		this.outFile = outFile;
+	public void setBomOutFile(String outFile) {
+		this.bomOutFile = outFile;
 	}
 
 	public String getSpliter() {
@@ -141,7 +170,7 @@ public class BomTask extends org.apache.tools.ant.Task {
 
 	private void dumpOutFile()
 	{
-		String outputFilename = this.path + "/" + this.outFile;
+		String outputFilename = this.path + "/" + this.bomOutFile;
 		
 		BufferedWriter writer = null;
 	    try {
@@ -164,7 +193,6 @@ public class BomTask extends org.apache.tools.ant.Task {
 	    }
 		System.out.println("Bom File: "+ outputFilename +" generated.");
 	}
-	
 	
 	private void dumpGradeOutFile()
 	{
@@ -191,7 +219,6 @@ public class BomTask extends org.apache.tools.ant.Task {
 	    }
 		System.out.println("Grade File: "+ outputFilename +" is generated!");
 	}
-	
 	
 	private void dumpModuleOutFile()
 	{
@@ -226,7 +253,7 @@ public class BomTask extends org.apache.tools.ant.Task {
 			return;
 		
 		String relativeFilename = fileName.replace("\\","/").replace(this.path, "");
-		String fileId = file.getName().replaceAll("\\.", "-");
+		String fileId = relativeFilename.replace(".", "-").replace("/", ".").substring(1);
 		String bomPath = (relativeFilename.startsWith(bomRoot) ? folderName : "").replaceAll(bomRoot, "");
 		String appPath = (relativeFilename.startsWith(appRoot) ? folderName : "").replaceAll(appRoot, "");
 
@@ -235,14 +262,26 @@ public class BomTask extends org.apache.tools.ant.Task {
 			FileInputStream fis = new FileInputStream(new File(fileName));
 			String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
 			String cdn = relativeFilename;
+			String temp[], mod, order = "", module;
 			fis.close();			
 			//try merge CDN
 			if (ngoCDN.containsKey(relativeFilename)) {
 				cdn = ngoCDN.get(relativeFilename);
 				System.out.println("CDN merged: "+ cdn);
 			}
+			
+			//set default module
+			module = (bomPath.length() > 0 ? bomPath : appPath);
+			
+			//parse mod
+			mod = ngoMod.get(relativeFilename);
+			if (mod !=null && mod.length() > 0){
+				temp = mod.split("#");
+				module = temp[0];
+				order = temp[1];
+			}
 			//pub content in temp array
-			ngoBom.add(fileId + this.spliter + cdn + this.spliter + (bomPath.length() > 0 ? bomPath : appPath) + this.spliter + md5);
+			ngoBom.add(fileId + this.spliter + cdn + this.spliter + module + this.spliter + md5 + this.spliter + order);
 			System.out.println("File: "+ relativeFilename +", md5=" + md5) ;
 		} catch (IOException ioe) {
 			ioe.printStackTrace(System.out);
@@ -253,7 +292,7 @@ public class BomTask extends org.apache.tools.ant.Task {
 	private void handleMetaFile(File file, String folderName) throws IOException
 	{
 		//process meta.txt
-		File meta = new File(file.getAbsolutePath() + "/meta.txt");
+		File meta = new File(file.getAbsolutePath() + this.metaName);
 		if (meta.exists()) 
 		{
 			System.out.println("meta.txt: "+file.getAbsolutePath());
@@ -289,7 +328,8 @@ public class BomTask extends org.apache.tools.ant.Task {
         		}
         		line = br.readLine();
             }        	
-        	out.add(temp.substring(0, temp.length()-1)); 
+        	out.add(temp.substring(0, temp.length()-1));
+        	br.close();
 		} 
 		else
 		{
@@ -298,17 +338,16 @@ public class BomTask extends org.apache.tools.ant.Task {
 				String relativeFilename = file.getAbsolutePath().replace("\\","/").replace(this.path, "");
 				String bomPath = (relativeFilename.startsWith(bomRoot) ? folderName : "").replaceAll(bomRoot, "");
 				if (bomPath.length() > 0)
-					throw new IllegalStateException(relativeFilename + " don't have a meta.txt");
+					throw new IllegalStateException(relativeFilename + " don't have "+this.metaName);
 			}
 		}
 		
 	}
 	
-	
 	private void handleCDNFile(File file, String folderName) throws IOException
 	{
 		//process cdn.txt
-		File cdn = new File(file.getAbsolutePath() + "/cdn.txt");
+		File cdn = new File(file.getAbsolutePath() + this.cdnName);
 		if (cdn.exists()) 
 		{
 			System.out.println("cdn.txt: "+file.getAbsolutePath());
@@ -319,16 +358,36 @@ public class BomTask extends org.apache.tools.ant.Task {
         		row = line.split("=");   		
         		ngoCDN.put(row[0], row[1]);
         		line = br.readLine(); 
-        	}		
+        	}
+        	br.close();
 		}	
 	}
 	
-
+	private void handleModFile(File file, String folderName) throws IOException
+	{
+		//process cdn.txt
+		File order = new File(file.getAbsolutePath() + this.modName);
+		if (order.exists()) 
+		{
+			System.out.println("mod.txt: "+file.getAbsolutePath());
+			BufferedReader br = new BufferedReader(new FileReader(order));
+        	String line, row[];        	
+        	line = br.readLine();     	
+        	while (line!=null && line.length() > 0) {       		
+        		row = line.split("=");   		
+        		ngoMod.put(row[0], row[1]);
+        		line = br.readLine(); 
+        	}
+        	br.close();
+		}	
+	}
+	
 	private void iterateFiles(File[] files, String folderName) throws IOException  {
 		for (File file : files) {
 			if (file.isDirectory()) {
-				//process with meta.txt in bom path and CDN file in app path
+				//process with meta.txt in bom path and CDN, order file in app path
 				handleCDNFile(file, folderName);
+				handleModFile(file, folderName);
 				handleMetaFile(file, folderName);				
 				// traverse the folder tree
 				iterateFiles(file.listFiles(), folderName + "/"+ file.getName());
@@ -338,7 +397,6 @@ public class BomTask extends org.apache.tools.ant.Task {
 		}
 	}
 	
-
 	@Override
 	public void execute() throws BuildException {
 		File[] files = new File(this.path).listFiles();

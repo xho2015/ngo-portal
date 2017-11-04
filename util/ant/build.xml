@@ -83,11 +83,30 @@
 
 	<!--new NG resouce needs to be registered in include-->
 	<target name="bom" description="" depends="js.gzip">
-		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" bomRoot="/bom/" appRoot="/app/" outFile="/bom/boms.txt" moduleOutput="/bom/modules.txt" gradeOutput="/bom/grades.txt" path="${project.root}"  spliter="|"/>
+		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" 
+			bomRoot="/bom/" 
+			appRoot="/app/"
+			metaName="/meta.txt"
+			cdnName="/7cdn.txt"
+			modName="/7mod.txt"
+			bomOutFile="/out/boms.txt" 
+			moduleOutput="/out/modules.txt" 
+			gradeOutput="/out/grades.txt" 
+			path="${project.root}"  
+			spliter="|"/>
 	</target>
 
 	<target name="bom.DEV" description="" depends="js.gzip.DEV">
-		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" bomRoot="/bom/" appRoot="/app/" outFile="/bom/boms.txt" moduleOutput="/bom/modules.txt" gradeOutput="/bom/grades.txt" path="${project.root}"  spliter="|"/>
+		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" 
+			bomRoot="/bom/" 
+			appRoot="/app/" 
+			metaName="/meta.txt"
+			cdnName="/7cdn.txt"
+			modName="/7mod.txt"
+			bomOutFile="/out/boms.txt" 
+			moduleOutput="/out/modules.txt" 
+			gradeOutput="/out/grades.txt" 
+			path="${project.root}"  spliter="|"/>
 	</target>
 	
 
@@ -96,6 +115,12 @@
 		<get src="${dev.push.url}" dest="${project.root}/bom/push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="push.output" srcFile="${project.root}/bom/push.log"/>
 		<echo message="${push.output}" />
+	</target>
+	
+	<target name="push.DEBUG" description="" depends="bom.DEV">
+		<get src="${dev.debug.push.url}" dest="${project.root}/bom/push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+			<loadfile property="push.output" srcFile="${project.root}/bom/push.log"/>
+			<echo message="${push.output}" />
 	</target>
 	
 	<target name="cache.DEV" description="" depends="">
@@ -107,7 +132,7 @@
 	
 	<!-- NGO web manager interface - caching -->
 	<target name="push.km" description="" depends="ftp.app.km">
-		<get src="${km.push.url}" dest="${project.root}/bom/km.push.log" username="${km.push.user}" password="${km.push.pass}"/>
+		<get src="${km.push.url}" dest="${project.root}/bom/km.push.log" username="${km.base.user}" password="${km.base.pass}"/>
 		<loadfile property="push.output" srcFile="${project.root}/bom/km.push.log"/>
 		<echo message="KisMath push result: ${push.output}" />
 	</target>
@@ -119,10 +144,10 @@
 	
 	
 	<target name="ftp.app.km" description="upload client pack to web server" depends="bom">
-		<ftp server="${ftp.dev.ip}"
-		       remotedir="${ftp.dev.dir}"
-		       userid="${ftp.dev.user}"
-		       password="${ftp.dev.pass}"
+		<ftp server="${km.ftp.ip}"
+		       remotedir="${km.ftp.dir}"
+		       userid="${km.ftp.user}"
+		       password="${km.ftp.pass}"
 			   passive="yes"
 			   depends="no"
 			   binary="no"
@@ -139,10 +164,10 @@
 	</target>
 	
 	<target name="ftp.java.km" description="upload client pack to web server" depends="">
-		<ftp server="${ftp.dev.ip}"
-		       remotedir="${ftp.dev.dir}"
-		       userid="${ftp.dev.user}"
-		       password="${ftp.dev.pass}"
+		<ftp server="${km.ftp.ip}"
+			   remotedir="${km.ftp.dir}"
+			   userid="${km.ftp.user}"
+			   password="${km.ftp.pass}"
 			   passive="yes"
 			   depends="no"
 			   binary="no"

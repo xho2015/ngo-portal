@@ -4,6 +4,7 @@ package ngo.front.deploy.json;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,11 @@ public class DeployControler {
     
     @RequestMapping(value = "/base/deploy", method = RequestMethod.GET)
     public ResponseEntity<String> deploy(@RequestParam("path") String bomPath, @RequestParam("token") String token) {
+    	
+    	// close this will also close wrapped file reader 
+    	//https://stackoverflow.com/questions/9541614/how-does-this-filereader-get-closed
+    	BufferedReader br = null;
+
         try {
         	//TODO: validate token here
         	     	
@@ -52,8 +58,9 @@ public class DeployControler {
         	
         	//1. load the bom file from webapp root/bom folder
         	String filePath = servletContext.getRealPath(bomPath);
-        	BufferedReader br = new BufferedReader(new FileReader(filePath));
-        	String line, row[], name, url, md5, temp[], grade, module;
+        	FileReader fr = new FileReader(filePath);
+        	br = new BufferedReader(fr);
+        	String line, row[], name, url, md5, temp[], grade, module, lorder;
         	line = br.readLine();
             while (line!=null && line.length() > 0) {
         		row = line.split("\\|");
@@ -61,33 +68,41 @@ public class DeployControler {
             	url = row[1];
             	temp = row[2].split("/");
             	grade = temp.length == 2 ? temp[0] : "";
-            	module = temp.length == 2 ? temp[1] : "";
+            	module = temp.length == 2 ? temp[1] : temp[0];
             	md5 = row[3];
-            	uploadedBoms.put(url, new Bom(name, url, grade, module, md5));
+            	lorder = row.length == 5? row[4] : "0";
+            	uploadedBoms.put(name, new Bom(name, url, grade, module, md5, Integer.parseInt(lorder)));
             	line = br.readLine();
             } 
             
         	//2. load the bom info from db
         	List<Bom> dbBoms = bomService.getAllBomObjects();
         	for (Bom b : dbBoms)
-        		storedBoms.put(b.getUrl(), b);
+        		storedBoms.put(b.getName(), b);
         	
         	//3. find bom to be inserted or updated
         	uploadedBoms.entrySet().stream().forEach(s -> {
         		Bom entry = storedBoms.get(s.getKey());
-        		if (entry == null)
-        		{
-        			s.getValue().setVer("1");
+        		if (entry == null) {
+        			s.getValue().setVer(1);
         			toBeInsertBoms.put(s.getKey(), s.getValue());
         		}
         		else 
         		{
-        			Bom u = s.getValue(); 
-        			if (!u.getMd5().equalsIgnoreCase(entry.getMd5()))
+        			Bom u = s.getValue();
+        			boolean isMd5 = u.getMd5().equalsIgnoreCase(entry.getMd5());
+        			boolean isModule = u.getModule().equals(entry.getModule());
+        			boolean isGrade = u.getGrade().equals(entry.getGrade());
+        			boolean isLoader = u.getLorder() == entry.getLorder();
+        			if (!isMd5 || !isModule || !isGrade || !isLoader )
         			{
         				//update version by increase 1
             			entry.setMd5(u.getMd5());
-            			entry.setVer(String.valueOf(Integer.parseInt(entry.getVer()) + 1));
+            			entry.setModule(u.getModule());
+            			entry.setGrade(u.getGrade());
+            			entry.setLorder(u.getLorder());
+            			if (!isMd5)
+            				entry.setVer(entry.getVer() + 1);
             			toBeUpdateBoms.put(s.getKey(), entry);	
         			}
         		}
@@ -104,7 +119,13 @@ public class DeployControler {
         	return ResponseEntity.ok("["+new java.util.Date()+"] Bom daployed on ["+ servletContext.getVirtualServerName() +"], Inserted:"+toBeInsertBoms.size()+", Updated:"+toBeUpdateBoms.size());
         } catch (Exception e) {
         	logger.error(e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Deploy error: "+e.getMessage());
+        } finally {
+        	try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

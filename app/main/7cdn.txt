@@ -1,0 +1,1 @@
+/app/main/createjs-0.8.2.min.ngjs=http://code.createjs.com/easeljs-0.8.2.min.js#/app/main/createjs-0.8.2.min.ngjs
