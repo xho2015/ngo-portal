@@ -9,7 +9,7 @@ var MAINAPP = $.ngoModule(function() {
 	};
 
 	function init() {
-		var depends = LIBRARY.require("main");
+		var depends = LIBRARY.require("common1");
 		LIBRARY.loadScriptsRetry(depends.links, ready, fail);
 	};
 

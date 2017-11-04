@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ngo.front.deploy.service.DeployService;
 import ngo.front.storage.entity.Bom;
 import ngo.front.web.service.BomService;
  
@@ -33,7 +34,7 @@ import ngo.front.web.service.BomService;
 public class DeployControler {
  
 	@Autowired
-    private BomService bomService;
+    private DeployService deployService;
 	
 	@Autowired 
 	private ServletContext servletContext;
@@ -76,7 +77,7 @@ public class DeployControler {
             } 
             
         	//2. load the bom info from db
-        	List<Bom> dbBoms = bomService.getAllBomObjects();
+        	List<Bom> dbBoms = deployService.getAllBomObjects();
         	for (Bom b : dbBoms)
         		storedBoms.put(b.getName(), b);
         	
@@ -110,13 +111,13 @@ public class DeployControler {
         	
         	//4. do insertion and updating
         	toBeUpdateBoms.entrySet().stream().forEach(s -> {
-        		bomService.updateBomObject(s.getValue());
+        		deployService.updateBomObject(s.getValue());
             });
         	toBeInsertBoms.entrySet().stream().forEach(s -> {
-        		bomService.addBomObject(s.getValue());
+        		deployService.addBomObject(s.getValue());
             });
         	
-        	return ResponseEntity.ok("["+new java.util.Date()+"] Bom daployed on ["+ servletContext.getVirtualServerName() +"], Inserted:"+toBeInsertBoms.size()+", Updated:"+toBeUpdateBoms.size());
+        	return ResponseEntity.ok("["+new java.util.Date()+"] Bom daployed by tancy ["+ servletContext.getVirtualServerName() +"], Inserted:"+toBeInsertBoms.size()+", Updated:"+toBeUpdateBoms.size());
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Deploy error: "+e.getMessage());

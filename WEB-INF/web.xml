@@ -111,6 +111,7 @@
 		<servlet-name>spring-dispatcher</servlet-name>
 		<url-pattern>/json/bom</url-pattern>
 		<url-pattern>/base/cache</url-pattern>
+		<!-- remove deploy when go PROD -->
 		<url-pattern>/base/deploy</url-pattern>
 	</servlet-mapping>
 
@@ -132,9 +133,10 @@
 	   <web-resource-collection>
 	     <web-resource-name>NGO Text Manager interface (for scripts)</web-resource-name>
 	     <url-pattern>/base/*</url-pattern>
+	     <url-pattern>/monitoring</url-pattern>    
 	   </web-resource-collection>
 	   <auth-constraint>
-	      <role-name>base-script</role-name>
+	      <role-name>tancy-script</role-name>
 	   </auth-constraint>
 	 </security-constraint>
 	 
@@ -148,7 +150,7 @@
 	    <description>
 	      The role that is required to access the ngo base management interfaces
 	    </description>
-	    <role-name>base-script</role-name>
+	    <role-name>tancy-script</role-name>
 	  </security-role>
     
   <error-page>

@@ -218,7 +218,7 @@ PANEL.screen = (function() {
 	
 	my.stage = new createjs.Stage(PANEL.panelId);
 	my.stage.addChild(my.container);
-	my.stage.alpha = 0.6;
+	my.stage.alpha = 0.3;
 	
 	my.resize = function(x, y, w, h) {
 		var idx = my.container.getChildIndex(my.square);
@@ -227,7 +227,7 @@ PANEL.screen = (function() {
 		my.container.addChildAt(my.square, idx);
 		my.square.graphics.beginFill("#1F1F1F").drawRect(x, y, w, h);
 		my.Label1.x = x; my.Label1.y = y+10;
-		my.Label1.text = "ver.3 of panel.ui.js 版本更新 ";
+		my.Label1.text = "Ver=3 panel.ui.mini.ngjs 版本更新 ";
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.update();
 	};
