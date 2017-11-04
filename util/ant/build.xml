@@ -64,25 +64,25 @@
 		</target>
 
 	<!-- NGO resource package -->
-	<target name="js.compress" description="Javascript compression">
+	<target name="KM.js.compress" description="Javascript compression">
 		<compress ignore="\app\lib\dat.gui.js|\app\lib\three.js" include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
 	</target>
 
-	<target name="js.gzip" description="javascript compress, then gzip" depends="js.compress">
+	<target name="KM.css.gzip" description="Gzip for css">
+		<ngzip include=".*\.css" exclude="__NOMATCH__" fileExtension="ngcss" path="${project.root}" />
+	</target>
+				
+	<target name="KM.js.gzip" description="javascript compress, then gzip" depends="KM.js.compress">
 		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}" />
 	</target>
-	
-	<target name="css.gzip" description="Gzip for css">
-			<ngzip include=".*\.css" exclude="__NOMATCH__" fileExtension="ngcss" path="${project.root}" />
-		</target>
 
 	<!--This task is only for DEV debug purpose only-->
-	<target name="js.gzip.DEV" description="Javascript gzip without compress">
+	<target name="DEV.js.gzip" description="Javascript gzip without compress">
 		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${project.root}" />
 	</target>
 
 	<!--new NG resouce needs to be registered in include-->
-	<target name="bom" description="" depends="js.gzip">
+	<target name="KM.bom" description="" depends="KM.js.gzip">
 		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" 
 			bomRoot="/bom/" 
 			appRoot="/app/"
@@ -96,7 +96,7 @@
 			spliter="|"/>
 	</target>
 
-	<target name="bom.DEV" description="" depends="js.gzip.DEV">
+	<target name="DEV.bom" description="" depends="DEV.js.gzip">
 		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" 
 			bomRoot="/bom/" 
 			appRoot="/app/" 
@@ -108,22 +108,33 @@
 			gradeOutput="/out/grades.txt" 
 			path="${project.root}"  spliter="|"/>
 	</target>
-	
 
 	<!-- NGO web manager interface - caching -->
-	<target name="push.DEV" description="" depends="bom.DEV">
-		<get src="${dev.push.url}" dest="${project.root}/bom/push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
-		<loadfile property="push.output" srcFile="${project.root}/bom/push.log"/>
+	<target name="DEV.push" description="" depends="DEV.bom">
+		<get src="${dev.push.url}" dest="${project.root}/out/push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="push.output" srcFile="${project.root}/out/push.log"/>
 		<echo message="${push.output}" />
 	</target>
 	
-	<target name="push.DEBUG" description="" depends="bom.DEV">
-		<get src="${dev.debug.push.url}" dest="${project.root}/bom/push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
-			<loadfile property="push.output" srcFile="${project.root}/bom/push.log"/>
+	<target name="DEV.push.DEBUG" description="" depends="DEV.bom">
+		<get src="${dev.debug.push.url}" dest="${project.root}/out/push.DEBUG.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+			<loadfile property="push.output" srcFile="${project.root}/out/push.DEBUG.log"/>
 			<echo message="${push.output}" />
 	</target>
 	
-	<target name="cache.DEV" description="" depends="">
+	
+	<target name="DEV.TANCY.push" description="" depends="DEV.bom">
+		<copy todir="${dev.tancy.bom.out}" verbose="yes">
+		    <fileset dir="${project.root}/out/">
+		      <exclude name="**/*.log"/>
+		    </fileset>
+		  </copy>
+		<get src="${dev.tancy.push.url}" dest="${project.root}/out/tancy.push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="tancy.push.output" srcFile="${project.root}/out/tancy.push.log"/>
+		<echo message="Tancy push done: ${tancy.push.output}" />
+	</target>
+	
+	<target name="DEV.cache.refresh" description="" depends="">
 		<get src="${dev.cache.url}" dest="${project.root}/bom/cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="cache.output" srcFile="${project.root}/bom/cache.log"/>
 		<echo message="${cache.output}" />
@@ -131,10 +142,10 @@
 	
 	
 	<!-- NGO web manager interface - caching -->
-	<target name="push.km" description="" depends="ftp.app.km">
-		<get src="${km.push.url}" dest="${project.root}/bom/km.push.log" username="${km.base.user}" password="${km.base.pass}"/>
-		<loadfile property="push.output" srcFile="${project.root}/bom/km.push.log"/>
-		<echo message="KisMath push result: ${push.output}" />
+	<target name="KM.TANCY.push" description="" depends="KM.ftp.app,KM.TANCY.ftp.out">
+		<get src="${km.tancy.push.url}" dest="${project.root}/out/km.tancy.push.log" username="${km.base.user}" password="${km.base.pass}"/>
+		<loadfile property="push.output" srcFile="${project.root}/out/km.tancy.push.log"/>
+		<echo message="KisMath tancy push: ${push.output}" />
 	</target>
 	
 	<!-- TODO: check the accessibility of  cdn files in cdn.txt -->
@@ -142,15 +153,36 @@
 		
 	</target>
 	
+	<target name="KM.TANCY.ftp.out" description="upload out files to tancy" depends="">
+			<ftp server="${km.ftp.ip}"
+			       remotedir="${km.tancy.ftp.dir}"
+			       userid="${km.ftp.user}"
+			       password="${km.ftp.pass}"
+				   passive="yes"
+				   depends="no"
+				   binary="no"
+			       verbose="yes">
+				<fileset dir="${project.root}">
+					<exclude name="app/**" />
+					<exclude name="bom/**" />
+					<exclude name="ref/**" />
+					<exclude name="util/**" />
+					<exclude name="out/*.log"/>
+					<exclude name="WEB-INF/**" />
+					<exclude name="META-INF/**" />
+				</fileset>
+			</ftp>
+		</target>
 	
-	<target name="ftp.app.km" description="upload client pack to web server" depends="bom">
+	
+	<target name="KM.ftp.app" description="upload client pack to web server" depends="KM.bom">
 		<ftp server="${km.ftp.ip}"
 		       remotedir="${km.ftp.dir}"
 		       userid="${km.ftp.user}"
 		       password="${km.ftp.pass}"
 			   passive="yes"
 			   depends="no"
-			   binary="no"
+			   binary="yes"
 		       verbose="yes">
 			<fileset dir="${project.root}">
 				<exclude name="**/*.js" />
@@ -158,19 +190,20 @@
 				<exclude name="WEB-INF/**" />
 				<exclude name="META-INF/**" />
 				<exclude name="ref/**" />
+				<exclude name="out/**" />
 				<exclude name="util/**" />
 			</fileset>
 		</ftp>
 	</target>
 	
-	<target name="ftp.java.km" description="upload client pack to web server" depends="">
+	<target name="KM.ftp.java" description="upload client pack to web server" depends="">
 		<ftp server="${km.ftp.ip}"
 			   remotedir="${km.ftp.dir}"
 			   userid="${km.ftp.user}"
 			   password="${km.ftp.pass}"
 			   passive="yes"
 			   depends="no"
-			   binary="no"
+			   binary="yes"
 		       verbose="yes">
 			<fileset dir="${project.root}">
 				<exclude name="WEB-INF/src/**"/>
@@ -178,6 +211,7 @@
 				<exclude name="app/**" />
 				<exclude name="bom/**" />
 				<exclude name="ref/**" />
+				<exclude name="out/**" />
 				<exclude name="util/**" />
 			</fileset>
 		</ftp>
