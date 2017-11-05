@@ -18,19 +18,31 @@
 		cacheTtl="2000" cachingAllowed="true" />
 
 
-	<!-- maxTotal: Maximum number of database connections in pool. Make sure 
-		you configure your mysqld max_connections large enough to handle all of your 
-		db connections. Set to -1 for no limit. -->
-	<!-- maxIdle: Maximum number of idle database connections to retain in pool. 
-		Set to -1 for no limit. See also the DBCP documentation on this and the minEvictableIdleTimeMillis 
-		configuration parameter. -->
-	<!-- maxWaitMillis: Maximum time to wait for a database connection to become 
-		available in ms, in this example 10 seconds. An Exception is thrown if this 
-		timeout is exceeded. Set to -1 to wait indefinitely. -->
-	<!-- username and password: MySQL username and password for database connections -->
-	<!-- driverClassName: Class name for the old mm.mysql JDBC driver is org.gjt.mm.mysql.Driver 
-		- we recommend using Connector/J though. Class name for the official MySQL 
-		Connector/J driver is com.mysql.jdbc.Driver. -->
+	<Resource name="jdbc/ngoDB"
+          auth="Container"
+          type="javax.sql.DataSource"
+          factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+          testWhileIdle="true"
+          testOnBorrow="true"
+          testOnReturn="false"
+          validationQuery="SELECT 1"
+          validationInterval="30000"
+          timeBetweenEvictionRunsMillis="30000"
+          maxActive="100"
+          minIdle="10"
+          maxWait="10000"
+          initialSize="10"
+          removeAbandonedTimeout="60"
+          removeAbandoned="true"
+          logAbandoned="true"
+          minEvictableIdleTimeMillis="30000"
+          jmxEnabled="true"
+          jdbcInterceptors="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;
+            org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer"
+          username="ngow"
+          password="nG@F0rmW#b"
+          driverClassName="com.mysql.cj.jdbc.Driver"
+          url="jdbc:mysql://localhost:3306/ngodev"/>
 	
 
 
