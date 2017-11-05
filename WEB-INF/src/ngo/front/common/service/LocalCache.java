@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -32,9 +34,17 @@ public class LocalCache {
 			return loadObject(key);
 		}
 	};
+	
+	private static final int REFRESH_INTERVAL = 10;
+	
+	@PostConstruct
+	public void init()
+	{
+		logger.info("LocalCache builder refresh interval is :  ["+REFRESH_INTERVAL+"] minutes.");				
+	}
 
-	//TODO: change the refresh interval
-	private LoadingCache<String, Object> cache = CacheBuilder.newBuilder().recordStats().refreshAfterWrite(1, TimeUnit.MINUTES)
+	//TODO: change the refresh interval to 10 MINs when go PROD
+	private LoadingCache<String, Object> cache = CacheBuilder.newBuilder().recordStats().refreshAfterWrite(REFRESH_INTERVAL, TimeUnit.MINUTES)
 			.build(loader);
 
 	

@@ -13,9 +13,9 @@
 
 
 	<!--HXY: 0929-4, enable caching -->
-	<!--HXY: TODO, increase cacheTtl t0 120000 before go PROD -->
+	<!--HXY: TODO, increase cacheTtl t0 10 MINs before go PROD -->
 	<Resources cacheMaxSize="122880" cacheObjectMaxSize="6144"
-		cacheTtl="2000" cachingAllowed="true" />
+		cacheTtl="600000" cachingAllowed="true" />
 
 
 	<Resource name="jdbc/ngoDB"
