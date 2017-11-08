@@ -110,9 +110,9 @@
 	<servlet-mapping>
 		<servlet-name>spring-dispatcher</servlet-name>
 		<url-pattern>/json/bom</url-pattern>
-		<url-pattern>/base/cache</url-pattern>
+		<url-pattern>/ants/cache</url-pattern>
 		<!-- remove deploy when go PROD -->
-		<url-pattern>/base/deploy</url-pattern>
+		<url-pattern>/ants/deploy</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
@@ -131,8 +131,8 @@
  
 	<security-constraint>
 	   <web-resource-collection>
-	     <web-resource-name>NGO Text Manager interface (for scripts)</web-resource-name>
-	     <url-pattern>/base/*</url-pattern>
+	     <web-resource-name>NGO Text Script Manager interface</web-resource-name>
+	     <url-pattern>/ants/*</url-pattern>
 	     <url-pattern>/monitoring</url-pattern>    
 	   </web-resource-collection>
 	   <auth-constraint>
