@@ -129,7 +129,7 @@ var PANEL = (function(my) {
 		var ay = sy;
 		//sub object resize
 		PANEL.screen.resize(0, sy, my.dimension.swdith, my.dimension.sheight);
-		PANEL.assist.resize(ax, ay, my.dimension.awidth, my.dimension.aheight);
+		PANEL.property.resize(ax, ay, my.dimension.awidth, my.dimension.aheight);
 		PANEL.header.resize(0, 0, my.dimension.hwidth, my.dimension.hheight);
 	}
 	return my;
@@ -148,9 +148,13 @@ PANEL.header = (function() {
 	my.container.addChild(my.Label1);
 	my.container.addChild(my.Label2);
 	
-	my.enlarge = new createjs.Bitmap("/app/res/icons_enlarge40.png");
-	my.enlarge.shadow = new createjs.Shadow("#090909", 1, 1, 2);
+	my.enlarge = new createjs.Bitmap("/app/res/km-icons-3-36x36.png");
+	my.enlarge.shadow = new createjs.Shadow("#090909", 1, 1, 1);
 	my.container.addChild(my.enlarge);
+	
+	my.property = new createjs.Bitmap("/app/res/km-icons-2-36x36.png");
+	my.property.shadow = new createjs.Shadow("#090909", 1, 1, 1);
+	my.container.addChild(my.property);
 	
 	my.stage = new createjs.Stage(PANEL.panelId);
 	my.stage.addChild(my.container);
@@ -163,6 +167,10 @@ PANEL.header = (function() {
 			PANEL.fullScreen();
 	});
 	
+	my.property.on("click", function(evt) {
+		PANEL.property.hide();
+	});
+	
 	my.resize = function(x, y, w, h) {
 		var idx = my.container.getChildIndex(my.square);
 		my.container.removeChild(my.square);
@@ -172,8 +180,11 @@ PANEL.header = (function() {
 		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
 		my.Label1.x = 10; my.Label1.y = (h - 16) / 2;
 		my.Label1.text="NGO KidsMath " + PANEL.dimension.width+"X"+PANEL.dimension.height+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
-		my.enlarge.x = (w - my.enlarge.image.width - 20);
-		my.enlarge.y = (h - my.enlarge.image.height) / 2;
+		my.property.x = (w - my.property.image.width - 20);
+		my.property.y = (h - my.property.image.height) / 2;
+		my.enlarge.x = (my.property.x - my.enlarge.image.width - 20);
+		my.enlarge.y = my.property.y;
+		
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.alpha = 0.9;
 		my.stage.update();
@@ -182,9 +193,9 @@ PANEL.header = (function() {
 }());
 
 /**
- * panel assist sub-module
+ * panel property sub-module
  */
-PANEL.assist = (function() {
+PANEL.property = (function() {
 	var my = {};
 	my.container = new createjs.Container();
 	my.square = new createjs.Shape();
@@ -202,6 +213,12 @@ PANEL.assist = (function() {
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.update();
 	};
+	
+	my.hide = function() {
+		my.container.visible = !my.container.visible;
+		my.stage.update();
+	};
+	
 	return my;
 }());
 
@@ -213,7 +230,7 @@ PANEL.screen = (function() {
 	my.container = new createjs.Container();
 	my.square = new createjs.Shape();
 	my.container.addChild(my.square);
-	my.Label1 = new createjs.Text("info", "16px Arial", "#F0FFF0");
+	my.Label1 = new createjs.Text("", "16px Arial", "#F0FFF0");
 	my.container.addChild(my.Label1);
 	
 	my.stage = new createjs.Stage(PANEL.panelId);
@@ -227,7 +244,7 @@ PANEL.screen = (function() {
 		my.container.addChildAt(my.square, idx);
 		my.square.graphics.beginFill("#1F1F1F").drawRect(x, y, w, h);
 		my.Label1.x = x; my.Label1.y = y+10;
-		my.Label1.text = "Ver=3 panel.ui.mini.ngjs 版本更新 ";
+		my.Label1.text = "Ver=15 panel.ui.mini.ngjs 版本更新, test caching 10mins";
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.update();
 	};

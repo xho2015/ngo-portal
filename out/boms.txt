@@ -4,9 +4,9 @@ app.lib.jquery-1-9-1-min-ngjs|/app/lib/jquery-1.9.1.min.ngjs|lib|2b7cf2de286a2cb
 app.lib.three-min-ngjs|http://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.min.js#/app/lib/three.min.ngjs|lib|20881c280062fc8ea3e800127cd56504|
 app.main.bootstrap-min-ngjs|/app/main/bootstrap.min.ngjs|main|1870510f72be4d704a05e1a435c58037|
 app.main.common-min-ngjs|/app/main/common.min.ngjs|common1|13dfa49c093b1ce80ce0f2379619f230|10
-app.main.createjs-0-8-2-min-ngjs|http://code.createjs.com/easeljs-0.8.2.min.js#/app/main/createjs-0.8.2.min.ngjs|common1|5f47459d9f1675391d14766cc05f9d78|1
+app.main.createjs-0-8-2-min-ngjs|/app/main/createjs-0.8.2.min.ngjs|common1|5f47459d9f1675391d14766cc05f9d78|1
 app.main.main-min-ngjs|/app/main/main.min.ngjs|main|2e301dbd66529ced33660b52d6fdb138|
-app.main.panel-ui-min-ngjs|/app/main/panel.ui.min.ngjs|common1|6465badead25b3b368d6920e2883d812|16
+app.main.panel-ui-min-ngjs|/app/main/panel.ui.min.ngjs|common1|641f94142f0b8d08c49d69fac4a34cb6|16
 app.test.css1-ngcss|/app/test/css1.ngcss|test|1ea24e11abfbb500bddfff705a2ea564|
 app.test.demo1-min-ngjs|/app/test/demo1.min.ngjs|test|48214ff4f296b36d359e4c1f56649eb6|
 app.test.ngfun-min-ngjs|/app/test/ngfun.min.ngjs|test|5c72f9a3c32a8a894155a29ce6b16cfa|

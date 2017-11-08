@@ -168,10 +168,13 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	b. digest the clear-text password for base-script users
 		http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#Digested_Passwords
 
+
+--11.06
 2. cache refresh ant task 
 	[a]. added cache.DEV ant task for refresh main module
-
-
+	  b. resolve cache refresh, index out of range exception
+	
+	
 3. deployment of modules.txt + deployment of grades.txt
 	
 	
