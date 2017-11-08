@@ -41,7 +41,7 @@ public class DeployControler {
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
     
-    @RequestMapping(value = "/base/deploy", method = RequestMethod.GET)
+    @RequestMapping(value = "/ants/deploy", method = RequestMethod.GET)
     public ResponseEntity<String> deploy(@RequestParam("path") String bomPath, @RequestParam("token") String token) {
     	
     	// close this will also close wrapped file reader 

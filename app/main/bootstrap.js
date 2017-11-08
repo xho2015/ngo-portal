@@ -9,6 +9,8 @@ $.extend({ngoModule: function(module) {
 var LIBRARY = (function() {
 	var my = {};
 	
+	var verpfix = window.location.hostname.substring(0,1);
+	
 	/**
 	 * load single script without cache versioning 
 	 */
@@ -30,7 +32,7 @@ var LIBRARY = (function() {
 	    $.ajaxSetup({ cache : true});
 	    (function loadNextScript() {
 	         if (i < urls.length) {
-	              $.getScript(urls[i].url + "?"+urls[i].ver)
+	              $.getScript(urls[i].url + "?"+verpfix+urls[i].ver)
 	              .done(function() {
 	                  ++i;
 	                  loadNextScript();
@@ -68,7 +70,7 @@ var LIBRARY = (function() {
 	    (function loadNextScript() {
 	         if (i < urls.length) {
 	        	  var url = (r == 0 ?  urls[i].url : urls[i].retry[r]);
-	              $.getScript(url + "?" +urls[i].ver)
+	              $.getScript(url + "?" +verpfix+urls[i].ver)
 	              .done(function() {
 	                  ++i;
 	                  r = 0; //reset retry flag

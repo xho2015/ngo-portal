@@ -1,4 +1,4 @@
-package ngo.front.web.json;
+package ngo.front.deploy.json;
 
 
 import org.apache.log4j.Logger;
@@ -25,7 +25,7 @@ public class CacheControler {
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
     
-    @RequestMapping(value = "/base/cache", method = RequestMethod.GET)
+    @RequestMapping(value = "/ants/cache", method = RequestMethod.GET)
     public ResponseEntity<String> cache(@RequestParam("token") String token, @RequestParam("action") String action, @RequestParam("key") String key) {
         try {
         	//TODO: validate token here

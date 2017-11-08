@@ -171,11 +171,27 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 
 --11.06
 2. cache refresh ant task 
+<<<<<<< HEAD
 	[a]. added cache.DEV ant task for refresh main module
 	  b. resolve cache refresh, index out of range exception
 	
 	
+=======
+	[a]. added DEV.cache.refresh ant task for refresh common1 module cache from tomcat.
+
+
+>>>>>>> origin/master
 3. deployment of modules.txt + deployment of grades.txt
 	
 	
+--11.08
+	http://tomcat.apache.org/tomcat-8.0-doc/manager-howto.html#JMX_Set_command
+	a. create ant task for get WebResrouceRoot.size of current cache in KB
+		http://localhost:8080/manager/jmxproxy/?get=Catalina:type=WebResourceRoot,host=localhost,context=/,name=Cache&att=size
+	
+	b. create ant task for JMX invoke to webresource.clear(), in order to refresh the cached web resources from tomcat. 
+		http://localhost:8080/manager/jmxproxy/?invoke=Catalina:type=WebResourceRoot,host=localhost,context=/,name=Cache&op=clear&ps=
+		
+		
+	c. common out "org.mybatis.spring.mapper.MapperScannerConfigurer" from applicationContext.xml
 	
