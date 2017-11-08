@@ -47,6 +47,9 @@
 	http://tomcat.apache.org/tomcat-8.0-doc/
 
 
+. createjs issue
+	https://github.com/CreateJS/EaselJS/issues/178
+
 	
 [T?] Enable both HTTP and HTTPS in Tomcat 
 	https://stackoverflow.com/questions/41819962/how-to-enable-both-http-and-https-in-tomcat-without-redirect
