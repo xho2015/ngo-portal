@@ -80,6 +80,14 @@
 	<target name="DEV.js.gzip" description="Javascript gzip without compress">
 		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${project.root}" />
 	</target>
+	
+	<target name="DEV.png.base64" description="convert PNG file to base64 file">
+			<ngbase64 include=".*\.png" exclude="__NOMATCH__" fileExtension="b64" path="${project.root}" />
+	</target>
+	
+	<target name="DEV.png.gzip" description="base64 png file gzip" depends="DEV.png.base64">
+			<ngzip include=".*\.b64" exclude="__NOMATCH__" fileExtension="ngpng" path="${project.root}" />
+		</target>
 
 	<!--new NG resouce needs to be registered in include-->
 	<target name="KM.bom" description="" depends="KM.js.gzip">
@@ -135,9 +143,15 @@
 	</target>
 	
 	<target name="DEV.cache.refresh" description="" depends="DEV.push">
-		<get src="${dev.cache.url}" dest="${project.root}/bom/cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
-		<loadfile property="cache.output" srcFile="${project.root}/bom/cache.log"/>
+		<get src="${dev.cache.url}" dest="${project.root}/out/cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="cache.output" srcFile="${project.root}/out/cache.log"/>
 		<echo message="${cache.output}" />
+	</target>
+	
+	<target name="DEV.jmx.webResource.clear" description="" depends="DEV.cache.refresh">
+		<get src="${dev.jmx.wrr.clear}" dest="${project.root}/out/dev.jmx.wrr.clear.log" username="${dev.jmx.user}" password="${dev.jmx.pass}"/>
+		<loadfile property="jmx.clear.output" srcFile="${project.root}/out/dev.jmx.wrr.clear.log"/>
+		<echo message="Dev JMX WebResourceRoot clear invoked : ${jmx.clear.output}" />
 	</target>
 	
 	
@@ -147,6 +161,18 @@
 		<loadfile property="push.output" srcFile="${project.root}/out/km.tancy.push.log"/>
 		<echo message="KisMath tancy push: ${push.output}" />
 	</target>
+	
+	<target name="KM.cache.refresh" description="" depends="KM.TANCY.push">
+			<get src="${km.cache.url}" dest="${project.root}/out/km.cache.log" username="${km.base.user}" password="${km.base.pass}"/>
+			<loadfile property="km.cache.output" srcFile="${project.root}/out/km.cache.log"/>
+			<echo message="KidsMath ${km.cache.output}" />
+	</target>
+	
+	<target name="KM.jmx.webResource.clear" description="" depends="KM.cache.refresh">
+			<get src="${km.jmx.wrr.clear}" dest="${project.root}/out/km.jmx.wrr.clear.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
+			<loadfile property="km.jmx.clear.output" srcFile="${project.root}/out/km.jmx.wrr.clear.log"/>
+			<echo message="KidsMath WebResourceRoot clear via JMX: ${km.jmx.clear.output}" />
+		</target>
 	
 	<!-- TODO: check the accessibility of  cdn files in cdn.txt -->
 	<target name="validate.cdn">
