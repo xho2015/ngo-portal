@@ -169,10 +169,17 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 		http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#Digested_Passwords
 
 2. cache refresh ant task 
-	[a]. added cache.DEV ant task for refresh main module
+	[a]. added DEV.cache.refresh ant task for refresh common1 module cache from tomcat.
 
 
 3. deployment of modules.txt + deployment of grades.txt
 	
 	
+--11.08
+	http://tomcat.apache.org/tomcat-8.0-doc/manager-howto.html#JMX_Set_command
+	a. create ant task for get WebResrouceRoot.size of current cache in KB
+		http://localhost:8080/manager/jmxproxy/?get=Catalina:type=WebResourceRoot,host=localhost,context=/,name=Cache&att=size
+	
+	b. create ant task for JMX invoke to webresource.clear(), in order to refresh the cached web resources from tomcat. 
+		http://localhost:8080/manager/jmxproxy/?invoke=Catalina:type=WebResourceRoot,host=localhost,context=/,name=Cache&op=clear&ps=
 	
