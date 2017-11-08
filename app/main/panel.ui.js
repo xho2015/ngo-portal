@@ -2,7 +2,7 @@
  * NGO main panel module
  */
 var PANEL = (function(my) {
-	my.name = 'NGO Head navigator';
+	my.name = 'NGO Panel Graphic UI';
 	
 	//background
 	my.bgcontainer = $('#background_screen');
@@ -45,7 +45,7 @@ var PANEL = (function(my) {
 		[ 1120, 60 ], [ 960, 60 ], [ 800, 40 ], [ 640, 40 ],
 		[ 600, 40 ], [ 340, 40 ] ];
     
-    //resolution matrix
+    //property resolution matrix
     var amatrix = [[1600, '320,820' ], [ 1440, '320,730' ], [ 1280, '320,640' ],
 		[ 1120, '240,570' ], [ 960, '240,480' ], [ 800, '180,410' ], [ 640, '180,320' ],
 		[ 600, '180,300' ], [ 340, '0,0' ]];
@@ -87,7 +87,7 @@ var PANEL = (function(my) {
 			if (winWidth > pmatrix[m][0] && winHeight > pmatrix[m][1]) {
 				backgroundResize(pmatrix[m][0], pmatrix[m][1]);   	
 				panelResize(pmatrix[m][0], pmatrix[m][1]);
-				console.log("panel dimension change, width="+pmatrix[m][0]+", height="+pmatrix[m][1]);
+				console.log("panel dimension changed, width="+pmatrix[m][0]+", height="+pmatrix[m][1]);
 				break;
 			}
 		}
@@ -146,7 +146,7 @@ PANEL.header = (function() {
 	my.Label1 = new createjs.Text("", "17px Arial", "#eeffff");
 	my.Label1.shadow = new createjs.Shadow("#090909", 1, 1, 6);
 	my.container.addChild(my.Label1);
-	my.container.addChild(my.Label2);
+
 	
 	my.enlarge = new createjs.Bitmap("/app/res/km-icons-3-36x36.png");
 	my.enlarge.shadow = new createjs.Shadow("#090909", 1, 1, 1);
@@ -182,9 +182,14 @@ PANEL.header = (function() {
 		my.Label1.text="NGO KidsMath " + PANEL.dimension.width+"X"+PANEL.dimension.height+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
 		my.property.x = (w - my.property.image.width - 20);
 		my.property.y = (h - my.property.image.height) / 2;
+		my.property.hitArea  = new createjs.Shape();
+		my.property.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
+        
 		my.enlarge.x = (my.property.x - my.enlarge.image.width - 20);
 		my.enlarge.y = my.property.y;
-		
+		my.enlarge.hitArea  = new createjs.Shape();
+		my.enlarge.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
+       
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.alpha = 0.9;
 		my.stage.update();
@@ -244,7 +249,7 @@ PANEL.screen = (function() {
 		my.container.addChildAt(my.square, idx);
 		my.square.graphics.beginFill("#1F1F1F").drawRect(x, y, w, h);
 		my.Label1.x = x; my.Label1.y = y+10;
-		my.Label1.text = "Ver=15 panel.ui.mini.ngjs 版本更新, test caching 10mins";
+		my.Label1.text = "Ver=14 panel.ui.mini.ngjs 版本更新, test caching 10mins";
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.update();
 	};

@@ -1,5 +1,119 @@
 var AppCommon = (function() {
 	
+	function Map() {
+	    this.container = {};
+	    
+	    Map.prototype.put = function(key, value) {
+	        try {
+	            if (key != null && key != "")
+	                this.container[key] = value;
+	        } catch (e) {
+	            return e;
+	        }
+	    };
+	     
+	    Map.prototype.get = function(key) {
+	        try {
+	            return this.container[key];
+	        } catch (e) {
+	            return e;
+	        }
+	    };
+	     
+	    Map.prototype.containsKey = function(key) {
+	        try {
+	            for ( var p in this.container) {
+	                if (p == key)
+	                    return true;
+	            }
+	            return false;
+	     
+	        } catch (e) {
+	            return e;
+	        }
+	    }
+	     
+	    Map.prototype.containsValue = function(value) {
+	        try {
+	            for ( var p in this.container) {
+	                if (this.container[p] === value)
+	                    return true;
+	            }
+	            return false;
+	     
+	        } catch (e) {
+	            return e;
+	        }
+	    };
+	     
+	    Map.prototype.remove = function(key) {
+	        try {
+	            delete this.container[key];
+	        } catch (e) {
+	            return e;
+	        }
+	    };
+	     
+	    Map.prototype.clear = function() {
+	        try {
+	            delete this.container;
+	            this.container = {};
+	     
+	        } catch (e) {
+	            return e;
+	        }
+	    };
+	     
+	    Map.prototype.isEmpty = function() {
+	     
+	        if (this.keySet().length == 0)
+	            return true;
+	        else
+	            return false;
+	    };
+	     
+	    Map.prototype.size = function() {
+	     
+	        return this.keySet().length;
+	    }
+	     
+	    Map.prototype.keySet = function() {
+	        var keys = new Array();
+	        for ( var p in this.container) {
+	            keys.push(p);
+	        }	     
+	        return keys;
+	    }
+	     
+	    Map.prototype.values = function() {
+	        var valuesArray = new Array();
+	        var keys = this.keySet();
+	        for (var i = 0; i < keys.length; i++) {
+	            valuesArray.push(this.container[keys[i]]);
+	        }
+	        return valuesArray;
+	    }
+	     
+	    Map.prototype.entrySet = function() {
+	        var array = new Array();
+	        var keys = this.keySet();
+	        for (var i = 0; i < keys.length; i++) {
+	            array.push(keys[i],this.container[keys[i]]);
+	        }
+	        return array;
+	    }
+	     
+	    Map.prototype.sumValues = function() {
+	        var values = this.values();
+	        var result = 0;
+	        for (var i = 0; i < values.length; i++) {
+	            result += Number(values[i]);
+	        }
+	        return result;
+	    }
+	};
+	
+	
 	
 	/*
 	 * Limit the frame rate https://gist.github.com/addyosmani/5434533
@@ -111,7 +225,8 @@ var AppCommon = (function() {
 	
 	return {
 		limitLoop : limitLoop,
-		Detector : Detector
+		Detector : Detector,
+		Map : Map
 	};
 
 })();
