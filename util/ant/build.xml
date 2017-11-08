@@ -134,7 +134,7 @@
 		<echo message="Tancy push done: ${tancy.push.output}" />
 	</target>
 	
-	<target name="DEV.cache.refresh" description="" depends="">
+	<target name="DEV.cache.refresh" description="" depends="DEV.push">
 		<get src="${dev.cache.url}" dest="${project.root}/bom/cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="cache.output" srcFile="${project.root}/bom/cache.log"/>
 		<echo message="${cache.output}" />
