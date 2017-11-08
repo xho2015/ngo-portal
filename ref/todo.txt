@@ -182,4 +182,7 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 	
 	b. create ant task for JMX invoke to webresource.clear(), in order to refresh the cached web resources from tomcat. 
 		http://localhost:8080/manager/jmxproxy/?invoke=Catalina:type=WebResourceRoot,host=localhost,context=/,name=Cache&op=clear&ps=
+		
+		
+	c. common out "org.mybatis.spring.mapper.MapperScannerConfigurer" from applicationContext.xml
 	
