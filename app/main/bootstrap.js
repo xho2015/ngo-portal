@@ -92,6 +92,118 @@ var LIBRARY = (function() {
 	    })();
 	};
 	
+	
+	my.loadRetry = function(urls, ok, fail) {
+		if (AppSettings.debug == true){
+			my.loadRetryDebug(urls,ok,fail);
+			return;
+		}
+			
+		formalize(urls);
+		var i = 0, r = 0;
+		$.ajaxSetup({ cache : true});
+	    (function loadNext() {
+	         if (i < urls.length) {
+	        	  var url = (r == 0 ?  urls[i].url : urls[i].retry[r]);	        	  
+	        	  if (url.indexOf("js", url.length - 2) !== -1) {
+	        		//script start
+		              $.getScript(url + "?" +verpfix+urls[i].ver)
+		              .done(function() {
+		                  ++i;
+		                  r = 0; //reset retry flag
+		                  loadNext();
+		              })
+		              .fail(function( jqxhr, settings, exception ) {
+						    console.log( exception + " script [" + url + "]");
+						    if (urls[i].retry) {
+						    	if (r < urls[i].retry.length)
+						    	{	r++;
+						    		console.log( "retry load script [" + urls[i].retry[r]+"]");
+						    		loadNext();
+						    	}
+					    	}					    	
+		              });
+		              //script end
+    			  } else  {
+    				  //data start
+    				  $.ajax({
+    		      			type : "GET", 
+    		      			async : false,	
+    		      			cache : true,
+    		      			dataType : "text",	
+    		      			url : url+"?" +verpfix+urls[i].ver,
+    		      			data : {token : "ses001"},
+    		      			success : function(data) {
+    		      				++i;
+    		      				urls.data = data;
+    		      				loadNext();
+    		      			},
+    		      			error : function(error) {
+    		      				if (fail) fail();
+    		      			}
+    		      		});
+				  }	        	  
+	         }
+	         else 
+	        	 if (ok) ok();
+	    })();
+	};
+	
+	
+	my.loadRetryDebug = function(urls, ok, fail) {
+		formalize(urls);
+		var i = 0, r = 0;
+		$.ajaxSetup({ cache : true});
+	    (function loadNext() {
+	         if (i < urls.length) {
+	        	  var url = (r == 0 ?  urls[i].url : urls[i].retry[r]);	        	  
+	        	  if (url.indexOf("js", url.length - 2) !== -1) {
+	        		  //script start
+	        		  var head = document.getElementsByTagName('head')[0];
+	        		  var script = document.createElement('script');
+	        		  script.type = 'text/javascript';
+	        		  script.src = url;
+	        		  script.async = false;
+	        		  script.onload = function() {
+	        			  ++i;
+		      			  loadNext();
+	        		  };
+	        		  script.onerror = function() {
+	        			  if (urls[i].retry) {
+						    	if (r < urls[i].retry.length)
+						    	{	r++;
+						    		console.log( "retry load script [" + urls[i].retry[r]+"]");
+						    		loadNext();
+						    	}
+					    	}	
+	        		  };
+	        		  head.appendChild(script);
+	        		  //script end
+    			  } else  {
+    				  //data start
+    				  $.ajax({
+    		      			type : "GET", 
+    		      			async : false,	
+    		      			cache : true,
+    		      			dataType : "text",	
+    		      			url : url+"?" +verpfix+urls[i].ver,
+    		      			data : {token : "ses001"},
+    		      			success : function(data) {
+    		      				++i;
+    		      				urls.data = data;
+    		      				loadNext();
+    		      			},
+    		      			error : function(error) {
+    		      				if (fail) fail();
+    		      			}
+    		      		});
+				  }	        	  
+	         }
+	         else 
+	        	 if (ok) ok();
+	    })();
+	};
+	
 	/**
 	 * TODO: resolve token here
 	 */
@@ -125,6 +237,35 @@ var LIBRARY = (function() {
 		}).done(function(data){
 			  if (ok) ok(data);
 		});
+	};
+	
+	/**
+	 * TODO: resolve token here
+	 */
+	my.load = function (urls, ok, fail){
+		var i = 0;
+		(function loadNext() {
+	         if (i < urls.length) {
+	        	  var url = urls[i].url;
+	        	  $.ajax({
+	      			type : "GET", 
+	      			async : false,	
+	      			cache : false,
+	      			dataType : "text",	
+	      			url : url,
+	      			data : {token : "ses001"},
+	      			success : function(data) {
+	      				urls.data = data;
+	      				loadNext();
+	      			},
+	      			error : function(error) {
+	      				if (fail) fail();
+	      			}
+	      		});
+	         }
+	         else 
+	        	 if (ok) ok();
+	    })();
 	};
 
 	return my;
