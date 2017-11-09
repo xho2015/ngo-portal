@@ -44,66 +44,41 @@
 		<echo message="${project.name} ${project.ver},  basedir=${basedir}, project.root=${project.root}" />
 	</target>
 
-
 	<!-- basic targets -->
 	<target name="project.clean">
 		<delete dir="${dest.dir}" />
 	</target>
 	
 	<target name="project.war2" description="build war" depends="project.clean">
-			<mkdir dir="${dist.dir}" />
-			<war destfile="${dist.dir}/ROOT.war">
-				<fileset dir="${project.root}">
-					<exclude name="WEB-INF/src/**"/>
-					<exclude name="WEB-INF/sql/**"/>
-					<exclude name="**/*.js" />
-					<exclude name="ref/**" />
-					<exclude name="util/**" />
-				</fileset>
-			</war>
-		</target>
-
-	<!-- NGO resource package -->
-	<target name="KM.js.compress" description="Javascript compression">
-		<compress ignore="\app\lib\dat.gui.js|\app\lib\three.js" include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
+		<mkdir dir="${dist.dir}" />
+		<war destfile="${dist.dir}/ROOT.war">
+			<fileset dir="${project.root}">
+				<exclude name="WEB-INF/src/**"/>
+				<exclude name="WEB-INF/sql/**"/>
+				<exclude name="**/*.js" />
+				<exclude name="ref/**" />
+				<exclude name="util/**" />
+			</fileset>
+		</war>
 	</target>
 
-	<target name="KM.css.gzip" description="Gzip for css">
-		<ngzip include=".*\.css" exclude="__NOMATCH__" fileExtension="ngcss" path="${project.root}" />
-	</target>
-				
-	<target name="KM.js.gzip" description="javascript compress, then gzip" depends="KM.js.compress">
-		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}" />
-	</target>
-
-	<!--This task is only for DEV debug purpose only-->
+	<!--########## LOCAL DEV ########## -->
 	<target name="DEV.js.gzip" description="Javascript gzip without compress">
 		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${project.root}" />
 	</target>
 	
 	<target name="DEV.png.base64" description="convert PNG file to base64 file">
-			<ngbase64 include=".*\.png" exclude="__NOMATCH__" fileExtension="b64" path="${project.root}" />
+		<ngbase64 include=".*\.png" exclude="__NOMATCH__" fileExtension="b64" path="${project.root}" />
 	</target>
 	
-	<target name="DEV.png.gzip" description="base64 png file gzip" depends="DEV.png.base64">
+	<target name="DEV.b64.gzip" description="base64 png file gzip" depends="DEV.png.base64">
 			<ngzip include=".*\.b64" exclude="__NOMATCH__" fileExtension="ngpng" path="${project.root}" />
-		</target>
-
-	<!--new NG resouce needs to be registered in include-->
-	<target name="KM.bom" description="" depends="KM.js.gzip">
-		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__" 
-			bomRoot="/bom/" 
-			appRoot="/app/"
-			metaName="/meta.txt"
-			cdnName="/7cdn.txt"
-			modName="/7mod.txt"
-			bomOutFile="/out/boms.txt" 
-			moduleOutput="/out/modules.txt" 
-			gradeOutput="/out/grades.txt" 
-			path="${project.root}"  
-			spliter="|"/>
 	</target>
-
+	
+	<target name="DEV.gpng.gzip" description="base64 png file gzip" depends="">
+		<ngzip include=".*\.gpng" exclude="__NOMATCH__" fileExtension="ngpng" path="${project.root}" />
+	</target>
+	
 	<target name="DEV.bom" description="" depends="DEV.js.gzip">
 		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__" 
 			bomRoot="/bom/" 
@@ -117,8 +92,7 @@
 			path="${project.root}"  spliter="|"/>
 	</target>
 
-	<!-- NGO web manager interface - caching -->
-	<target name="DEV.push" description="" depends="DEV.bom,DEV.png.gzip">
+	<target name="DEV.push" description="" depends="DEV.bom,DEV.gpng.gzip,DEV.b64.gzip">
 		<get src="${dev.push.url}" dest="${project.root}/out/push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="push.output" srcFile="${project.root}/out/push.log"/>
 		<echo message="${push.output}" />
@@ -129,7 +103,6 @@
 			<loadfile property="push.output" srcFile="${project.root}/out/push.DEBUG.log"/>
 			<echo message="${push.output}" />
 	</target>
-	
 	
 	<target name="DEV.push.TANCY" description="" depends="DEV.bom">
 		<copy todir="${dev.tancy.bom.out}" verbose="yes">
@@ -148,7 +121,6 @@
 		<echo message="DEV JMX WebResourceRoot size (KB) : ${dev.jmx.size.output}" />
 	</target>
 	
-	
 	<target name="DEV.cache.refresh" description="" depends="DEV.push">
 		<get src="${dev.cache.url}" dest="${project.root}/out/cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="cache.output" srcFile="${project.root}/out/cache.log"/>
@@ -162,7 +134,34 @@
 	</target>
 	
 	
-	<!-- NGO web manager interface - caching -->
+	<!--########## KIDS MATH ########## -->	
+	<target name="KM.js.compress" description="Javascript compression">
+			<compress ignore="\app\lib\dat.gui.js|\app\lib\three.js" include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
+	</target>
+
+	<target name="KM.css.gzip" description="Gzip for css">
+		<ngzip include=".*\.css" exclude="__NOMATCH__" fileExtension="ngcss" path="${project.root}" />
+	</target>
+				
+	<target name="KM.js.gzip" description="javascript compress, then gzip" depends="KM.js.compress">
+		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}" />
+	</target>
+	
+	<!--new NG resouce needs to be registered in include-->
+	<target name="KM.bom" description="" depends="KM.js.gzip">
+		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__" 
+			bomRoot="/bom/" 
+			appRoot="/app/"
+			metaName="/meta.txt"
+			cdnName="/7cdn.txt"
+			modName="/7mod.txt"
+			bomOutFile="/out/boms.txt" 
+			moduleOutput="/out/modules.txt" 
+			gradeOutput="/out/grades.txt" 
+			path="${project.root}"  
+			spliter="|"/>
+	</target>
+
 	<target name="KM.push.TANCY" description="" depends="KM.ftp.app,KM.ftp.TANCY.out">
 		<get src="${km.tancy.push.url}" dest="${project.root}/out/km.tancy.push.log" username="${km.base.user}" password="${km.base.pass}"/>
 		<loadfile property="push.output" srcFile="${project.root}/out/km.tancy.push.log"/>
@@ -187,32 +186,26 @@
 		<echo message="KidsMath JMX WebResourceRoot size (KB) : ${km.jmx.size.output}" />
 	</target>
 	
-	<!-- TODO: check the accessibility of  cdn files in cdn.txt -->
-	<target name="validate.cdn">
-		
-	</target>
-	
 	<target name="KM.ftp.TANCY.out" description="upload out files to tancy" depends="">
-			<ftp server="${km.ftp.ip}"
-			       remotedir="${km.tancy.ftp.dir}"
-			       userid="${km.ftp.user}"
-			       password="${km.ftp.pass}"
-				   passive="yes"
-				   depends="no"
-				   binary="no"
-			       verbose="yes">
-				<fileset dir="${project.root}">
-					<exclude name="app/**" />
-					<exclude name="bom/**" />
-					<exclude name="ref/**" />
-					<exclude name="util/**" />
-					<exclude name="out/*.log"/>
-					<exclude name="WEB-INF/**" />
-					<exclude name="META-INF/**" />
-				</fileset>
-			</ftp>
-		</target>
-	
+		<ftp server="${km.ftp.ip}"
+		       remotedir="${km.tancy.ftp.dir}"
+		       userid="${km.ftp.user}"
+		       password="${km.ftp.pass}"
+			   passive="yes"
+			   depends="no"
+			   binary="no"
+		       verbose="yes">
+			<fileset dir="${project.root}">
+				<exclude name="app/**" />
+				<exclude name="bom/**" />
+				<exclude name="ref/**" />
+				<exclude name="util/**" />
+				<exclude name="out/*.log"/>
+				<exclude name="WEB-INF/**" />
+				<exclude name="META-INF/**" />
+			</fileset>
+		</ftp>
+	</target>
 	
 	<target name="KM.ftp.app" description="upload client pack to web server" depends="KM.bom">
 		<ftp server="${km.ftp.ip}"
@@ -237,7 +230,7 @@
 		</ftp>
 	</target>
 	
-	<target name="KM.ftp.java" description="upload client pack to web server" depends="">
+	<target name="KM.ftp.java" description="upload server pack to web server" depends="">
 		<ftp server="${km.ftp.ip}"
 			   remotedir="${km.ftp.dir}"
 			   userid="${km.ftp.user}"
@@ -270,6 +263,5 @@
 	<target name="tomcat.undeploy" description="Remove web application">
 		<undeploy url="${url}" username="${username}" password="${password}" path="${path}" />
 	</target>
-
 
 </project>
