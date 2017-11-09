@@ -3,6 +3,7 @@
  */
 var PANEL = (function(my) {
 	my.name = 'NGO Panel Graphic UI';
+	my.DATAURL = 'data:image/png;base64,';
 	
 	//background
 	my.bgcontainer = $('#background_screen');
@@ -148,11 +149,11 @@ PANEL.header = (function() {
 	my.container.addChild(my.Label1);
 
 	
-	my.enlarge = new createjs.Bitmap("/app/res/km-icons-3-36x36.png");
+	my.enlarge = new createjs.Bitmap(PANEL.DATAURL+MAINAPP.resource.get("app.res.km-icons-3-36x36-ngpng"));//"/app/res/km-icons-3-36x36.png");
 	my.enlarge.shadow = new createjs.Shadow("#090909", 1, 1, 1);
 	my.container.addChild(my.enlarge);
 	
-	my.property = new createjs.Bitmap("/app/res/km-icons-2-36x36.png");
+	my.property = new createjs.Bitmap(PANEL.DATAURL+MAINAPP.resource.get("app.res.km-icons-2-36x36-ngpng"));
 	my.property.shadow = new createjs.Shadow("#090909", 1, 1, 1);
 	my.container.addChild(my.property);
 	

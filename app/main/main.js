@@ -1,5 +1,7 @@
 var MAINAPP = $.ngoModule(function() {
 
+	var resource = new AppCommon.Map();
+	
 	var ready = function() {
 		MAIMUI.init();	
 	};
@@ -10,10 +12,11 @@ var MAINAPP = $.ngoModule(function() {
 
 	function init() {
 		var depends = LIBRARY.require("lib1");
-		LIBRARY.loadRetry(depends.links, ready, fail);
+		LIBRARY.loadRetry(depends.links, ready, fail, resource);
 	};
 
 	return {
-		init : init
+		init : init,
+		resource : resource
 	};
 }());

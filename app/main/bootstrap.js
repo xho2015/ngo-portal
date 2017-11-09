@@ -15,6 +15,11 @@ var LIBRARY = (function() {
 	 * load single script without cache versioning 
 	 */
 	my.loadScript = function (url, ok, fail){
+		if (AppSettings.debug == true){
+			my.loadScriptDebug(url,ok,fail);
+			return;
+		}
+		
 		//enable caching
 		$.ajaxSetup({ cache : true});
 		$.getScript(url, ok, fail )
@@ -25,6 +30,21 @@ var LIBRARY = (function() {
 		    console.log( exception + " script ["+url+"]");
 		    if (fail) fail(url);
 		});
+	};
+	
+	my.loadScriptDebug = function (url, ok, fail){
+		var head = document.getElementsByTagName('head')[0];
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = url;
+		script.async = false;
+		script.onload = function() {
+			if (ok) ok();
+		};
+		script.onerror = function() {
+		  if (fail) fail();
+		};
+		head.appendChild(script);
 	};
 	
 	my.loadScripts = function(urls, ok, fail) {
@@ -93,9 +113,9 @@ var LIBRARY = (function() {
 	};
 	
 	
-	my.loadRetry = function(urls, ok, fail) {
+	my.loadRetry = function(urls, ok, fail, res) {
 		if (AppSettings.debug == true){
-			my.loadRetryDebug(urls,ok,fail);
+			my.loadRetryDebug(urls,ok,fail,res);
 			return;
 		}
 			
@@ -134,8 +154,8 @@ var LIBRARY = (function() {
     		      			url : url+"?" +verpfix+urls[i].ver,
     		      			data : {token : "ses001"},
     		      			success : function(data) {
+    		      				res.put(urls[i].name, data);
     		      				++i;
-    		      				urls.data = data;
     		      				loadNext();
     		      			},
     		      			error : function(error) {
@@ -150,7 +170,7 @@ var LIBRARY = (function() {
 	};
 	
 	
-	my.loadRetryDebug = function(urls, ok, fail) {
+	my.loadRetryDebug = function(urls, ok, fail, res) {
 		formalize(urls);
 		var i = 0, r = 0;
 		$.ajaxSetup({ cache : true});
@@ -162,7 +182,7 @@ var LIBRARY = (function() {
 	        		  var head = document.getElementsByTagName('head')[0];
 	        		  var script = document.createElement('script');
 	        		  script.type = 'text/javascript';
-	        		  script.src = url;
+	        		  script.src = url + "?" +verpfix+urls[i].ver;
 	        		  script.async = false;
 	        		  script.onload = function() {
 	        			  ++i;
@@ -189,8 +209,8 @@ var LIBRARY = (function() {
     		      			url : url+"?" +verpfix+urls[i].ver,
     		      			data : {token : "ses001"},
     		      			success : function(data) {
+    		      				res.put(urls[i].name, data);
     		      				++i;
-    		      				urls.data = data;
     		      				loadNext();
     		      			},
     		      			error : function(error) {

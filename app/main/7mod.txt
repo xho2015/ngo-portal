@@ -1,3 +1,2 @@
 /app/main/createjs-0.8.2.min.ngjs=lib1#8
-/app/main/common.min.ngjs=lib1#10
 /app/main/panel.ui.min.ngjs=lib1#16
