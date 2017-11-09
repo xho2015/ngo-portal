@@ -4,12 +4,13 @@ app.lib.dat-gui-min-ngjs|/app/lib/dat.gui.min.ngjs|lib|20e4b1e163d82d70c99ba1d25
 app.lib.jquery-1-9-1-min-ngjs|/app/lib/jquery-1.9.1.min.ngjs|lib|2b7cf2de286a2cb1ed594994d6b164c6|
 app.lib.three-min-ngjs|http://cdnjs.cloudflare.com/ajax/libs/three.js/88/three.min.js#/app/lib/three.min.ngjs|lib|5157c9c4f3a1103504e8ba840e2ffd2a|
 app.main.bootstrap-min-ngjs|/app/main/bootstrap.min.ngjs|main|32e982d6716615525143d60229e8130f|
-app.main.common-min-ngjs|/app/main/common.min.ngjs|main|f49b77f08b8d7cddd41a1e67a58e11b1|
-app.main.main-min-ngjs|/app/main/main.min.ngjs|main|81e40df8603a7c18bfeff75a9db7c7c2|
-app.main.panel-ui-min-ngjs|/app/main/panel.ui.min.ngjs|lib1|f2640fde12c9876b2646f89048c50397|16
-app.res.apple-touch-icon-114x114-ngpng|/app/res/apple-touch-icon-114x114.ngpng|res|043af77c3afc82d5b956ac406c2752aa|
+app.main.common-min-ngjs|/app/main/common.min.ngjs|main|a81712bdcb75e56984d7212997d956d6|
+app.main.main-min-ngjs|/app/main/main.min.ngjs|main|51c9ee3cf09cd32c12d021d18c61add5|
+app.main.panel-ui-min-ngjs|/app/main/panel.ui.min.ngjs|lib1|614d52b87e2058b0a6cbd0083a644193|16
+app.res.apple-touch-icon-114x114-ngpng|/app/res/apple-touch-icon-114x114.ngpng|res|4a5658850f9934eb4241c7ad3dd23086|
 app.res.km-icons-2-36x36-ngpng|/app/res/km-icons-2-36x36.ngpng|lib1|944d9d5b79054de85561139fea7ac03f|1
 app.res.km-icons-3-36x36-ngpng|/app/res/km-icons-3-36x36.ngpng|lib1|c409bfcee63ab203a9307b42bd09b692|2
+app.res.km-icons-4-36x36-ngpng|/app/res/km-icons-4-36x36.ngpng|lib1|fb85758973330f882ada6d5cc7025a94|3
 app.res.res1-ngpng|/app/res/res1.ngpng|res|3c7fb1fb0a153b9ac48ca45a9668dbde|
 app.test.css1-ngcss|/app/test/css1.ngcss|test|1ea24e11abfbb500bddfff705a2ea564|
 app.test.demo1-min-ngjs|/app/test/demo1.min.ngjs|test|c9e483e171c177a9c4014f0e71c1de98|
