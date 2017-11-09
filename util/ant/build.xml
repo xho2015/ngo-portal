@@ -131,7 +131,7 @@
 	</target>
 	
 	
-	<target name="DEV.TANCY.push" description="" depends="DEV.bom">
+	<target name="DEV.push.TANCY" description="" depends="DEV.bom">
 		<copy todir="${dev.tancy.bom.out}" verbose="yes">
 		    <fileset dir="${project.root}/out/">
 		      <exclude name="**/*.log"/>
@@ -163,13 +163,13 @@
 	
 	
 	<!-- NGO web manager interface - caching -->
-	<target name="KM.TANCY.push" description="" depends="KM.ftp.app,KM.TANCY.ftp.out">
+	<target name="KM.push.TANCY" description="" depends="KM.ftp.app,KM.ftp.TANCY.out">
 		<get src="${km.tancy.push.url}" dest="${project.root}/out/km.tancy.push.log" username="${km.base.user}" password="${km.base.pass}"/>
 		<loadfile property="push.output" srcFile="${project.root}/out/km.tancy.push.log"/>
 		<echo message="KisMath tancy push: ${push.output}" />
 	</target>
 	
-	<target name="KM.cache.refresh" description="" depends="KM.TANCY.push">
+	<target name="KM.cache.refresh" description="" depends="KM.push.TANCY">
 			<get src="${km.cache.url}" dest="${project.root}/out/km.cache.log" username="${km.base.user}" password="${km.base.pass}"/>
 			<loadfile property="km.cache.output" srcFile="${project.root}/out/km.cache.log"/>
 			<echo message="KidsMath ${km.cache.output}" />
@@ -192,7 +192,7 @@
 		
 	</target>
 	
-	<target name="KM.TANCY.ftp.out" description="upload out files to tancy" depends="">
+	<target name="KM.ftp.TANCY.out" description="upload out files to tancy" depends="">
 			<ftp server="${km.ftp.ip}"
 			       remotedir="${km.tancy.ftp.dir}"
 			       userid="${km.ftp.user}"
