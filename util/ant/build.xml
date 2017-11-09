@@ -91,7 +91,7 @@
 
 	<!--new NG resouce needs to be registered in include-->
 	<target name="KM.bom" description="" depends="KM.js.gzip">
-		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" 
+		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__" 
 			bomRoot="/bom/" 
 			appRoot="/app/"
 			metaName="/meta.txt"
@@ -105,7 +105,7 @@
 	</target>
 
 	<target name="DEV.bom" description="" depends="DEV.js.gzip">
-		<ngbom validate="true" include=".*\.ng(js|css)" exclude="__NOMATCH__" 
+		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__" 
 			bomRoot="/bom/" 
 			appRoot="/app/" 
 			metaName="/meta.txt"
