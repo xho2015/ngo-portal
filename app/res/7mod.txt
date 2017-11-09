@@ -1,0 +1,2 @@
+/app/res/km-icons-2-36x36.ngpng=lib1#1
+/app/res/km-icons-3-36x36.ngpng=lib1#2

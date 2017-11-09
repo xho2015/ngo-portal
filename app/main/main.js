@@ -10,7 +10,7 @@ var MAINAPP = $.ngoModule(function() {
 
 	function init() {
 		var depends = LIBRARY.require("lib1");
-		LIBRARY.loadScriptsRetry(depends.links, ready, fail);
+		LIBRARY.loadRetry(depends.links, ready, fail);
 	};
 
 	return {
