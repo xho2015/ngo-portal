@@ -211,13 +211,15 @@
 			   binary="yes"
 		       verbose="yes">
 			<fileset dir="${project.root}">
-				<exclude name="**/*.js" />
-				<exclude name="app/test/**" />
+				<include name="**/*.htm" />
+				<include name="**/*.ngjs" />
+				<include name="**/*.ngpng" />
+				<include name="**/*.ngcss" />
+				<exclude name="ref/**" />
+				<exclude name="util/**" />
+				<exclude name="out/*.log"/>
 				<exclude name="WEB-INF/**" />
 				<exclude name="META-INF/**" />
-				<exclude name="ref/**" />
-				<exclude name="out/**" />
-				<exclude name="util/**" />
 			</fileset>
 		</ftp>
 	</target>
