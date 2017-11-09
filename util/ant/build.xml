@@ -118,7 +118,7 @@
 	</target>
 
 	<!-- NGO web manager interface - caching -->
-	<target name="DEV.push" description="" depends="DEV.bom">
+	<target name="DEV.push" description="" depends="DEV.bom,DEV.png.gzip">
 		<get src="${dev.push.url}" dest="${project.root}/out/push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="push.output" srcFile="${project.root}/out/push.log"/>
 		<echo message="${push.output}" />
@@ -141,6 +141,13 @@
 		<loadfile property="tancy.push.output" srcFile="${project.root}/out/tancy.push.log"/>
 		<echo message="Tancy push done: ${tancy.push.output}" />
 	</target>
+	
+	<target name="DEV.jmx.webResource.size" description="" depends="">
+		<get src="${dev.jmx.wrr.size}" dest="${project.root}/out/dev.jmx.wrr.size.log" username="${dev.jmx.user}" password="${dev.jmx.pass}"/>
+		<loadfile property="dev.jmx.size.output" srcFile="${project.root}/out/dev.jmx.wrr.size.log"/>
+		<echo message="DEV JMX WebResourceRoot size (KB) : ${dev.jmx.size.output}" />
+	</target>
+	
 	
 	<target name="DEV.cache.refresh" description="" depends="DEV.push">
 		<get src="${dev.cache.url}" dest="${project.root}/out/cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
@@ -172,7 +179,13 @@
 			<get src="${km.jmx.wrr.clear}" dest="${project.root}/out/km.jmx.wrr.clear.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
 			<loadfile property="km.jmx.clear.output" srcFile="${project.root}/out/km.jmx.wrr.clear.log"/>
 			<echo message="KidsMath WebResourceRoot clear via JMX: ${km.jmx.clear.output}" />
-		</target>
+	</target>
+	
+	<target name="KM.jmx.webResource.size" description="" depends="">
+		<get src="${km.jmx.wrr.size}" dest="${project.root}/out/km.jmx.wrr.size.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
+		<loadfile property="km.jmx.size.output" srcFile="${project.root}/out/km.jmx.wrr.size.log"/>
+		<echo message="KidsMath JMX WebResourceRoot size (KB) : ${km.jmx.size.output}" />
+	</target>
 	
 	<!-- TODO: check the accessibility of  cdn files in cdn.txt -->
 	<target name="validate.cdn">
