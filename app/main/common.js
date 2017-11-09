@@ -11,6 +11,30 @@ var AppCommon = (function() {
 	            return e;
 	        }
 	    };
+	    
+	    Map.prototype.putJson = function(json, key, value) {
+	        try {
+	            if (json != null && key != "" && key !=null && value!="" & value!=null)
+	            	for (e in json)	{
+	            		this.put(json[e][key], json[e][value]);
+	            	}	
+	        } catch (e) {
+	            return e;
+	        }
+	    };
+	    
+	    Map.prototype.toString = function() {
+	    	var out = '';
+	    	var entries = this.entrySet();
+	        try {
+	        	for (e in entries) {
+	        		out += entries[e] +",";
+        		}
+	        	return out;
+	        } catch (e) {
+	            return e;
+	        }
+	    };
 	     
 	    Map.prototype.get = function(key) {
 	        try {
