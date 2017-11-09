@@ -76,6 +76,7 @@
 	<filter-mapping>
 		<filter-name>GzipHeaderFilter</filter-name>
 		<url-pattern>*.ngjs</url-pattern>
+		<url-pattern>*.ngpng</url-pattern>
 		<url-pattern>*.ngcss</url-pattern>
 	</filter-mapping>
 	
@@ -122,9 +123,6 @@
 		<url-pattern>*.ngcss</url-pattern>
 		<url-pattern>*.ngmp3</url-pattern>
 		<url-pattern>*.ngpng</url-pattern>
-		<!-- remove js & png when go PROD -->
-		<url-pattern>*.js</url-pattern>
-		<url-pattern>*.png</url-pattern>
 		<url-pattern>/monitoring</url-pattern> 
 	</servlet-mapping>
   
@@ -180,6 +178,6 @@
   </mime-mapping>
   <mime-mapping>
     <extension>ngpng</extension>
-    <mime-type>image/png</mime-type>
+    <mime-type>text/plain</mime-type>
   </mime-mapping>
 </web-app>
