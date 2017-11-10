@@ -199,8 +199,7 @@ PANEL.header = (function() {
 		my.profile.y = my.enlarge.y;
 		my.profile.hitArea  = new createjs.Shape();
 		my.profile.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
-       
-       
+         
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.alpha = 0.9;
 		my.stage.update();
