@@ -140,6 +140,7 @@ var PANEL = (function(my) {
  * panel header sub-module
  */
 PANEL.header = (function() {
+	var ICON_PADDING = 16;
 	var my = {};
 	my.container = new createjs.Container();
 	my.square = new createjs.Shape();
@@ -149,15 +150,15 @@ PANEL.header = (function() {
 	my.container.addChild(my.Label1);
 
 	
-	my.enlarge = new createjs.Bitmap(PANEL.DATAURL+MAINAPP.resource.get("app.res.km-icons-3-36x36-ngpng"));
+	my.enlarge = new createjs.Bitmap(MAINAPP.resource.get("app.res.km-icons-3-36x36-ngpng"));
 	my.enlarge.shadow = new createjs.Shadow("#090909", 1, 1, 1);
 	my.container.addChild(my.enlarge);
 	
-	my.property = new createjs.Bitmap(PANEL.DATAURL+MAINAPP.resource.get("app.res.km-icons-2-36x36-ngpng"));
+	my.property = new createjs.Bitmap(MAINAPP.resource.get("app.res.km-icons-2-36x36-ngpng"));
 	my.property.shadow = new createjs.Shadow("#090909", 1, 1, 1);
 	my.container.addChild(my.property);
 	
-	my.profile = new createjs.Bitmap(PANEL.DATAURL+MAINAPP.resource.get("app.res.km-icons-4-36x36-ngpng"));
+	my.profile = new createjs.Bitmap(MAINAPP.resource.get("app.res.km-icons-4-36x36-ngpng"));
 	my.profile.shadow = new createjs.Shadow("#090909", 1, 1, 1);
 	my.container.addChild(my.profile);
 	
@@ -185,17 +186,17 @@ PANEL.header = (function() {
 		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
 		my.Label1.x = 10; my.Label1.y = (h - 16) / 2;
 		my.Label1.text="NGO KidsMath " + PANEL.dimension.width+"X"+PANEL.dimension.height+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
-		my.property.x = (w - my.property.image.width - 20);
+		my.property.x = (w - my.property.image.width - ICON_PADDING);
 		my.property.y = (h - my.property.image.height) / 2;
 		my.property.hitArea  = new createjs.Shape();
 		my.property.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
         
-		my.enlarge.x = (my.property.x - my.enlarge.image.width - 20);
+		my.enlarge.x = (my.property.x - my.enlarge.image.width - ICON_PADDING);
 		my.enlarge.y = my.property.y;
 		my.enlarge.hitArea  = new createjs.Shape();
 		my.enlarge.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
 		
-		my.profile.x = (my.enlarge.x - my.profile.image.width - 20);
+		my.profile.x = (my.enlarge.x - my.profile.image.width - ICON_PADDING);
 		my.profile.y = my.enlarge.y;
 		my.profile.hitArea  = new createjs.Shape();
 		my.profile.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
