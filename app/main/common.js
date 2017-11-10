@@ -138,6 +138,15 @@ var AppCommon = (function() {
 	};
 	
 	
+	function toImage(dataUrl, callback)
+	{
+		var image = new Image();
+		image.src = 'data:image/png;base64,'+dataUrl;
+		image.onload = function (){ 
+			if (callback)
+				callback(this);
+		} 	
+	};
 	
 	/*
 	 * Limit the frame rate https://gist.github.com/addyosmani/5434533
@@ -250,7 +259,8 @@ var AppCommon = (function() {
 	return {
 		limitLoop : limitLoop,
 		Detector : Detector,
-		Map : Map
+		Map : Map,
+		toImage: toImage
 	};
 
 })();

@@ -125,8 +125,8 @@ var LIBRARY = (function() {
 	    (function loadNext() {
 	         if (i < urls.length) {
 	        	  var url = (r == 0 ?  urls[i].url : urls[i].retry[r]);	        	  
-	        	  if (url.indexOf("js", url.length - 2) !== -1) {
-	        		//script start
+	        	  if ( urls[i].category=="J") {
+	        		  //script start
 		              $.getScript(url + "?" +verpfix+urls[i].ver)
 		              .done(function() {
 		                  ++i;
@@ -144,7 +144,7 @@ var LIBRARY = (function() {
 					    	}					    	
 		              });
 		              //script end
-    			  } else  {
+    			  } else if (urls[i].category=="I")  {
     				  //data start
     				  $.ajax({
     		      			type : "GET", 
@@ -153,10 +153,13 @@ var LIBRARY = (function() {
     		      			dataType : "text",	
     		      			url : url+"?" +verpfix+urls[i].ver,
     		      			data : {token : "ses001"},
-    		      			success : function(data) {
-    		      				res.put(urls[i].name, data);
-    		      				++i;
-    		      				loadNext();
+    		      			success : function(data) {		      				
+    		      				AppCommon.toImage(data, function(image)	{
+    		      					if (res)
+    		      						res.put(urls[i].name, image);
+        		      				++i;
+        		      				loadNext();
+		      					});
     		      			},
     		      			error : function(error) {
     		      				if (fail) fail();
@@ -177,7 +180,7 @@ var LIBRARY = (function() {
 	    (function loadNext() {
 	         if (i < urls.length) {
 	        	  var url = (r == 0 ?  urls[i].url : urls[i].retry[r]);	        	  
-	        	  if (url.indexOf("js", url.length - 2) !== -1) {
+	        	  if (urls[i].category=="J") {
 	        		  //script start
 	        		  var head = document.getElementsByTagName('head')[0];
 	        		  var script = document.createElement('script');
@@ -199,7 +202,7 @@ var LIBRARY = (function() {
 	        		  };
 	        		  head.appendChild(script);
 	        		  //script end
-    			  } else  {
+    			  } else if (urls[i].category=="I") {
     				  //data start
     				  $.ajax({
     		      			type : "GET", 
@@ -209,9 +212,12 @@ var LIBRARY = (function() {
     		      			url : url+"?" +verpfix+urls[i].ver,
     		      			data : {token : "ses001"},
     		      			success : function(data) {
-    		      				res.put(urls[i].name, data);
-    		      				++i;
-    		      				loadNext();
+    		      				AppCommon.toImage(data, function(image)	{
+    		      					if (res)
+    		      						res.put(urls[i].name, image);
+        		      				++i;
+        		      				loadNext();
+		      					});
     		      			},
     		      			error : function(error) {
     		      				if (fail) fail();
