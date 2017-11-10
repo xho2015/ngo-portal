@@ -49,6 +49,10 @@ public class CacheControler {
         	{	String state = localCache.cacheState();
         		return ResponseEntity.ok(timestamp+state);
         	}
+        	else if (action.equalsIgnoreCase("size"))
+        	{	String size = localCache.getCacheSize();
+        		return ResponseEntity.ok(timestamp+size);
+        	}
         	return ResponseEntity.ok("N/A");
         } catch (Exception e) {
         	logger.error(e.getMessage());

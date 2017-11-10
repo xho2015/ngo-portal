@@ -8,17 +8,13 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-
 import org.springframework.stereotype.Service;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import ngo.front.storage.entity.Resource;
-import ngo.front.storage.orm.BomDAO;
 
 @Service
 @Scope("singleton")
@@ -36,6 +32,9 @@ public class LocalCache {
 	};
 	
 	private static final int REFRESH_INTERVAL = 10;
+	
+	private static Map<String,Integer> SIZE_MAP = new HashMap<String,Integer>();
+	
 	
 	@PostConstruct
 	public void init()
@@ -56,13 +55,16 @@ public class LocalCache {
 	private Object loadObject(String key) {
 		
 		//retrieve the root key
-		String keys[] = key.split("\\.");
-		String root = keys.length > 0 ? keys[0] : "";
+		String temp[] = key.split("\\.");
+		String root = temp.length > 0 ? temp[0] : "";
 		CachingLoader loader = registra.get(root);
 		if (loader==null)
 			logger.error("Localcache: key ["+key+"] don't have a caching loader");			
-		else
-			return loader.loadCacheObject(key);
+		else{
+			Object newObj =  loader.loadCacheObject(key);
+			SIZE_MAP.put(key, newObj.toString().length());
+			return newObj;
+		}
 		return null;
 	}
 
@@ -79,6 +81,15 @@ public class LocalCache {
 	public String cacheState() {
 		logger.info("Localcache: cache states");		
 		return cache.stats().toString();
+	}
+	
+	public String getCacheSize() {
+		logger.info("Localcache: cache size");		
+		int size = 0;
+		for (Map.Entry<String,Integer> entry : SIZE_MAP.entrySet()){
+		    size+=entry.getValue();
+		}
+		return String.valueOf(size);
 	}
 
 	public void refreshObject(String key) {
