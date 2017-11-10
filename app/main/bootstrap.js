@@ -12,7 +12,7 @@ var LIBRARY = (function() {
 	var verpfix = window.location.hostname.substring(0,1);
 	
 	/**
-	 * load single script without cache versioning 
+	 * load single script without version 
 	 */
 	my.loadScript = function (url, ok, fail){
 		if (AppSettings.debug == true){
@@ -32,6 +32,9 @@ var LIBRARY = (function() {
 		});
 	};
 	
+	/**
+	 * load single script without version in DEBUG mode, script will show up in Source panel  
+	 */
 	my.loadScriptDebug = function (url, ok, fail){
 		var head = document.getElementsByTagName('head')[0];
 		var script = document.createElement('script');
@@ -47,6 +50,9 @@ var LIBRARY = (function() {
 		head.appendChild(script);
 	};
 	
+	/**
+	 * load multiple scripts in bulk 
+	 */
 	my.loadScripts = function(urls, ok, fail) {
 	    var i = 0;
 	    $.ajaxSetup({ cache : true});
@@ -69,7 +75,7 @@ var LIBRARY = (function() {
 	};
 	
 	/**
-	 * formalize to below
+	 * do formalization for URLs Json object as below
 	 * 1. inject "retry" to link objects, in case CDN or retry URL exists, 
 	 */
 	function formalize(links)
@@ -84,6 +90,9 @@ var LIBRARY = (function() {
 		}
 	}
 	
+	/**
+	 * load multiple scripts in bulk, do retry in case CDN or retry URL exists 
+	 */
 	my.loadScriptsRetry = function(urls, ok, fail) {
 		formalize(urls);
 		var i = 0, r = 0;
@@ -113,7 +122,9 @@ var LIBRARY = (function() {
 	    })();
 	};
 	
-	
+	/**
+	 * load multiple NG contents (e.g. ngjs, ngpng) in bulk, do retry in case CDN or retry URL exists 
+	 */
 	my.loadRetry = function(urls, ok, fail, res) {
 		if (AppSettings.debug == true){
 			my.loadRetryDebug(urls,ok,fail,res);
@@ -174,7 +185,9 @@ var LIBRARY = (function() {
 	    })();
 	};
 	
-	
+	/**
+	 * load multiple NG contents (e.g. ngjs, ngpng) in bulk in debug mode, do retry in case CDN or retry URL exists 
+	 */
 	my.loadRetryDebug = function(urls, ok, fail, res) {
 		formalize(urls);
 		var i = 0, r = 0;
@@ -236,6 +249,7 @@ var LIBRARY = (function() {
 	};
 	
 	/**
+	 * load required urls for designated module in synchronized mode
 	 * TODO: resolve token here
 	 */
 	my.require = function (module, ok, fail){
@@ -258,6 +272,7 @@ var LIBRARY = (function() {
 	};
 	
 	/**
+	 * load required urls for designated module in asynchronized mode
 	 * TODO: resolve token here
 	 */
 	my.requirea = function (module, ok) {
@@ -268,35 +283,6 @@ var LIBRARY = (function() {
 		}).done(function(data){
 			  if (ok) ok(data);
 		});
-	};
-	
-	/**
-	 * TODO: resolve token here
-	 */
-	my.load = function (urls, ok, fail){
-		var i = 0;
-		(function loadNext() {
-	         if (i < urls.length) {
-	        	  var url = urls[i].url;
-	        	  $.ajax({
-	      			type : "GET", 
-	      			async : false,	
-	      			cache : false,
-	      			dataType : "text",	
-	      			url : url,
-	      			data : {token : "ses001"},
-	      			success : function(data) {
-	      				urls.data = data;
-	      				loadNext();
-	      			},
-	      			error : function(error) {
-	      				if (fail) fail();
-	      			}
-	      		});
-	         }
-	         else 
-	        	 if (ok) ok();
-	    })();
 	};
 
 	return my;

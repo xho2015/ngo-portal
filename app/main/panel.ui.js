@@ -3,7 +3,6 @@
  */
 var PANEL = (function(my) {
 	my.name = 'NGO Panel Graphic UI';
-	my.DATAURL = 'data:image/png;base64,';
 	
 	//background
 	my.bgcontainer = $('#background_screen');
@@ -140,7 +139,9 @@ var PANEL = (function(my) {
  * panel header sub-module
  */
 PANEL.header = (function() {
-	var ICON_PADDING = 16;
+	var style = {
+		PADDING: 16
+	};
 	var my = {};
 	my.container = new createjs.Container();
 	my.square = new createjs.Shape();
@@ -186,17 +187,17 @@ PANEL.header = (function() {
 		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
 		my.Label1.x = 10; my.Label1.y = (h - 16) / 2;
 		my.Label1.text="NGO KidsMath " + PANEL.dimension.width+"X"+PANEL.dimension.height+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
-		my.property.x = (w - my.property.image.width - ICON_PADDING);
+		my.property.x = (w - my.property.image.width - style.PADDING);
 		my.property.y = (h - my.property.image.height) / 2;
 		my.property.hitArea  = new createjs.Shape();
 		my.property.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
         
-		my.enlarge.x = (my.property.x - my.enlarge.image.width - ICON_PADDING);
+		my.enlarge.x = (my.property.x - my.enlarge.image.width - style.PADDING);
 		my.enlarge.y = my.property.y;
 		my.enlarge.hitArea  = new createjs.Shape();
 		my.enlarge.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
 		
-		my.profile.x = (my.enlarge.x - my.profile.image.width - ICON_PADDING);
+		my.profile.x = (my.enlarge.x - my.profile.image.width - style.PADDING);
 		my.profile.y = my.enlarge.y;
 		my.profile.hitArea  = new createjs.Shape();
 		my.profile.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
