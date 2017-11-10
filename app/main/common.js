@@ -138,8 +138,7 @@ var AppCommon = (function() {
 	};
 	
 	
-	function toImage(dataUrl, callback)
-	{
+	function toImage(dataUrl, callback)	{
 		var image = new Image();
 		image.src = 'data:image/png;base64,'+dataUrl;
 		image.onload = function (){ 
