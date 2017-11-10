@@ -9,22 +9,19 @@ public class Bom {
 	@JsonIgnore
 	private String module;
 	@JsonIgnore
-	private String category;
+	private String md5;
 	
 	private String name;
 	private int ver;
 	private String url;
-	
-	@JsonIgnore
-	private String md5;
-	
 	private int lorder;
+	private String category;
 	
 	public Bom()
 	{
 	}
 	
-	public Bom(String fid, String url, String grade, String module, String md5, int lorder)
+	public Bom(String fid, String url, String grade, String module, String md5, int lorder,String category)
 	{
 		this.name = fid;
 		this.url = url;
@@ -32,6 +29,7 @@ public class Bom {
 		this.module = module;
 		this.md5 = md5;
 		this.lorder = lorder;
+		this.category = category;
 	}
 	
 	

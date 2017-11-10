@@ -61,7 +61,7 @@ public class DeployControler {
         	String filePath = servletContext.getRealPath(bomPath);
         	FileReader fr = new FileReader(filePath);
         	br = new BufferedReader(fr);
-        	String line, row[], name, url, md5, temp[], grade, module, lorder;
+        	String line, row[], name, url, md5, temp[], grade, module, lorder, category;
         	line = br.readLine();
             while (line!=null && line.length() > 0) {
         		row = line.split("\\|");
@@ -72,7 +72,8 @@ public class DeployControler {
             	module = temp.length == 2 ? temp[1] : temp[0];
             	md5 = row[3];
             	lorder = row.length == 5? row[4] : "0";
-            	uploadedBoms.put(name, new Bom(name, url, grade, module, md5, Integer.parseInt(lorder)));
+            	category = row[5];
+            	uploadedBoms.put(name, new Bom(name, url, grade, module, md5, Integer.parseInt(lorder),category));
             	line = br.readLine();
             } 
             

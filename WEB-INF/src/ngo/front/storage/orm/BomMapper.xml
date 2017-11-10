@@ -14,11 +14,11 @@
 	</select>
 	
 	<update id="update" parameterType="ngo.front.storage.entity.Bom">
-        update bom set md5=#{md5},ver=#{ver},grade=#{grade},module=#{module},lorder=#{lorder} where name=#{name}
+        update bom set md5=#{md5},ver=#{ver},grade=#{grade},module=#{module},lorder=#{lorder},category=#{category} where name=#{name}
     </update>
     
     <insert id="insert" parameterType="ngo.front.storage.entity.Bom" useGeneratedKeys="true" keyProperty="rid">
-        insert into bom(name,ver,url,md5,grade,module,lorder) values(#{name},#{ver},#{url},#{md5},#{grade},#{module},#{lorder})
+        insert into bom(name,ver,url,md5,grade,module,lorder,category) values(#{name},#{ver},#{url},#{md5},#{grade},#{module},#{lorder},#{category})
     </insert>
     
 </mapper>

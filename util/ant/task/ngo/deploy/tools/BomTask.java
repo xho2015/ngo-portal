@@ -41,9 +41,13 @@ public class BomTask extends org.apache.tools.ant.Task {
 	private List<String> ngoGradeBom = new ArrayList<String>();
 	private Map<String,String> ngoCDN = new HashMap<String,String>();
 	private Map<String,String> ngoMod = new HashMap<String,String>();
+	private Map<String,String> ngoCategory = new HashMap<String,String>();
+	
+	
 	
 
 	private String validate;
+	private String categoryMapping;
 	private String path;
 	private String include;
 	private String exclude;
@@ -58,6 +62,14 @@ public class BomTask extends org.apache.tools.ant.Task {
 	private String modName;
 
 	
+	public String getCategoryMapping() {
+		return categoryMapping;
+	}
+
+	public void setCategoryMapping(String categoryMapping) {
+		this.categoryMapping = categoryMapping;
+	}
+
 	public String getMetaName() {
 		return metaName;
 	}
@@ -280,9 +292,13 @@ public class BomTask extends org.apache.tools.ant.Task {
 				module = temp[0];
 				order = temp[1];
 			}
+			
+			//parse file category base on file extension
+			String fileTemp[] = file.getName().split("\\.");
+			String category= this.ngoCategory.get(fileTemp[fileTemp.length-1]); 
 			//pub content in temp array
-			ngoBom.add(fileId + this.spliter + cdn + this.spliter + module + this.spliter + md5 + this.spliter + order);
-			System.out.println("File: "+ relativeFilename +", md5=" + md5) ;
+			ngoBom.add(fileId + this.spliter + cdn + this.spliter + module + this.spliter + md5 + this.spliter + order+ this.spliter + category);
+			System.out.println("File: category="+category + ", "+ relativeFilename +", md5=" + md5) ;
 		} catch (IOException ioe) {
 			ioe.printStackTrace(System.out);
 			throw new BuildException(ioe.getMessage());
@@ -399,6 +415,11 @@ public class BomTask extends org.apache.tools.ant.Task {
 	
 	@Override
 	public void execute() throws BuildException {
+		//parse categoryMapping
+		String categorys[] = this.categoryMapping.split("#");
+		for (String c : categorys)
+			this.ngoCategory.put(c.split("=")[0], c.split("=")[1]);
+			
 		File[] files = new File(this.path).listFiles();
 		try {
 			iterateFiles(files, "");
