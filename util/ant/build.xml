@@ -80,7 +80,8 @@
 	</target>
 	
 	<target name="DEV.bom" description="" depends="DEV.js.gzip">
-		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__" 
+		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__"
+			categoryMapping="ngjs=J#ngpng=I#ngcss=S"
 			bomRoot="/bom/" 
 			appRoot="/app/" 
 			metaName="/meta.txt"
