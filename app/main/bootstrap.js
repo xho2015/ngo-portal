@@ -69,7 +69,8 @@ var LIBRARY = (function() {
 	};
 	
 	/**
-	 * inject "retry" to link objects, in case CDN or retry URL exists, 
+	 * formalize to below
+	 * 1. inject "retry" to link objects, in case CDN or retry URL exists, 
 	 */
 	function formalize(links)
 	{
@@ -118,7 +119,7 @@ var LIBRARY = (function() {
 			my.loadRetryDebug(urls,ok,fail,res);
 			return;
 		}
-			
+		//formalize urls json object	
 		formalize(urls);
 		var i = 0, r = 0;
 		$.ajaxSetup({ cache : true});
@@ -145,7 +146,7 @@ var LIBRARY = (function() {
 		              });
 		              //script end
     			  } else if (urls[i].category=="I")  {
-    				  //data start
+    				  //png image start
     				  $.ajax({
     		      			type : "GET", 
     		      			async : false,	
@@ -165,6 +166,7 @@ var LIBRARY = (function() {
     		      				if (fail) fail();
     		      			}
     		      		});
+    				  //png image end
 				  }	        	  
 	         }
 	         else 
@@ -203,7 +205,7 @@ var LIBRARY = (function() {
 	        		  head.appendChild(script);
 	        		  //script end
     			  } else if (urls[i].category=="I") {
-    				  //data start
+    				  //png image start
     				  $.ajax({
     		      			type : "GET", 
     		      			async : false,	
@@ -223,7 +225,10 @@ var LIBRARY = (function() {
     		      				if (fail) fail();
     		      			}
     		      		});
-				  }	        	  
+    				  //png image end
+				  }	else if (urls[i].category=="S") { 
+					//css style start
+				  }
 	         }
 	         else 
 	        	 if (ok) ok();
