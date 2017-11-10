@@ -105,22 +105,39 @@
 			<echo message="${push.output}" />
 	</target>
 	
-	<target name="DEV.WebResource.size" description="" depends="">
+	<target name="DEV.Resource.size" description="" depends="">
 		<get src="${dev.jmx.wrr.size}" dest="${project.root}/out/dev.jmx.wrr.size.log" username="${dev.jmx.user}" password="${dev.jmx.pass}"/>
 		<loadfile property="dev.jmx.size.output" srcFile="${project.root}/out/dev.jmx.wrr.size.log"/>
 		<echo message="DEV JMX WebResourceRoot size (KB) : ${dev.jmx.size.output}" />
+		
+		<get src="${dev.localcache.size}" dest="${project.root}/out/dev.localcache.size.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="dev.localcache.size.output" srcFile="${project.root}/out/dev.localcache.size.log"/>
+		<echo message="DEV LocalCache size (char) : ${dev.localcache.size.output}" />
+				
 	</target>
 	
-	<target name="DEV.cache.refresh" description="" depends="DEV.push">
-		<get src="${dev.cache.url}" dest="${project.root}/out/cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+	<target name="DEV.localcache.refresh" description="" depends="DEV.push">
+		<get src="${dev.localcache.url}" dest="${project.root}/out/cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="cache.output" srcFile="${project.root}/out/cache.log"/>
 		<echo message="${cache.output}" />
 	</target>
 	
-	<target name="DEV.WebResource.clear" description="" depends="DEV.cache.refresh">
+	<target name="DEV.Resource.clear" description="" depends="DEV.localcache.refresh">
 		<get src="${dev.jmx.wrr.clear}" dest="${project.root}/out/dev.jmx.wrr.clear.log" username="${dev.jmx.user}" password="${dev.jmx.pass}"/>
 		<loadfile property="jmx.clear.output" srcFile="${project.root}/out/dev.jmx.wrr.clear.log"/>
 		<echo message="Dev JMX WebResourceRoot clear invoked : ${jmx.clear.output}" />
+	</target>
+	
+	<target name="DEV.stop.ROOT" description="" depends="">
+		<get src="${dev.text.stop.url}" dest="${project.root}/out/dev.stop.root.log" username="${dev.script.user}" password="${dev.script.pass}"/>
+		<loadfile property="dev.stop.output" srcFile="${project.root}/out/dev.stop.root.log"/>
+		<echo message="Dev stop ROOT : ${dev.stop.output}" />
+	</target>
+	
+	<target name="DEV.start.ROOT" description="" depends="">
+		<get src="${dev.text.start.url}" dest="${project.root}/out/dev.start.root.log" username="${dev.script.user}" password="${dev.script.pass}"/>
+		<loadfile property="dev.start.output" srcFile="${project.root}/out/dev.start.root.log"/>
+		<echo message="Dev start ROOT : ${dev.start.output}" />
 	</target>
 	
 	
@@ -238,6 +255,18 @@
 				<exclude name="util/**" />
 			</fileset>
 		</ftp>
+	</target>
+	
+	<target name="KM.stop.ROOT" description="" depends="">
+		<get src="${km.text.stop.url}" dest="${project.root}/out/km.stop.root.log" username="${km.script.user}" password="${km.script.pass}"/>
+		<loadfile property="km.stop.output" srcFile="${project.root}/out/km.stop.root.log"/>
+		<echo message="KidsMath stop ROOT : ${km.stop.output}" />
+	</target>
+	
+	<target name="KM.start.ROOT" description="" depends="">
+		<get src="${km.text.start.url}" dest="${project.root}/out/km.start.root.log" username="${km.script.user}" password="${km.script.pass}"/>
+		<loadfile property="km.start.output" srcFile="${project.root}/out/km.start.root.log"/>
+		<echo message="KidsMath start ROOT : ${km.start.output}" />
 	</target>
 
 	<!-- Tomcat manager interface -->
