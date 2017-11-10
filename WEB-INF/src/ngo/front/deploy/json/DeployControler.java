@@ -71,7 +71,7 @@ public class DeployControler {
             	grade = temp.length == 2 ? temp[0] : "";
             	module = temp.length == 2 ? temp[1] : temp[0];
             	md5 = row[3];
-            	lorder = row.length == 5? row[4] : "0";
+            	lorder = row[4].isEmpty() ? "0" : row[4];
             	category = row[5];
             	uploadedBoms.put(name, new Bom(name, url, grade, module, md5, Integer.parseInt(lorder),category));
             	line = br.readLine();
