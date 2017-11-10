@@ -134,7 +134,7 @@
 	     <url-pattern>/monitoring</url-pattern>    
 	   </web-resource-collection>
 	   <auth-constraint>
-	      <role-name>tancy-script</role-name>
+	      <role-name>ants-script</role-name>
 	   </auth-constraint>
 	 </security-constraint>
 	 
@@ -148,7 +148,7 @@
 	    <description>
 	      The role that is required to access the ngo base management interfaces
 	    </description>
-	    <role-name>tancy-script</role-name>
+	    <role-name>ants-script</role-name>
 	  </security-role>
     
   <error-page>
