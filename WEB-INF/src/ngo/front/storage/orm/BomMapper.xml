@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ngo.front.storage.orm.BomMapper">
 	<select id="getByModuleId" parameterType="String" resultType="ngo.front.storage.entity.Bom">
-		select name,ver,url,md5,grade,module,category from bom where module=#{module} order by lorder
+		select name,ver,url,md5,grade,module,category,lorder from bom where module=#{module} order by lorder
 	</select>
 	
 	<select id="getByGradeId" parameterType="String" resultType="ngo.front.storage.entity.Bom">
-		select name,ver,url,md5,grade,module,category from bom where grade=#{grade}
+		select name,ver,url,md5,grade,module,category,lorder from bom where grade=#{grade}
 	</select>
 	
 	<select id="getAll" resultType="ngo.front.storage.entity.Bom">
