@@ -149,13 +149,17 @@ PANEL.header = (function() {
 	my.container.addChild(my.Label1);
 
 	
-	my.enlarge = new createjs.Bitmap(PANEL.DATAURL+MAINAPP.resource.get("app.res.km-icons-3-36x36-ngpng"));//"/app/res/km-icons-3-36x36.png");
+	my.enlarge = new createjs.Bitmap(PANEL.DATAURL+MAINAPP.resource.get("app.res.km-icons-3-36x36-ngpng"));
 	my.enlarge.shadow = new createjs.Shadow("#090909", 1, 1, 1);
 	my.container.addChild(my.enlarge);
 	
 	my.property = new createjs.Bitmap(PANEL.DATAURL+MAINAPP.resource.get("app.res.km-icons-2-36x36-ngpng"));
 	my.property.shadow = new createjs.Shadow("#090909", 1, 1, 1);
 	my.container.addChild(my.property);
+	
+	my.profile = new createjs.Bitmap(PANEL.DATAURL+MAINAPP.resource.get("app.res.km-icons-4-36x36-ngpng"));
+	my.profile.shadow = new createjs.Shadow("#090909", 1, 1, 1);
+	my.container.addChild(my.profile);
 	
 	my.stage = new createjs.Stage(PANEL.panelId);
 	my.stage.addChild(my.container);
@@ -190,7 +194,12 @@ PANEL.header = (function() {
 		my.enlarge.y = my.property.y;
 		my.enlarge.hitArea  = new createjs.Shape();
 		my.enlarge.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
-       
+		
+		my.profile.x = (my.enlarge.x - my.profile.image.width - 20);
+		my.profile.y = my.enlarge.y;
+		my.profile.hitArea  = new createjs.Shape();
+		my.profile.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
+         
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.alpha = 0.9;
 		my.stage.update();
@@ -233,6 +242,7 @@ PANEL.property = (function() {
  */
 PANEL.screen = (function() {
 	var my = {};
+	
 	my.container = new createjs.Container();
 	my.square = new createjs.Shape();
 	my.container.addChild(my.square);
@@ -250,7 +260,7 @@ PANEL.screen = (function() {
 		my.container.addChildAt(my.square, idx);
 		my.square.graphics.beginFill("#1F1F1F").drawRect(x, y, w, h);
 		my.Label1.x = x; my.Label1.y = y+10;
-		my.Label1.text = "Ver=14 panel.ui.mini.ngjs 版本更新, test caching 10mins";
+		my.Label1.text = MAINAPP.DEBUGINFO.toString();
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
 		my.stage.update();
 	};
