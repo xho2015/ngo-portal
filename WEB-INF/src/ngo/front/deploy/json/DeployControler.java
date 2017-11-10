@@ -118,7 +118,7 @@ public class DeployControler {
         		deployService.addBomObject(s.getValue());
             });
         	
-        	return ResponseEntity.ok("["+new java.util.Date()+"] Bom daployed by tancy ["+ servletContext.getVirtualServerName() +"], Inserted:"+toBeInsertBoms.size()+", Updated:"+toBeUpdateBoms.size());
+        	return ResponseEntity.ok("["+new java.util.Date()+"] Bom entry daployed, Inserted:"+toBeInsertBoms.size()+", Updated:"+toBeUpdateBoms.size());
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Deploy error: "+e.getMessage());
