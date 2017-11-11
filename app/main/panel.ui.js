@@ -2,7 +2,7 @@
  * NGO main panel module
  */
 var PANEL = (function(my) {
-	my.name = 'NGO Panel Graphic UI';
+	my.name = 'NGO Panel GUI';
 	
 	//background
 	my.bgcontainer = $('#background_screen');
