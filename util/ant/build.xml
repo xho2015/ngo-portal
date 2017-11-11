@@ -274,12 +274,18 @@
 			   remotedir="${km.ftp.demon.dir}"
 			   userid="${km.ftp.user}"
 			   password="${km.ftp.pass}"
-			   passive="yes"
-			   depends="no"
-			   binary="yes"
-		       verbose="yes">
-			<fileset dir="${project.root}/out/start">
+			   passive="yes" depends="no" binary="yes" verbose="yes">
+			<fileset dir="${project.root}/out/demon/start">
 				<include name="notify.txt"/>
+			</fileset>
+		</ftp>
+		<ftp server="${km.ftp.ip}"
+			   remotedir="${km.ftp.demon.dir}"
+			   userid="${km.ftp.user}"
+			   password="${km.ftp.pass}"
+			   passive="yes"  depends="no"  binary="yes"  verbose="yes">
+			<fileset dir="${project.root}/out/demon">
+				<include name="args.txt"/>
 			</fileset>
 		</ftp>
 		<echo message="KidsMath tomcat to be launched..." />
@@ -294,7 +300,7 @@
 			   depends="no"
 			   binary="yes"
 		       verbose="yes">
-			<fileset dir="${project.root}/out/stop">
+			<fileset dir="${project.root}/out/demon/stop">
 				<include name="notify.txt"/>
 			</fileset>
 		</ftp>
