@@ -85,7 +85,7 @@
 		<url-pattern>*.ngjs</url-pattern>
 		<url-pattern>*.ngmp3</url-pattern>
 		<url-pattern>*.ngpng</url-pattern>
-		<url-pattern>*.htm</url-pattern>
+		<url-pattern>*.ngdom</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
 	
@@ -112,13 +112,13 @@
 		<servlet-name>spring-dispatcher</servlet-name>
 		<url-pattern>/json/bom</url-pattern>
 		<url-pattern>/ants/cache</url-pattern>
-		<!-- remove deploy when go PROD -->
+		<url-pattern>/ants/query</url-pattern>
 		<url-pattern>/ants/deploy</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
-		<url-pattern>*.htm</url-pattern>
+		<url-pattern>*.ngdom</url-pattern>
 		<url-pattern>*.ngjs</url-pattern>
 		<url-pattern>*.ngcss</url-pattern>
 		<url-pattern>*.ngmp3</url-pattern>
@@ -164,6 +164,10 @@
     <location>/WEB-INF/jsp/404.jsp</location>
   </error-page>
   
+  <mime-mapping>
+    <extension>ngdom</extension>
+    <mime-type>text/html</mime-type>
+  </mime-mapping>
   <mime-mapping>
     <extension>ngjs</extension>
     <mime-type>application/javascript</mime-type>
