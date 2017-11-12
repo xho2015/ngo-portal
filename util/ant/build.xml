@@ -20,8 +20,13 @@
 	<path id="ngo-ant-classpath">
 		<fileset dir="${project.root}/util/ant/lib">
 			<include name="ngotask.jar" />
+			<include name="ngoweb.jar" />
 			<include name="commons-net-1.4.1.jar" />
 			<include name="jakarta-oro-2.0.8.jar" />
+		</fileset>
+		<fileset dir="${project.root}/WEB-INF/lib">
+			<include name="jackson-core-asl-1.9.13.jar" />
+			<include name="jackson-mapper-lgpl-1.9.13.jar" />
 		</fileset>
 		<fileset dir="${project.root}/util/jsc">
 			<include name="yuicompressor-2.4.8.jar" />
@@ -67,11 +72,15 @@
 		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${project.root}" />
 	</target>
 	
+	<target name="DEV.css.gzip" description="Gzip for css">
+		<ngzip include=".*\.css" exclude="__NOMATCH__" fileExtension="ngcss" path="${project.root}" />
+	</target>
+
 	<target name="DEV.png.base64" description="convert PNG file to base64 file">
 		<ngbase64 include=".*\.png" exclude="__NOMATCH__" fileExtension="b64" path="${project.root}" />
 	</target>
 	
-	<target name="DEV.b64.gzip" description="base64 png file gzip" depends="DEV.png.base64">
+	<target name="DEV.base64.gzip" description="base64 png file gzip" depends="">
 			<ngzip include=".*\.b64" exclude="__NOMATCH__" fileExtension="ngpng" path="${project.root}" />
 	</target>
 	
@@ -79,7 +88,7 @@
 		<ngzip include=".*\.gpng" exclude="__NOMATCH__" fileExtension="ngpng" path="${project.root}" />
 	</target>
 	
-	<target name="DEV.bom" description="" depends="DEV.js.gzip">
+	<target name="DEV.bom" description="" depends="">
 		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__"
 			categoryMapping="ngjs=J#ngpng=I#ngcss=S"
 			bomRoot="/bom/" 
@@ -87,56 +96,80 @@
 			metaName="/meta.txt"
 			cdnName="/7cdn.txt"
 			modName="/7mod.txt"
-			bomOutFile="/out/boms.txt" 
-			moduleOutput="/out/modules.txt" 
-			gradeOutput="/out/grades.txt" 
+			bomOutFile="/out/push/boms.txt" 
+			moduleOutput="/out/push/modules.txt" 
+			gradeOutput="/out/push/grades.txt" 
 			path="${project.root}"  spliter="|"/>
 	</target>
 
-	<target name="DEV.push" description="" depends="DEV.bom,DEV.gpng.gzip,DEV.b64.gzip">
-		<get src="${dev.push.url}" dest="${project.root}/out/dev.push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
-		<loadfile property="push.output" srcFile="${project.root}/out/dev.push.log"/>
+	<target name="DEV.push" description="" depends="">
+		<get src="${dev.push.url}" dest="${project.root}/out/log/dev.push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="push.output" srcFile="${project.root}/out/log/dev.push.log"/>
 		<echo message="${push.output}" />
 	</target>
 	
-	<target name="DEV.push.DEBUG" description="" depends="DEV.bom">
-		<get src="${dev.debug.push.url}" dest="${project.root}/out/push.DEBUG.log" username="${dev.base.user}" password="${dev.base.pass}"/>
-			<loadfile property="push.output" srcFile="${project.root}/out/push.DEBUG.log"/>
+	<target name="DEV.version.query" description="query ngresource version" depends="">
+		<get src="${dev.version.query.url}" dest="${project.root}/${dev.bomver.file}" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="dev.verquery.output" srcFile="${project.root}/${dev.bomver.file}"/>
+		<echo message="${dev.verquery.output}" />
+	</target>
+	
+	<target name="DEV.domgen" description="ngdom file generation" depends="">
+		<ngdom include=".*\.htm" exclude="__NOMATCH__" fileExtension="ngdom" path="${project.root}" compact="false" verFile="${dev.bomver.file}" verSeed="1d" verSeedName="@VERSION_SEED@"/>
+	</target>
+		
+	
+	<target name="DEV.push.DEBUG" description="" depends="">
+		<get src="${dev.debug.push.url}" dest="${project.root}/out/log/push.DEBUG.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+			<loadfile property="push.output" srcFile="${project.root}/out/log/push.DEBUG.log"/>
 			<echo message="${push.output}" />
 	</target>
 	
 	<target name="DEV.Resource.size" description="" depends="">
-		<get src="${dev.jmx.wrr.size}" dest="${project.root}/out/dev.jmx.wrr.size.log" username="${dev.jmx.user}" password="${dev.jmx.pass}"/>
-		<loadfile property="dev.jmx.size.output" srcFile="${project.root}/out/dev.jmx.wrr.size.log"/>
-		<echo message="DEV JMX WebResourceRoot size (KB) : ${dev.jmx.size.output}" />
-		
-		<get src="${dev.localcache.size}" dest="${project.root}/out/dev.localcache.size.log" username="${dev.base.user}" password="${dev.base.pass}"/>
-		<loadfile property="dev.localcache.size.output" srcFile="${project.root}/out/dev.localcache.size.log"/>
+		<get src="${dev.jmx.wrr.size}" dest="${project.root}/out/log/dev.jmx.wrr.size.log" username="${dev.jmx.user}" password="${dev.jmx.pass}"/>
+		<loadfile property="dev.jmx.size.output" srcFile="${project.root}/out/log/dev.jmx.wrr.size.log"/>
+		<echo message="DEV JMX WebResourceRoot size (KB) : ${dev.jmx.size.output}" />		
+		<get src="${dev.localcache.size}" dest="${project.root}/out/log/dev.localcache.size.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="dev.localcache.size.output" srcFile="${project.root}/out/log/dev.localcache.size.log"/>
 		<echo message="DEV LocalCache size (char) : ${dev.localcache.size.output}" />
 				
 	</target>
 	
-	<target name="DEV.localcache.refresh" description="" depends="DEV.push">
-		<get src="${dev.localcache.url}" dest="${project.root}/out/cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
-		<loadfile property="cache.output" srcFile="${project.root}/out/cache.log"/>
+	<target name="DEV.localcache.refresh" description="" depends="">
+		<get src="${dev.localcache.url}" dest="${project.root}/out/log/dev.cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="cache.output" srcFile="${project.root}/out/log/dev.cache.log"/>
 		<echo message="${cache.output}" />
 	</target>
 	
-	<target name="DEV.Resource.clear" description="" depends="DEV.localcache.refresh">
-		<get src="${dev.jmx.wrr.clear}" dest="${project.root}/out/dev.jmx.wrr.clear.log" username="${dev.jmx.user}" password="${dev.jmx.pass}"/>
-		<loadfile property="jmx.clear.output" srcFile="${project.root}/out/dev.jmx.wrr.clear.log"/>
+	<target name="DEV.Resource.clear" description="" depends="">
+		<get src="${dev.jmx.wrr.clear}" dest="${project.root}/out/log/dev.jmx.wrr.clear.log" username="${dev.jmx.user}" password="${dev.jmx.pass}"/>
+		<loadfile property="jmx.clear.output" srcFile="${project.root}/out/log/dev.jmx.wrr.clear.log"/>
 		<echo message="Dev JMX WebResourceRoot clear invoked : ${jmx.clear.output}" />
 	</target>
 	
+	<target name="DEV.app.deploy" description="deploy app to DEV" depends="">
+		<antcall target="DEV.css.gzip"/>
+		<antcall target="DEV.js.gzip"/>
+		<antcall target="DEV.gpng.gzip"/>
+		<antcall target="DEV.png.base64"/>
+		<antcall target="DEV.base64.gzip"/>
+		<antcall target="DEV.bom"/>
+		<antcall target="DEV.push"/>
+		<antcall target="DEV.version.query"/>
+		<antcall target="DEV.domgen"/>						
+		<antcall target="DEV.Resource.clear"/>
+		<antcall target="DEV.localcache.refresh"/>
+	</target>
+	
 	<target name="DEV.stop.ROOT" description="" depends="">
-		<get src="${dev.text.stop.url}" dest="${project.root}/out/dev.stop.root.log" username="${dev.script.user}" password="${dev.script.pass}"/>
-		<loadfile property="dev.stop.output" srcFile="${project.root}/out/dev.stop.root.log"/>
+		<get src="${dev.text.stop.url}" dest="${project.root}/out/log/dev.stop.root.log" username="${dev.script.user}" password="${dev.script.pass}"/>
+		<loadfile property="dev.stop.output" srcFile="${project.root}/out/log/dev.stop.root.log"/>
 		<echo message="Dev stop ROOT : ${dev.stop.output}" />
 	</target>
 	
 	<target name="DEV.start.ROOT" description="" depends="">
-		<get src="${dev.text.start.url}" dest="${project.root}/out/dev.start.root.log" username="${dev.script.user}" password="${dev.script.pass}"/>
-		<loadfile property="dev.start.output" srcFile="${project.root}/out/dev.start.root.log"/>
+		<get src="${dev.text.start.url}" dest="${project.root}/out/log/dev.start.root.log" username="${dev.script.user}" password="${dev.script.pass}"/>
+		<loadfile property="dev.start.output" srcFile="${project.root}/out/log/dev.start.root.log"/>
 		<echo message="Dev start ROOT : ${dev.start.output}" />
 	</target>
 	
@@ -163,9 +196,9 @@
 			metaName="/meta.txt"
 			cdnName="/7cdn.txt"
 			modName="/7mod.txt"
-			bomOutFile="/out/boms.txt" 
-			moduleOutput="/out/modules.txt" 
-			gradeOutput="/out/grades.txt" 
+			bomOutFile="/out/push/boms.txt" 
+			moduleOutput="/out/push/modules.txt" 
+			gradeOutput="/out/push/grades.txt" 
 			path="${project.root}"  
 			spliter="|"/>
 	</target>
@@ -180,7 +213,7 @@
 			   binary="yes"
 		       verbose="yes">
 			<fileset dir="${project.root}">
-				<include name="out/*.txt" />
+				<include name="out/push/*.txt" />
 				<exclude name="app/**" />
 				<exclude name="bom/**" />
 				<exclude name="ref/**" />
@@ -190,26 +223,26 @@
 				<exclude name="META-INF/**" />
 			</fileset>
 		</ftp>
-		<get src="${km.push.url}" dest="${project.root}/out/km.push.log" username="${km.base.user}" password="${km.base.pass}"/>
-		<loadfile property="km.push.output" srcFile="${project.root}/out/km.push.log"/>
+		<get src="${km.push.url}" dest="${project.root}/out/log/km.push.log" username="${km.base.user}" password="${km.base.pass}"/>
+		<loadfile property="km.push.output" srcFile="${project.root}/out/log/km.push.log"/>
 		<echo message="KisMath push: ${km.push.output}" />
 	</target>
 	
 	<target name="KM.cache.refresh" description="" depends="KM.push">
-			<get src="${km.cache.url}" dest="${project.root}/out/km.cache.log" username="${km.base.user}" password="${km.base.pass}"/>
-			<loadfile property="km.cache.output" srcFile="${project.root}/out/km.cache.log"/>
+			<get src="${km.cache.url}" dest="${project.root}/out/log/km.cache.log" username="${km.base.user}" password="${km.base.pass}"/>
+			<loadfile property="km.cache.output" srcFile="${project.root}/out/log/km.cache.log"/>
 			<echo message="KidsMath ${km.cache.output}" />
 	</target>
 	
 	<target name="KM.WebResource.clear" description="" depends="KM.cache.refresh">
-			<get src="${km.jmx.wrr.clear}" dest="${project.root}/out/km.jmx.wrr.clear.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
-			<loadfile property="km.jmx.clear.output" srcFile="${project.root}/out/km.jmx.wrr.clear.log"/>
+			<get src="${km.jmx.wrr.clear}" dest="${project.root}/out/log/km.jmx.wrr.clear.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
+			<loadfile property="km.jmx.clear.output" srcFile="${project.root}/out/log/km.jmx.wrr.clear.log"/>
 			<echo message="KidsMath WebResourceRoot clear via JMX: ${km.jmx.clear.output}" />
 	</target>
 	
 	<target name="KM.WebResource.size" description="" depends="">
-		<get src="${km.jmx.wrr.size}" dest="${project.root}/out/km.jmx.wrr.size.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
-		<loadfile property="km.jmx.size.output" srcFile="${project.root}/out/km.jmx.wrr.size.log"/>
+		<get src="${km.jmx.wrr.size}" dest="${project.root}/out/log/km.jmx.wrr.size.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
+		<loadfile property="km.jmx.size.output" srcFile="${project.root}/out/log/km.jmx.wrr.size.log"/>
 		<echo message="KidsMath JMX WebResourceRoot size (KB) : ${km.jmx.size.output}" />
 	</target>
 	
@@ -258,14 +291,14 @@
 	</target>
 	
 	<target name="KM.stop.ROOT" description="" depends="">
-		<get src="${km.text.stop.url}" dest="${project.root}/out/km.stop.root.log" username="${km.script.user}" password="${km.script.pass}"/>
-		<loadfile property="km.stop.output" srcFile="${project.root}/out/km.stop.root.log"/>
+		<get src="${km.text.stop.url}" dest="${project.root}/out/log/km.stop.root.log" username="${km.script.user}" password="${km.script.pass}"/>
+		<loadfile property="km.stop.output" srcFile="${project.root}/out/log/km.stop.root.log"/>
 		<echo message="KidsMath stop ROOT : ${km.stop.output}" />
 	</target>
 	
 	<target name="KM.start.ROOT" description="" depends="">
-		<get src="${km.text.start.url}" dest="${project.root}/out/km.start.root.log" username="${km.script.user}" password="${km.script.pass}"/>
-		<loadfile property="km.start.output" srcFile="${project.root}/out/km.start.root.log"/>
+		<get src="${km.text.start.url}" dest="${project.root}/out/log/km.start.root.log" username="${km.script.user}" password="${km.script.pass}"/>
+		<loadfile property="km.start.output" srcFile="${project.root}/out/log/km.start.root.log"/>
 		<echo message="KidsMath start ROOT : ${km.start.output}" />
 	</target>
 	
