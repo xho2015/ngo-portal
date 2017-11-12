@@ -36,4 +36,8 @@ public class BomDAO {
 	public int insertBom(Bom bom) {
 		return sqlSession.insert("ngo.front.storage.orm.BomMapper.insert", bom);		
 	}
+
+	public List<Bom> getBomVersions() {
+		return sqlSession.selectList("ngo.front.storage.orm.BomMapper.getBomVersions");
+	}
 }

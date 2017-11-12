@@ -1,20 +1,30 @@
 package ngo.front.storage.entity;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonView;
 
 public class Bom {
+	
+	public interface Dafault {}
+	public interface MD5 extends Dafault{}
 	
 	@JsonIgnore
 	private String grade;
 	@JsonIgnore
 	private String module;
-	@JsonIgnore
+	
+	@JsonView(Bom.MD5.class)
 	private String md5;
 	
+	@JsonView(Bom.Dafault.class)
 	private String name;
+	@JsonView(Bom.Dafault.class)
 	private int ver;
+	@JsonView(Bom.Dafault.class)
 	private String url;
+	@JsonView(Bom.Dafault.class)
 	private int lorder;
+	@JsonView(Bom.Dafault.class)
 	private String category;
 	
 	public Bom()

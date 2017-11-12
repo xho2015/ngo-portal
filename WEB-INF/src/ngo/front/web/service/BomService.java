@@ -13,6 +13,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.annotate.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
@@ -58,6 +59,17 @@ public class BomService implements LocalCache.CachingLoader{
 	{
     	return (String)localCache.getObject(CACHE_KEY+"."+ SUB_KEY_GRADE + "."+ gradeId);	
 	}
+	
+	/**
+	 * it only care name version and md5
+	 * @return
+	 */
+	public String getBomVersions()
+	{
+		List<Bom> versions = bomDAO.getBomVersions();
+    	String verJson = jsonService.toJson(versions, Bom.MD5.class);
+    	return verJson;
+	}
 
 	@Override
 	public Object loadCacheObject(String key)  {
@@ -68,13 +80,13 @@ public class BomService implements LocalCache.CachingLoader{
 			{
 				Resource resource = new Resource();
 				resource.setLinks(bomDAO.getBomByModule(keys[2]));			
-				String json = jsonService.toJson(resource);			
+				String json = jsonService.toJson(resource, Bom.Dafault.class);			
 				logger.info("Localcache: Module key ["+key+"] loaded from database");			
 				return (Object)json;	
 			} else if (keys[1].equals(SUB_KEY_GRADE)){
 				Resource resource = new Resource();
 				resource.setLinks(bomDAO.getBomByGrade(keys[2]));			
-				String json = jsonService.toJson(resource);			
+				String json = jsonService.toJson(resource, Bom.Dafault.class);			
 				logger.info("Localcache: Grade key ["+key+"] loaded from database");			
 				return (Object)json;
 			}

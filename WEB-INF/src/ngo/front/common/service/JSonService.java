@@ -12,10 +12,10 @@ public class JSonService {
 
 	private final ObjectMapper mapper = new ObjectMapper();
 	
-	public String toJson(Object obj)
+	public String toJson(Object obj, Class view)
 	{
 		try {
-    		return mapper.writeValueAsString(obj);	
+    		return mapper.writerWithView(view).writeValueAsString(obj);	
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
