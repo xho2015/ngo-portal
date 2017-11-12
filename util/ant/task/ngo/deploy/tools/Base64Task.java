@@ -24,7 +24,7 @@ import sun.misc.BASE64Encoder;
  * @author Administrator
  *
  */
-public class DataUrlTask extends org.apache.tools.ant.Task {
+public class Base64Task extends org.apache.tools.ant.Task {
 	
 	private String path;
 
