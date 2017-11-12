@@ -5,7 +5,9 @@ $.extend({ngoModule: function(module) {
 	return module;}
 });
 
-
+/**
+ * bootstrap: ver.8 houxuyong@hotmail.com
+ */
 var LIBRARY = (function() {
 	var my = {};
 	
@@ -225,7 +227,7 @@ var LIBRARY = (function() {
     		      			cache : true,
     		      			dataType : "text",	
     		      			url : url+"?" +verpfix+urls[i].ver,
-    		      			data : {token : "ses001"},
+    		      			data : {token : "ses002"},
     		      			success : function(data) {
     		      				AppCommon.toImage(data, function(image)	{
     		      					if (res)

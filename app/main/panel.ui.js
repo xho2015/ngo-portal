@@ -1,8 +1,8 @@
 /**
- * NGO main panel module
+ * NGO main panel user interface. ver6 houxuyong@hotmail.com
  */
 var PANEL = (function(my) {
-	my.name = 'NGO Panel GUI v.5';
+	my.name = 'NGO Panel GUI';
 	
 	//background
 	my.bgcontainer = $('#background_screen');
