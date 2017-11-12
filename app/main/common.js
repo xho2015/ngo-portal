@@ -1,5 +1,8 @@
 var AppCommon = (function() {
 	
+	/**
+	 * Map define 
+	 */
 	function Map() {
 	    this.container = {};
 	    
@@ -137,7 +140,12 @@ var AppCommon = (function() {
 	    }
 	};
 	
-	
+	/**
+	 * convert BASE64 dataUrl to png Image, callbeck will be invoked once image.onload 
+	 * @param dataUrl
+	 * @param callback
+	 * @returns
+	 */
 	function toImage(dataUrl, callback)	{
 		var image = new Image();
 		image.src = 'data:image/png;base64,'+dataUrl;
@@ -151,18 +159,14 @@ var AppCommon = (function() {
 	 * Limit the frame rate https://gist.github.com/addyosmani/5434533
 	 */
 	var limitLoop = function(fn, fps) {
-
 		// Use var then = Date.now(); if you
 		// don't care about targetting < IE9
 		var then = new Date().getTime();
-
 		// custom fps, otherwise fallback to 60
 		fps = fps || 60;
 		var interval = 1000 / fps;
-
 		return (function loop(time) {
 			requestAnimationFrame(loop);
-
 			// again, Date.now() if it's available
 			var now = new Date().getTime();
 			var delta = now - then;
@@ -172,7 +176,6 @@ var AppCommon = (function() {
 				// now - (delta % interval) is an improvement over just
 				// using then = now, which can end up lowering overall fps
 				then = now - (delta % interval);
-
 				// call the fn
 				fn();
 			}
@@ -183,7 +186,6 @@ var AppCommon = (function() {
 	 * @author alteredq / http://alteredqualia.com/
 	 * @author mr.doob / http://mrdoob.com/
 	 */
-
 	var Detector = {
 
 		canvas : !!window.CanvasRenderingContext2D,
@@ -201,7 +203,6 @@ var AppCommon = (function() {
 		workers : !!window.Worker,
 		fileapi : window.File && window.FileReader && window.FileList
 				&& window.Blob,
-
 		getWebGLErrorMessage : function() {
 			var element = document.createElement('div');
 			element.id = 'webgl-error-message';
@@ -214,9 +215,7 @@ var AppCommon = (function() {
 			element.style.padding = '1.5em';
 			element.style.width = '400px';
 			element.style.margin = '5em auto 0';
-
 			if (!this.webgl) {
-
 				element.innerHTML = window.WebGLRenderingContext ? [
 						'Your graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br />',
 						'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.' ]
@@ -225,35 +224,22 @@ var AppCommon = (function() {
 								'Your browser does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br/>',
 								'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.' ]
 								.join('\n');
-
 			}
-
 			return element;
-
 		},
 
 		addGetWebGLMessage : function(parameters) {
-
 			var parent, id, element;
-
 			parameters = parameters || {};
-
 			parent = parameters.parent !== undefined ? parameters.parent
 					: document.body;
 			id = parameters.id !== undefined ? parameters.id : 'oldie';
-
 			element = Detector.getWebGLErrorMessage();
 			element.id = id;
-
 			parent.appendChild(element);
 		}
 	};
 
-	// browserify support
-	//if (typeof module === 'object') {
-
-	//	module.exports = Detector;
-	//}
 	
 	return {
 		limitLoop : limitLoop,

@@ -9,7 +9,7 @@ $.extend({ngoModule: function(module) {
 var LIBRARY = (function() {
 	var my = {};
 	
-	var verpfix = window.location.hostname.substring(0,1) + AppSettings.cacheseed;
+	var verpfix = AppSettings.verSeed;
 	
 	/**
 	 * load single script without version 
