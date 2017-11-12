@@ -66,29 +66,25 @@
 			</fileset>
 		</war>
 	</target>
-
-	<!--########## LOCAL DEV ########## -->
-	<target name="DEV.js.gzip" description="Javascript gzip without compress">
-		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${project.root}" />
-	</target>
 	
-	<target name="DEV.css.gzip" description="Gzip for css">
+	<!-- COMMON tasks -->
+	<target name="COMMON.css.gzip" description="Gzip for css">
 		<ngzip include=".*\.css" exclude="__NOMATCH__" fileExtension="ngcss" path="${project.root}" />
 	</target>
-
-	<target name="DEV.png.base64" description="convert PNG file to base64 file">
+	
+	<target name="COMMON.png.base64" description="convert PNG file to base64 file">
 		<ngbase64 include=".*\.png" exclude="__NOMATCH__" fileExtension="b64" path="${project.root}" />
 	</target>
 	
-	<target name="DEV.base64.gzip" description="base64 png file gzip" depends="">
+	<target name="COMMON.base64.gzip" description="base64 png file gzip" depends="">
 			<ngzip include=".*\.b64" exclude="__NOMATCH__" fileExtension="ngpng" path="${project.root}" />
 	</target>
 	
-	<target name="DEV.gpng.gzip" description="base64 png file gzip" depends="">
+	<target name="COMMON.gpng.gzip" description="base64 png file gzip" depends="">
 		<ngzip include=".*\.gpng" exclude="__NOMATCH__" fileExtension="ngpng" path="${project.root}" />
 	</target>
 	
-	<target name="DEV.bom" description="" depends="">
+	<target name="COMMON.bom" description="" depends="">
 		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__"
 			categoryMapping="ngjs=J#ngpng=I#ngcss=S"
 			bomRoot="/bom/" 
@@ -100,6 +96,11 @@
 			moduleOutput="/out/push/modules.txt" 
 			gradeOutput="/out/push/grades.txt" 
 			path="${project.root}"  spliter="|"/>
+	</target>
+	
+	<!--########## LOCAL DEV ########## -->
+	<target name="DEV.js.gzip" description="Javascript gzip without compress">
+		<ngzip include=".*\.js" exclude=".*\.min\.js" fileExtension="min.ngjs" path="${project.root}" />
 	</target>
 
 	<target name="DEV.push" description="" depends="">
@@ -117,7 +118,6 @@
 	<target name="DEV.domgen" description="ngdom file generation" depends="">
 		<ngdom include=".*\.htm" exclude="__NOMATCH__" fileExtension="ngdom" path="${project.root}" compact="false" verFile="${dev.bomver.file}" verSeed="1d" verSeedName="@VERSION_SEED@"/>
 	</target>
-		
 	
 	<target name="DEV.push.DEBUG" description="" depends="">
 		<get src="${dev.debug.push.url}" dest="${project.root}/out/log/push.DEBUG.log" username="${dev.base.user}" password="${dev.base.pass}"/>
@@ -148,12 +148,12 @@
 	</target>
 	
 	<target name="DEV.app.deploy" description="deploy app to DEV" depends="">
-		<antcall target="DEV.css.gzip"/>
+		<antcall target="COMMON.css.gzip"/>
 		<antcall target="DEV.js.gzip"/>
-		<antcall target="DEV.gpng.gzip"/>
-		<antcall target="DEV.png.base64"/>
-		<antcall target="DEV.base64.gzip"/>
-		<antcall target="DEV.bom"/>
+		<antcall target="COMMON.gpng.gzip"/>
+		<antcall target="COMMON.png.base64"/>
+		<antcall target="COMMON.base64.gzip"/>
+		<antcall target="COMMON.bom"/>
 		<antcall target="DEV.push"/>
 		<antcall target="DEV.version.query"/>
 		<antcall target="DEV.domgen"/>						
@@ -179,16 +179,12 @@
 			<compress ignore="\app\lib\dat.gui.js|\app\lib\three.js" include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
 	</target>
 
-	<target name="KM.css.gzip" description="Gzip for css">
-		<ngzip include=".*\.css" exclude="__NOMATCH__" fileExtension="ngcss" path="${project.root}" />
-	</target>
-				
-	<target name="KM.js.gzip" description="javascript compress, then gzip" depends="KM.js.compress">
+	<target name="KM.js.gzip" description="javascript compress, then gzip" depends="">
 		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}" />
 	</target>
 	
 	<!--new NG resouce needs to be registered in include-->
-	<target name="KM.bom" description="" depends="KM.js.gzip">
+	<target name="KM.bom" description="" depends="">
 		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__" 
 			categoryMapping="ngjs=J#ngpng=I#ngcss=S"
 			bomRoot="/bom/" 
@@ -203,38 +199,25 @@
 			spliter="|"/>
 	</target>
 
-	<target name="KM.push" description="" depends="KM.ftp.app">
-		<ftp server="${km.ftp.ip}"
-		       remotedir="${km.ftp.dir}"
-		       userid="${km.ftp.user}"
-		       password="${km.ftp.pass}"
-			   passive="yes"
-			   depends="no"
-			   binary="yes"
-		       verbose="yes">
-			<fileset dir="${project.root}">
-				<include name="out/push/*.txt" />
-				<exclude name="app/**" />
-				<exclude name="bom/**" />
-				<exclude name="ref/**" />
-				<exclude name="util/**" />
-				<exclude name="out/*.log"/>
-				<exclude name="WEB-INF/**" />
-				<exclude name="META-INF/**" />
-			</fileset>
-		</ftp>
+	<target name="KM.push" description="" depends="">
 		<get src="${km.push.url}" dest="${project.root}/out/log/km.push.log" username="${km.base.user}" password="${km.base.pass}"/>
 		<loadfile property="km.push.output" srcFile="${project.root}/out/log/km.push.log"/>
 		<echo message="KisMath push: ${km.push.output}" />
 	</target>
 	
-	<target name="KM.cache.refresh" description="" depends="KM.push">
+	<target name="KM.version.query" description="query ngresource version" depends="">
+		<get src="${km.version.query.url}" dest="${project.root}/${km.bomver.file}" username="${km.base.user}" password="${km.base.pass}"/>
+		<loadfile property="km.verquery.output" srcFile="${project.root}/${km.bomver.file}"/>
+		<echo message="${km.verquery.output}" />
+	</target>
+	
+	<target name="KM.localcache.refresh" description="" depends="">
 			<get src="${km.cache.url}" dest="${project.root}/out/log/km.cache.log" username="${km.base.user}" password="${km.base.pass}"/>
 			<loadfile property="km.cache.output" srcFile="${project.root}/out/log/km.cache.log"/>
 			<echo message="KidsMath ${km.cache.output}" />
 	</target>
 	
-	<target name="KM.WebResource.clear" description="" depends="KM.cache.refresh">
+	<target name="KM.WebResource.clear" description="" depends="">
 			<get src="${km.jmx.wrr.clear}" dest="${project.root}/out/log/km.jmx.wrr.clear.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
 			<loadfile property="km.jmx.clear.output" srcFile="${project.root}/out/log/km.jmx.wrr.clear.log"/>
 			<echo message="KidsMath WebResourceRoot clear via JMX: ${km.jmx.clear.output}" />
@@ -246,17 +229,14 @@
 		<echo message="KidsMath JMX WebResourceRoot size (KB) : ${km.jmx.size.output}" />
 	</target>
 	
-	<target name="KM.ftp.app" description="upload client pack to web server" depends="KM.bom">
+	<target name="KM.ftp.app" description="upload client pack to web server" depends="">
 		<ftp server="${km.ftp.ip}"
 		       remotedir="${km.ftp.dir}"
 		       userid="${km.ftp.user}"
 		       password="${km.ftp.pass}"
-			   passive="yes"
-			   depends="no"
-			   binary="yes"
-		       verbose="yes">
+			   passive="yes" depends="no" binary="yes" verbose="yes">
 			<fileset dir="${project.root}">
-				<include name="**/*.htm" />
+				<include name="**/*.ngmp3" />
 				<include name="**/*.ngjs" />
 				<include name="**/*.ngpng" />
 				<include name="**/*.ngcss" />
@@ -269,15 +249,45 @@
 		</ftp>
 	</target>
 	
+	<target name="KM.ftp.ngdom" description="upload ngdom to web server" depends="">
+		<ftp server="${km.ftp.ip}"
+		       remotedir="${km.ftp.dir}"
+		       userid="${km.ftp.user}"
+		       password="${km.ftp.pass}"
+			   passive="yes" depends="no" binary="yes" verbose="yes">
+			<fileset dir="${project.root}">
+				<include name="**/*.ngdom" />
+				<exclude name="ref/**" />
+				<exclude name="util/**" />
+				<exclude name="out/**"/>
+				<exclude name="WEB-INF/**" />
+				<exclude name="META-INF/**" />
+			</fileset>
+		</ftp>
+	</target>
+	
+	<target name="KM.domgen" description="ngdom file generation" depends="">
+		<ngdom include=".*\.htm" exclude="__NOMATCH__" fileExtension="ngdom" path="${project.root}" compact="true" verFile="${km.bomver.file}" verSeed="9p" verSeedName="@VERSION_SEED@"/>
+	</target>
+	
+	<target name="KM.ftp.out.push" description="upload outpush to web server" depends="">
+		<ftp server="${km.ftp.ip}"
+		       remotedir="${km.ftp.outpush.dir}"
+		       userid="${km.ftp.user}"
+		       password="${km.ftp.pass}"
+			   passive="yes"  depends="no"  binary="yes"  verbose="yes">
+			<fileset dir="${project.root}/out/push">
+				<include name="*.*"/>
+			</fileset>
+		</ftp>
+	</target>
+	
 	<target name="KM.ftp.java" description="upload server pack to web server" depends="">
 		<ftp server="${km.ftp.ip}"
 			   remotedir="${km.ftp.dir}"
 			   userid="${km.ftp.user}"
 			   password="${km.ftp.pass}"
-			   passive="yes"
-			   depends="no"
-			   binary="yes"
-		       verbose="yes">
+			   passive="yes"  depends="no"  binary="yes" verbose="yes">
 			<fileset dir="${project.root}">
 				<exclude name="WEB-INF/src/**"/>
 				<exclude name="WEB-INF/sql/**"/>
@@ -288,6 +298,24 @@
 				<exclude name="util/**" />
 			</fileset>
 		</ftp>
+	</target>
+	
+	<target name="KM.app.deploy" description="deploy app to KidsMath" depends="">
+		<antcall target="COMMON.css.gzip"/>
+		<antcall target="KM.js.compress"/>	
+		<antcall target="KM.js.gzip"/>
+		<antcall target="COMMON.gpng.gzip"/>
+		<antcall target="COMMON.png.base64"/>
+		<antcall target="COMMON.base64.gzip"/>
+		<antcall target="KM.bom"/>
+		<antcall target="KM.ftp.app"/>
+		<antcall target="KM.ftp.out.push"/>
+		<antcall target="KM.push"/>
+		<antcall target="KM.version.query"/>	
+		<antcall target="KM.domgen"/>	
+		<antcall target="KM.ftp.ngdom"/>			
+		<antcall target="KM.WebResource.clear"/>
+		<antcall target="KM.localcache.refresh"/>
 	</target>
 	
 	<target name="KM.stop.ROOT" description="" depends="">
@@ -302,7 +330,7 @@
 		<echo message="KidsMath start ROOT : ${km.start.output}" />
 	</target>
 	
-	<target name="KM.start.tomcat" description="notify demon to start tomcat" depends="">
+	<target name="KM.demon.start.tomcat" description="notify demon to start tomcat" depends="">
 		<ftp server="${km.ftp.ip}"
 			   remotedir="${km.ftp.demon.dir}"
 			   userid="${km.ftp.user}"
@@ -324,7 +352,7 @@
 		<echo message="KidsMath tomcat to be launched..." />
 	</target>
 	
-	<target name="KM.stop.tomcat" description="notify demon to start tomcat" depends="">
+	<target name="KM.demon.stop.tomcat" description="notify demon to start tomcat" depends="">
 		<ftp server="${km.ftp.ip}"
 			   remotedir="${km.ftp.demon.dir}"
 			   userid="${km.ftp.user}"
