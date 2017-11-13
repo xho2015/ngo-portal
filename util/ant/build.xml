@@ -104,9 +104,13 @@
 	</target>
 
 	<target name="DEV.push" description="" depends="">
-		<get src="${dev.push.url}" dest="${project.root}/out/log/dev.push.log" username="${dev.base.user}" password="${dev.base.pass}"/>
-		<loadfile property="push.output" srcFile="${project.root}/out/log/dev.push.log"/>
-		<echo message="${push.output}" />
+		<get src="${dev.push.url}" dest="${project.root}/out/log/dev.push.bom.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="dev.push.bom.out" srcFile="${project.root}/out/log/dev.push.bom.log"/>
+		<echo message="${dev.push.bom.out}" />
+		
+		<get src="${dev.push.url2}" dest="${project.root}/out/log/dev.push.module.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="dev.push.module.out" srcFile="${project.root}/out/log/dev.push.module.log"/>
+		<echo message="${dev.push.module.out}" />
 	</target>
 	
 	<target name="DEV.version.query" description="query ngresource version" depends="">

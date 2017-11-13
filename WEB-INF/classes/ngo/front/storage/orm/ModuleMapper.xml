@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ngo.front.storage.orm.ModuleMapper">
+	<select id="getByGrade" parameterType="String" resultType="ngo.front.storage.entity.Module">
+		select mid,gid,name,description from module where gid=#{gid} order by mid
+	</select>
+
+	<select id="getAll" resultType="ngo.front.storage.entity.Module">
+		select mid,gid,name,description from module
+	</select>
+	
+	<update id="update" parameterType="ngo.front.storage.entity.Module">
+        update module set gid=#{gid},name=#{name},description=#{description} where mid=#{mid}
+    </update>
+    
+    <insert id="insert" parameterType="ngo.front.storage.entity.Module">
+        insert into module(mid,gid,name,description) values(#{mid},#{gid},#{name},#{description})
+    </insert>
+</mapper>

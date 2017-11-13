@@ -16,7 +16,7 @@ app.test.css1-ngcss|/app/test/css1.ngcss|test|1ea24e11abfbb500bddfff705a2ea564||
 app.test.demo1-min-ngjs|/app/test/demo1.min.ngjs|test|48214ff4f296b36d359e4c1f56649eb6||J
 app.test.ngfun-min-ngjs|/app/test/ngfun.min.ngjs|test|5c72f9a3c32a8a894155a29ce6b16cfa||J
 app.test.screen-min-ngjs|/app/test/screen.min.ngjs|test|c6b367117a504d58c0b19805ed222911||J
-bom.g1.g1m1.demo1-min-ngjs|/bom/g1/g1m1/demo1.min.ngjs|g1/g1m1|aa0bf92cec14dc4a9b3d6895d358bd47||J
-bom.g1.g1m1.loader-min-ngjs|/bom/g1/g1m1/loader.min.ngjs|g1/g1m1|f6176b767b88919e595a5fc6856c7d9b||J
-bom.g1.g1m2.loader-min-ngjs|/bom/g1/g1m2/loader.min.ngjs|g1/g1m2|d4536a87545eb7d6250aec9d1a705c6e||J
-bom.g2.g2m1.loader-min-ngjs|/bom/g2/g2m1/loader.min.ngjs|g2/g2m1|c4d1c6f64be839015149f1f5673ca86b||J
+bom.ga1.ga1ma1.demo1-min-ngjs|/bom/ga1/ga1ma1/demo1.min.ngjs|ga1/ga1ma1|aa0bf92cec14dc4a9b3d6895d358bd47||J
+bom.ga1.ga1ma1.loader-min-ngjs|/bom/ga1/ga1ma1/loader.min.ngjs|ga1/ga1ma1|f6176b767b88919e595a5fc6856c7d9b||J
+bom.ga1.ga1ma2.loader-min-ngjs|/bom/ga1/ga1ma2/loader.min.ngjs|ga1/ga1ma2|d4536a87545eb7d6250aec9d1a705c6e||J
+bom.ga2.ga2ma1.loader-min-ngjs|/bom/ga2/ga2ma1/loader.min.ngjs|ga2/ga2ma1|c4d1c6f64be839015149f1f5673ca86b||J
