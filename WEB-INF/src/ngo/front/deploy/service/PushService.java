@@ -30,26 +30,26 @@ public class PushService {
 	
 	public List<Bom> getAllBomObjects()
 	{
-		return bomDAO.getAllBom();
+		return bomDAO.getAll();
 	}	
 	
 	public int updateBomObject(Bom bom) {
-		return bomDAO.updateBom(bom);
+		return bomDAO.update(bom);
 	}
 	
 	public int addBomObject(Bom bom) {
-		return bomDAO.insertBom(bom);
+		return bomDAO.insert(bom);
 	}
 
 	public List<Module> getAllModuleObjects() {
 		return moduleDAO.getAll();
 	}
 
-	public void updateModuleObject(Module module) {
-		moduleDAO.update(module);	
+	public int updateModuleObject(Module module) {
+		return moduleDAO.update(module);	
 	}
 
-	public void addModuleObject(Module module) {
-		moduleDAO.insert(module);
+	public int addModuleObject(Module module) {
+		return moduleDAO.insert(module);
 	}
 }

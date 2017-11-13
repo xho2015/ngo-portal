@@ -29,7 +29,6 @@ public class ModuleControler {
     @RequestMapping(value = "/json/module", method = RequestMethod.GET)
     public ResponseEntity<String> bom(@RequestParam("grade") String gradeId, @RequestParam("token") String token) {
         try {
-        	//it's not necessary do request param validity as spring framework will handle it
         	String json = moduleService.getByGrade(gradeId);
         	return ResponseEntity.ok(json);
         } catch (Exception e) {

@@ -129,7 +129,16 @@ public class PushControler {
         		pushService.addBomObject(s.getValue());
             });
         	
-        	return ResponseEntity.ok("["+new java.util.Date()+"] Bom entry pushed, Inserted:"+toBeInsertBoms.size()+", Updated:"+toBeUpdateBoms.size());
+        	//4. do insertion and updating
+        	int countUpdated = 0, countInserted = 0;
+        	for (Map.Entry<String,Bom> b : toBeUpdateBoms.entrySet()){
+        		countUpdated+=pushService.updateBomObject(b.getValue());
+        	}    	
+        	for (Map.Entry<String,Bom> b : toBeInsertBoms.entrySet()){
+        		countInserted+=pushService.addBomObject(b.getValue());
+        	}
+        	
+        	return ResponseEntity.ok("["+new java.util.Date()+"] Bom entry pushed, Inserted:"+countInserted+", Updated:"+countUpdated);
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Push error: "+e.getMessage());
@@ -200,14 +209,15 @@ public class PushControler {
         	});
         	
         	//4. do insertion and updating
-        	toBeUpdateModules.entrySet().stream().forEach(s -> {
-        		pushService.updateModuleObject(s.getValue());
-            });
-        	toBeInsertModules.entrySet().stream().forEach(s -> {
-        		pushService.addModuleObject(s.getValue());
-            });
+        	int countUpdated = 0, countInserted = 0;
+        	for (Map.Entry<String,Module> m : toBeUpdateModules.entrySet()){
+        		countUpdated+=pushService.updateModuleObject(m.getValue());
+        	}    	
+        	for (Map.Entry<String,Module> m : toBeInsertModules.entrySet()){
+        		countInserted+=pushService.addModuleObject(m.getValue());
+        	}
         	
-        	return ResponseEntity.ok("["+new java.util.Date()+"] Module entry pushed, Inserted:"+toBeInsertModules.size()+", Updated:"+toBeUpdateModules.size());
+        	return ResponseEntity.ok("["+new java.util.Date()+"] Module entry pushed, Inserted:"+countInserted+", Updated:"+countUpdated);
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Push error: "+e.getMessage());

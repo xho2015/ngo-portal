@@ -14,30 +14,30 @@ public class BomDAO {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
-	public List<Bom> getAllBom() {
+	public List<Bom> getAll() {
 		List<Bom> list =  sqlSession.selectList("ngo.front.storage.orm.BomMapper.getAll");
 		return list;
 	}
 	
-	public List<Bom> getBomByModule(String moduleId) {
-		List<Bom> list =  sqlSession.selectList("ngo.front.storage.orm.BomMapper.getByModuleId", moduleId);
+	public List<Bom> getByModule(String moduleId) {
+		List<Bom> list =  sqlSession.selectList("ngo.front.storage.orm.BomMapper.getByModule", moduleId);
 		return list;
 	}
 	
-	public List<Bom> getBomByGrade(String gradeId) {
-		List<Bom> list =  sqlSession.selectList("ngo.front.storage.orm.BomMapper.getByGradeId", gradeId);
+	public List<Bom> getByGrade(String gradeId) {
+		List<Bom> list =  sqlSession.selectList("ngo.front.storage.orm.BomMapper.getByGrade", gradeId);
 		return list;
 	}
 
-	public int updateBom(Bom bom) {
+	public int update(Bom bom) {
 		return sqlSession.update("ngo.front.storage.orm.BomMapper.update", bom);		
 	}
 	
-	public int insertBom(Bom bom) {
+	public int insert(Bom bom) {
 		return sqlSession.insert("ngo.front.storage.orm.BomMapper.insert", bom);		
 	}
 
-	public List<Bom> getBomVersions() {
-		return sqlSession.selectList("ngo.front.storage.orm.BomMapper.getBomVersions");
+	public List<Bom> getVersions() {
+		return sqlSession.selectList("ngo.front.storage.orm.BomMapper.getVersions");
 	}
 }

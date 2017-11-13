@@ -41,15 +41,6 @@ public class BomService implements LocalCache.CachingLoader{
 		logger.info("BomService registered as caching loader for ["+CACHE_KEY+"]");				
 	}
 	
-	/**
-	 * retrive all Bom data from DAO
-	 * @return list of Bom object
-	 */
-	public List<Bom> getAllBomObjects()
-	{
-		return bomDAO.getAllBom();
-	}
-	
 	public String getModuleBom(String moduleId, String token)
 	{
     	return (String)localCache.getObject(CACHE_KEY+"."+ SUB_KEY_MODULE + "."+ moduleId);	
@@ -61,7 +52,7 @@ public class BomService implements LocalCache.CachingLoader{
 	 */
 	public String getBomVersions()
 	{
-		List<Bom> versions = bomDAO.getBomVersions();
+		List<Bom> versions = bomDAO.getVersions();
     	String verJson = jsonService.toJson(versions, Bom.MD5.class);
     	return verJson;
 	}
@@ -74,7 +65,7 @@ public class BomService implements LocalCache.CachingLoader{
 			if (keys[1].equals(SUB_KEY_MODULE))
 			{
 				Resource resource = new Resource();
-				resource.setLinks(bomDAO.getBomByModule(keys[2]));			
+				resource.setLinks(bomDAO.getByModule(keys[2]));			
 				String json = jsonService.toJson(resource, Bom.Dafault.class);			
 				logger.info("Localcache: Module key ["+key+"] loaded from database");			
 				return (Object)json;	
@@ -86,16 +77,12 @@ public class BomService implements LocalCache.CachingLoader{
 	public int updateBomObject(Bom bom) {
 		if (bom == null)
 			throw new IllegalStateException("Bom can not be null for updating");
-		if (bomDAO.updateBom(bom) != 1)
-			throw new IllegalStateException("Bom not updated successfully");
-		return 1;
+		return bomDAO.update(bom);
 	}
 	
 	public int addBomObject(Bom bom) {
 		if (bom == null)
 			throw new IllegalStateException("Bom can not be null for adding");
-		if (bomDAO.insertBom(bom) != 1)
-			throw new IllegalStateException("Bom not added successfully");
-		return 1;
+		return bomDAO.insert(bom);
 	}
 }
