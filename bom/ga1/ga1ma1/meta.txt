@@ -1,0 +1,4 @@
+type=M
+id=ga1/ga1ma1
+name=加法基础
+desc=加法基础描述

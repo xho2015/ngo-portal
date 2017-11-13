@@ -1,4 +1,0 @@
-type=M
-id=g2/g2m1
-name=三角形基础
-desc=图形描述
