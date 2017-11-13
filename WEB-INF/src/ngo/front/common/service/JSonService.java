@@ -21,4 +21,14 @@ public class JSonService {
     	}
         return null;
 	}
+	
+	public String toJson(Object obj)
+	{
+		try {
+    		return mapper.writeValueAsString(obj);	
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+        return null;
+	}
 }

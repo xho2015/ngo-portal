@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ngo.front.deploy.service.DeployService;
+import ngo.front.deploy.service.PushService;
 import ngo.front.storage.entity.Bom;
 import ngo.front.web.service.BomService;
  

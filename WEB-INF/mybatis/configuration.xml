@@ -4,5 +4,6 @@
 <configuration>
 	<mappers>
 		<mapper resource="ngo/front/storage/orm/BomMapper.xml" />
+		<mapper resource="ngo/front/storage/orm/ModuleMapper.xml" />
 	</mappers>
 </configuration>

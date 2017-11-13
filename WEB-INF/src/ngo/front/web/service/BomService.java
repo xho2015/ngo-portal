@@ -23,7 +23,7 @@ public class BomService implements LocalCache.CachingLoader{
 	
 	private static final String CACHE_KEY = "bom";
 	private static final String SUB_KEY_MODULE = "module";
-	private static final String SUB_KEY_GRADE = "grade";
+
 	
 	@Autowired
 	private LocalCache localCache;
@@ -55,11 +55,6 @@ public class BomService implements LocalCache.CachingLoader{
     	return (String)localCache.getObject(CACHE_KEY+"."+ SUB_KEY_MODULE + "."+ moduleId);	
 	}
 	
-	public String getGradeBom(String gradeId, String token)
-	{
-    	return (String)localCache.getObject(CACHE_KEY+"."+ SUB_KEY_GRADE + "."+ gradeId);	
-	}
-	
 	/**
 	 * it only care name version and md5
 	 * @return
@@ -83,14 +78,7 @@ public class BomService implements LocalCache.CachingLoader{
 				String json = jsonService.toJson(resource, Bom.Dafault.class);			
 				logger.info("Localcache: Module key ["+key+"] loaded from database");			
 				return (Object)json;	
-			} else if (keys[1].equals(SUB_KEY_GRADE)){
-				Resource resource = new Resource();
-				resource.setLinks(bomDAO.getBomByGrade(keys[2]));			
-				String json = jsonService.toJson(resource, Bom.Dafault.class);			
-				logger.info("Localcache: Grade key ["+key+"] loaded from database");			
-				return (Object)json;
-			}
-			
+			} 
 		}
 		return null;
 	}
