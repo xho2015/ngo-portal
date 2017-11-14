@@ -5,9 +5,6 @@ $.extend({ngoModule: function(module) {
 	return module;}
 });
 
-/**
- * bootstrap: ver.8 houxuyong@hotmail.com
- */
 var LIBRARY = (function() {
 	var my = {};
 	
@@ -249,20 +246,48 @@ var LIBRARY = (function() {
 	        	 if (ok) ok();
 	    })();
 	};
+
+	return my;
+})();
+
+
+var JSONG = (function() {
+	var my = {};
 	
 	/**
 	 * load required urls for designated module in synchronized mode
-	 * TODO: resolve token here
 	 */
 	my.require = function (module, ok, fail){
+		return my.load("/json/bom"+"?module="+module, ok, fail);
+	};
+	
+	/**
+	 * load required urls for designated module in asynchronized mode
+	 * TODO: resolve token here
+	 */
+	my.requireAsync = function (module, ok) {
+		var api = "/json/bom"+ "?token=t1&module="+module;
+		$.ajaxSetup({ cache : false});
+	    $.getJSON(api, {
+	    	format: "json"
+		}).done(function(data){
+			  if (ok) ok(data);
+		});
+	};
+	
+	/**
+	 * load json data from specified location in synchronized mode
+	 * TODO: resolve token here
+	 */
+	my.load = function (location, ok, fail, storage){
 		var data;
 		$.ajax({
 			type : "GET", 
 			async : false,	
 			cache : false,
 			dataType : "json",	
-			url : "/json/bom",
-			data : {token : "ses001",module : module},
+			url : location,
+			data : {token : "ses001"},
 			success : function(json) {
 				data = json;
 			},
@@ -272,23 +297,10 @@ var LIBRARY = (function() {
 		});
 		return data;
 	};
-	
-	/**
-	 * load required urls for designated module in asynchronized mode
-	 * TODO: resolve token here
-	 */
-	my.requirea = function (module, ok) {
-		var api = "/json/bom?token=t1&module="+module;
-		$.ajaxSetup({ cache : false});
-	    $.getJSON(api, {
-	    	format: "json"
-		}).done(function(data){
-			  if (ok) ok(data);
-		});
-	};
 
 	return my;
 })();
+
 
 var BOOTSTRAP = $.ngoModule(function() {
 	function init() {

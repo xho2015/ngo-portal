@@ -6,7 +6,7 @@ var MAINAPP = $.ngoModule(function() {
 	
 	var ready = function() {
 		var temp = new AppCommon.Map();
-		temp.putJson(lib.links, "name", "ver");
+		temp.putJson(lib.payload, "name", "ver");
 		DEBUGINFO.put("app.main.panel-ui-min-ngjs",temp.get("app.main.panel-ui-min-ngjs"));
 		MAIMUI.init();
 	};
@@ -16,8 +16,8 @@ var MAINAPP = $.ngoModule(function() {
 	};
 
 	function init() {
-		lib = LIBRARY.require("lib1");
-		LIBRARY.loadRetry(lib.content, ready, fail, resource);
+		lib = JSONG.require("lib1");
+		LIBRARY.loadRetry(lib.payload, ready, fail, resource);
 	};
 
 	return {
