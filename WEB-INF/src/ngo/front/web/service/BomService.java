@@ -65,7 +65,7 @@ public class BomService implements LocalCache.CachingLoader{
 			if (keys[1].equals(SUB_KEY_MODULE))
 			{
 				Resource resource = new Resource();
-				resource.setContent(bomDAO.getByModule(keys[2]));			
+				resource.setPayload(bomDAO.getByModule(keys[2]));			
 				String json = jsonService.toJson(resource, Resource.Dafault.class);			
 				logger.info("Localcache: Module key ["+key+"] loaded from database");			
 				return (Object)json;	

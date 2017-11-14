@@ -12,7 +12,7 @@ public class Resource {
 	public interface MD5 extends Dafault{}
 	
 	@JsonView(Resource.Dafault.class)
-	private Object content;
+	private Object payload;
 
 	@JsonView(Resource.Version.class)
 	private int version;
@@ -20,12 +20,12 @@ public class Resource {
 	@JsonView(Resource.Expire.class)
 	private int expire;
 
-	public Object getContent() {
-		return content;
+	public Object getPayload() {
+		return payload;
 	}
 
-	public void setContent(Object content) {
-		this.content = content;
+	public void setPayload(Object content) {
+		this.payload = content;
 	}
 
 	public int getVersion() {
@@ -43,10 +43,4 @@ public class Resource {
 	public void setExpire(int expire) {
 		this.expire = expire;
 	}
-	
-	
-	
-	
-	
-
 }
