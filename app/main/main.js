@@ -17,7 +17,7 @@ var MAINAPP = $.ngoModule(function() {
 
 	function init() {
 		lib = LIBRARY.require("lib1");
-		LIBRARY.loadRetry(lib.links, ready, fail, resource);
+		LIBRARY.loadRetry(lib.content, ready, fail, resource);
 	};
 
 	return {
