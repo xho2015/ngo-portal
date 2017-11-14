@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ngo.front.storage.orm.BomMapper">
+	<select id="getByModule" parameterType="String" resultType="ngo.front.storage.entity.Bom">
+		select name,ver,url,md5,grade,module,category,lorder from bom where module=#{module} order by lorder
+	</select>
+	
+	<select id="getByGrade" parameterType="String" resultType="ngo.front.storage.entity.Bom">
+		select name,ver,url,md5,grade,module,category,lorder from bom where grade=#{grade}
+	</select>
+	
+	<select id="getAll" resultType="ngo.front.storage.entity.Bom">
+		select name,ver,url,md5,grade,module,category,lorder from bom
+	</select>
+	
+	<select id="getVersions" resultType="ngo.front.storage.entity.Bom">
+		select name,ver,md5,url from bom
+	</select>
+	
+	
+	<update id="update" parameterType="ngo.front.storage.entity.Bom">
+        update bom set md5=#{md5},ver=#{ver},grade=#{grade},module=#{module},lorder=#{lorder},category=#{category} where name=#{name}
+    </update>
+    
+    <insert id="insert" parameterType="ngo.front.storage.entity.Bom" useGeneratedKeys="true" keyProperty="rid">
+        insert into bom(name,ver,url,md5,grade,module,lorder,category) values(#{name},#{ver},#{url},#{md5},#{grade},#{module},#{lorder},#{category})
+    </insert>
+    
+</mapper>
