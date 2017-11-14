@@ -139,10 +139,22 @@
 				
 	</target>
 	
-	<target name="DEV.localcache.refresh" description="" depends="">
+	<target name="DEV.localcache.removeAll" description="" depends="">
 		<get src="${dev.localcache.removeAll}" dest="${project.root}/out/log/dev.cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="cache.output" srcFile="${project.root}/out/log/dev.cache.log"/>
 		<echo message="${cache.output}" />
+	</target>
+	
+	<target name="DEV.localcache.setPolicy" description="" depends="">
+		<get src="${dev.localcache.setPolicy}" dest="${project.root}/out/log/dev.cache.policy.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="cache.policy.output" srcFile="${project.root}/out/log/dev.cache.policy.log"/>
+		<echo message="${cache.policy.output}" />
+	</target>
+	
+	<target name="DEV.localcache.getPolicy" description="" depends="">
+		<get src="${dev.localcache.getPolicy}" dest="${project.root}/out/log/dev.cache.policy1.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="cache.policy.output" srcFile="${project.root}/out/log/dev.cache.policy1.log"/>
+		<echo message="${cache.policy.output}" />
 	</target>
 	
 	<target name="DEV.Resource.clear" description="" depends="">
@@ -162,7 +174,7 @@
 		<antcall target="DEV.version.query"/>
 		<antcall target="DEV.domgen"/>						
 		<antcall target="DEV.Resource.clear"/>
-		<antcall target="DEV.localcache.refresh"/>
+		<antcall target="DEV.localcache.removeAll"/>
 	</target>
 	
 	<target name="DEV.stop.ROOT" description="" depends="">

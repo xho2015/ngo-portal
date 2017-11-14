@@ -57,6 +57,14 @@ public class CacheControler {
         	{	String dump = localCache.dmpCacheEntries();
     			return ResponseEntity.ok(timestamp+dump);
         	}
+        	else if (action.equalsIgnoreCase("setPolicy"))
+        	{	localCache.setReloadPolicy(key);
+    			return ResponseEntity.ok(timestamp+" set reload policy done.");
+        	}
+        	else if (action.equalsIgnoreCase("getPolicy"))
+        	{	String policy = localCache.getReloadPolicy();
+    			return ResponseEntity.ok(timestamp+policy);
+        	}
         	
         	return ResponseEntity.ok("N/A");
         } catch (Exception e) {
