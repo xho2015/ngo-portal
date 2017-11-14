@@ -53,7 +53,7 @@ public class BomService implements LocalCache.CachingLoader{
 	public String getBomVersions()
 	{
 		List<Bom> versions = bomDAO.getVersions();
-    	String verJson = jsonService.toJson(versions, Bom.MD5.class);
+    	String verJson = jsonService.toJson(versions, Resource.MD5.class);
     	return verJson;
 	}
 
@@ -65,8 +65,8 @@ public class BomService implements LocalCache.CachingLoader{
 			if (keys[1].equals(SUB_KEY_MODULE))
 			{
 				Resource resource = new Resource();
-				resource.setLinks(bomDAO.getByModule(keys[2]));			
-				String json = jsonService.toJson(resource, Bom.Dafault.class);			
+				resource.setContent(bomDAO.getByModule(keys[2]));			
+				String json = jsonService.toJson(resource, Resource.Dafault.class);			
 				logger.info("Localcache: Module key ["+key+"] loaded from database");			
 				return (Object)json;	
 			} 
