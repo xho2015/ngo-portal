@@ -140,7 +140,7 @@
 	</target>
 	
 	<target name="DEV.localcache.refresh" description="" depends="">
-		<get src="${dev.localcache.url}" dest="${project.root}/out/log/dev.cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<get src="${dev.localcache.removeAll}" dest="${project.root}/out/log/dev.cache.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="cache.output" srcFile="${project.root}/out/log/dev.cache.log"/>
 		<echo message="${cache.output}" />
 	</target>
