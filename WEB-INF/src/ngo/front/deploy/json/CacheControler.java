@@ -53,6 +53,11 @@ public class CacheControler {
         	{	String size = localCache.getCacheSize();
         		return ResponseEntity.ok(timestamp+size);
         	}
+        	else if (action.equalsIgnoreCase("dump"))
+        	{	String dump = localCache.dmpCacheEntries();
+    			return ResponseEntity.ok(timestamp+dump);
+        	}
+        	
         	return ResponseEntity.ok("N/A");
         } catch (Exception e) {
         	logger.error(e.getMessage());

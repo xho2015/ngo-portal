@@ -91,6 +91,15 @@ public class LocalCache {
 		}
 		return String.valueOf(size);
 	}
+	
+	public String dmpCacheEntries() {
+		logger.info("Localcache: dump entries");		
+		StringBuffer dump = new StringBuffer();
+		for (Map.Entry<String,Integer> entry : SIZE_MAP.entrySet()){
+			dump.append(entry.getKey()).append("=").append(entry.getValue()).append(";");
+		}
+		return dump.toString();
+	}
 
 	public void refreshObject(String key) {
 		cache.refresh(key);
@@ -99,11 +108,13 @@ public class LocalCache {
 	
 	public void removeObject(String key) {
 		cache.invalidate(key);
+		SIZE_MAP.remove(key);
 		logger.info("Localcache: key [" +key+"] removed");		
 	}
 	
 	public void removeAllObject() {
 		cache.invalidateAll();
+		SIZE_MAP.clear();
 		logger.info("Localcache: all keys removed");		
 	}
 	
