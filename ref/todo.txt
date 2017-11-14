@@ -195,3 +195,6 @@ http://www.html5canvastutorials.com/tutorials/html5-canvas-radial-gradients/
 		
 	[c]. common out "org.mybatis.spring.mapper.MapperScannerConfigurer" from applicationContext.xml
 	
+--11.14
+	a. change the server of tomcat connector from "Apache-Coyote/1.1" to "Apache httpd"
+	
