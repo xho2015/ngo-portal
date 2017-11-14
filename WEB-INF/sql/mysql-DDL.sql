@@ -12,10 +12,9 @@ CREATE TABLE `bom` (
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='NGO versioning BOM';
 
 CREATE TABLE `module` (
-  `mid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `grade` int(11) DEFAULT NULL,
-  `description` varchar(250) DEFAULT NULL,
-  `lorder` int(11) DEFAULT NULL,
+  `mid` varchar(20) NOT NULL,
+  `gid` varchar(20),
+  `name` VARCHAR(45),
+  `description`  VARCHAR(250),
   PRIMARY KEY (`mid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='NGO resource module';
