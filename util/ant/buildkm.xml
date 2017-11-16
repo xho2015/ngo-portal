@@ -1,0 +1,308 @@
+<project name="KidsMath Ant Deployer" default="ngo.echo" basedir=".">
+
+	<property file="buildkm.properties" />
+
+	<path id="catalina-ant-classpath">
+		<fileset dir="${tomcat.home}/lib">
+			<include name="catalina-ant.jar" />
+			<include name="tomcat-coyote.jar" />
+			<include name="tomcat-util.jar" />
+		</fileset>
+		<fileset dir="${tomcat.home}/bin">
+			<include name="tomcat-juli.jar" />
+		</fileset>
+	</path>
+	<taskdef file="${project.root}/util/ant/tomcatTasks.properties">
+		<classpath refid="catalina-ant-classpath" />
+	</taskdef>
+
+
+	<path id="ngo-ant-classpath">
+		<fileset dir="${project.root}/util/ant/lib">
+			<include name="ngotask.jar" />
+			<include name="ngoweb.jar" />
+			<include name="commons-net-1.4.1.jar" />
+			<include name="jakarta-oro-2.0.8.jar" />
+		</fileset>
+		<fileset dir="${project.root}/WEB-INF/lib">
+			<include name="jackson-core-asl-1.9.13.jar" />
+			<include name="jackson-mapper-lgpl-1.9.13.jar" />
+		</fileset>
+		<fileset dir="${project.root}/util/jsc">
+			<include name="yuicompressor-2.4.8.jar" />
+			<include name="commons-io-2.5.jar" />
+		</fileset>
+		<fileset dir="${project.root}/util/gzip">
+			<include name="commons-compress-1.14.jar" />
+		</fileset>
+		<fileset dir="${project.root}/util/md5">
+			<include name="commons-codec-1.10.jar" />
+		</fileset>
+	</path>
+	
+	<taskdef file="${project.root}/util/ant/ngoTasks.properties">
+		<classpath refid="ngo-ant-classpath" />
+	</taskdef>
+
+	<!--default-->
+	<target name="ngo.echo">
+		<echo message="${project.name} ${project.ver},  basedir=${basedir}, project.root=${project.root}" />
+	</target>
+
+	<!-- basic targets -->
+	<target name="project.clean">
+		<delete dir="${dest.dir}" />
+	</target>
+	
+	<target name="project.war2" description="build war" depends="project.clean">
+		<mkdir dir="${dist.dir}" />
+		<war destfile="${dist.dir}/ROOT.war">
+			<fileset dir="${project.root}">
+				<exclude name="WEB-INF/src/**"/>
+				<exclude name="WEB-INF/sql/**"/>
+				<exclude name="**/*.js" />
+				<exclude name="ref/**" />
+				<exclude name="util/**" />
+			</fileset>
+		</war>
+	</target>
+	
+	<!-- COMMON tasks -->
+	<target name="COMMON.css.gzip" description="Gzip for css">
+		<ngzip include=".*\.css" exclude="__NOMATCH__" fileExtension="ngcss" path="${project.root}" />
+	</target>
+	
+	<target name="COMMON.png.base64" description="convert PNG file to base64 file">
+		<ngbase64 include=".*\.png" exclude="__NOMATCH__" fileExtension="b64" path="${project.root}" />
+	</target>
+	
+	<target name="COMMON.base64.gzip" description="base64 png file gzip" depends="">
+			<ngzip include=".*\.b64" exclude="__NOMATCH__" fileExtension="ngpng" path="${project.root}" />
+	</target>
+	
+	<target name="COMMON.gpng.gzip" description="base64 png file gzip" depends="">
+		<ngzip include=".*\.gpng" exclude="__NOMATCH__" fileExtension="ngpng" path="${project.root}" />
+	</target>
+	
+	<target name="COMMON.bom" description="" depends="">
+		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__"
+			categoryMapping="ngjs=J#ngpng=I#ngcss=S"
+			bomRoot="/bom/" 
+			appRoot="/app/" 
+			metaName="/meta.txt"
+			cdnName="/7cdn.txt"
+			modName="/7mod.txt"
+			bomOutFile="/out/push/boms.txt" 
+			moduleOutput="/out/push/modules.txt" 
+			gradeOutput="/out/push/grades.txt" 
+			path="${project.root}"  spliter="|"/>
+	</target>
+	
+	<!--########## KIDS MATH ########## -->	
+	<target name="KM.js.compress" description="Javascript compression">
+			<compress ignore="\app\lib\dat.gui.js|\app\lib\three.js" include=".*\.js" exclude=".*\.min\.js" fileExtension="min.js" path="${project.root}" />
+	</target>
+
+	<target name="KM.js.gzip" description="javascript compress, then gzip" depends="">
+		<ngzip include=".*\.min\.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}" />
+	</target>
+	
+	<!--new NG resouce needs to be registered in include-->
+	<target name="KM.bom" description="" depends="">
+		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__" 
+			categoryMapping="ngjs=J#ngpng=I#ngcss=S"
+			bomRoot="/bom/" 
+			appRoot="/app/"
+			metaName="/meta.txt"
+			cdnName="/7cdn.txt"
+			modName="/7mod.txt"
+			bomOutFile="/out/push/boms.txt" 
+			moduleOutput="/out/push/modules.txt" 
+			gradeOutput="/out/push/grades.txt" 
+			path="${project.root}"  
+			spliter="|"/>
+	</target>
+
+	<target name="KM.push" description="" depends="">
+		<get src="${km.push.url}" dest="${project.root}/out/log/km.push.log" username="${km.base.user}" password="${km.base.pass}"/>
+		<loadfile property="km.push.output" srcFile="${project.root}/out/log/km.push.log"/>
+		<echo message="KisMath push: ${km.push.output}" />
+	</target>
+	
+	<target name="KM.version.query" description="query ngresource version" depends="">
+		<get src="${km.version.query.url}" dest="${project.root}/${km.bomver.file}" username="${km.base.user}" password="${km.base.pass}"/>
+		<loadfile property="km.verquery.output" srcFile="${project.root}/${km.bomver.file}"/>
+		<echo message="${km.verquery.output}" />
+	</target>
+	
+	<target name="KM.localcache.refresh" description="" depends="">
+			<get src="${km.cache.url}" dest="${project.root}/out/log/km.cache.log" username="${km.base.user}" password="${km.base.pass}"/>
+			<loadfile property="km.cache.output" srcFile="${project.root}/out/log/km.cache.log"/>
+			<echo message="KidsMath ${km.cache.output}" />
+	</target>
+	
+	<target name="KM.WebResource.clear" description="" depends="">
+			<get src="${km.jmx.wrr.clear}" dest="${project.root}/out/log/km.jmx.wrr.clear.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
+			<loadfile property="km.jmx.clear.output" srcFile="${project.root}/out/log/km.jmx.wrr.clear.log"/>
+			<echo message="KidsMath WebResourceRoot clear via JMX: ${km.jmx.clear.output}" />
+	</target>
+	
+	<target name="KM.WebResource.size" description="" depends="">
+		<get src="${km.jmx.wrr.size}" dest="${project.root}/out/log/km.jmx.wrr.size.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
+		<loadfile property="km.jmx.size.output" srcFile="${project.root}/out/log/km.jmx.wrr.size.log"/>
+		<echo message="KidsMath JMX WebResourceRoot size (KB) : ${km.jmx.size.output}" />
+	</target>
+	
+	<target name="KM.ftp.app" description="upload client pack to web server" depends="">
+		<ftp server="${km.ftp.ip}"
+		       remotedir="${km.ftp.dir}"
+		       userid="${km.ftp.user}"
+		       password="${km.ftp.pass}"
+			   passive="yes" depends="no" binary="yes" verbose="yes">
+			<fileset dir="${project.root}">
+				<include name="**/*.ngmp3" />
+				<include name="**/*.ngjs" />
+				<include name="**/*.ngpng" />
+				<include name="**/*.ngcss" />
+				<exclude name="ref/**" />
+				<exclude name="util/**" />
+				<exclude name="out/*.log"/>
+				<exclude name="WEB-INF/**" />
+				<exclude name="META-INF/**" />
+			</fileset>
+		</ftp>
+	</target>
+	
+	<target name="KM.ftp.ngdom" description="upload ngdom to web server" depends="">
+		<ftp server="${km.ftp.ip}"
+		       remotedir="${km.ftp.dir}"
+		       userid="${km.ftp.user}"
+		       password="${km.ftp.pass}"
+			   passive="yes" depends="no" binary="yes" verbose="yes">
+			<fileset dir="${project.root}">
+				<include name="**/*.ngdom" />
+				<exclude name="ref/**" />
+				<exclude name="util/**" />
+				<exclude name="out/**"/>
+				<exclude name="WEB-INF/**" />
+				<exclude name="META-INF/**" />
+			</fileset>
+		</ftp>
+	</target>
+	
+	<target name="KM.domgen" description="ngdom file generation" depends="">
+		<ngdom include=".*\.htm" exclude="__NOMATCH__" fileExtension="ngdom" path="${project.root}" compact="true" verFile="${km.bomver.file}" verSeed="9p" verSeedName="@VERSION_SEED@"/>
+	</target>
+	
+	<target name="KM.ftp.out.push" description="upload outpush to web server" depends="">
+		<ftp server="${km.ftp.ip}"
+		       remotedir="${km.ftp.outpush.dir}"
+		       userid="${km.ftp.user}"
+		       password="${km.ftp.pass}"
+			   passive="yes"  depends="no"  binary="yes"  verbose="yes">
+			<fileset dir="${project.root}/out/push">
+				<include name="*.*"/>
+			</fileset>
+		</ftp>
+	</target>
+	
+	<target name="KM.ftp.java" description="upload server pack to web server" depends="">
+		<ftp server="${km.ftp.ip}"
+			   remotedir="${km.ftp.dir}"
+			   userid="${km.ftp.user}"
+			   password="${km.ftp.pass}"
+			   passive="yes"  depends="no"  binary="yes" verbose="yes">
+			<fileset dir="${project.root}">
+				<exclude name="WEB-INF/src/**"/>
+				<exclude name="WEB-INF/sql/**"/>
+				<exclude name="app/**" />
+				<exclude name="bom/**" />
+				<exclude name="ref/**" />
+				<exclude name="out/**" />
+				<exclude name="util/**" />
+			</fileset>
+		</ftp>
+	</target>
+	
+	<target name="KM.app.deploy" description="deploy app to KidsMath" depends="">
+		<antcall target="COMMON.css.gzip"/>
+		<antcall target="KM.js.compress"/>	
+		<antcall target="KM.js.gzip"/>
+		<antcall target="COMMON.gpng.gzip"/>
+		<antcall target="COMMON.png.base64"/>
+		<antcall target="COMMON.base64.gzip"/>
+		<antcall target="KM.bom"/>
+		<antcall target="KM.ftp.app"/>
+		<antcall target="KM.ftp.out.push"/>
+		<antcall target="KM.push"/>
+		<antcall target="KM.version.query"/>	
+		<antcall target="KM.domgen"/>	
+		<antcall target="KM.ftp.ngdom"/>			
+		<antcall target="KM.WebResource.clear"/>
+		<antcall target="KM.localcache.refresh"/>
+	</target>
+	
+	<target name="KM.stop.ROOT" description="" depends="">
+		<get src="${km.text.stop.url}" dest="${project.root}/out/log/km.stop.root.log" username="${km.script.user}" password="${km.script.pass}"/>
+		<loadfile property="km.stop.output" srcFile="${project.root}/out/log/km.stop.root.log"/>
+		<echo message="KidsMath stop ROOT : ${km.stop.output}" />
+	</target>
+	
+	<target name="KM.start.ROOT" description="" depends="">
+		<get src="${km.text.start.url}" dest="${project.root}/out/log/km.start.root.log" username="${km.script.user}" password="${km.script.pass}"/>
+		<loadfile property="km.start.output" srcFile="${project.root}/out/log/km.start.root.log"/>
+		<echo message="KidsMath start ROOT : ${km.start.output}" />
+	</target>
+	
+	<target name="KM.demon.start.tomcat" description="notify demon to start tomcat" depends="">
+		<ftp server="${km.ftp.ip}"
+			   remotedir="${km.ftp.demon.dir}"
+			   userid="${km.ftp.user}"
+			   password="${km.ftp.pass}"
+			   passive="yes" depends="no" binary="yes" verbose="yes">
+			<fileset dir="${project.root}/out/demon/start">
+				<include name="notify.txt"/>
+			</fileset>
+		</ftp>
+		<ftp server="${km.ftp.ip}"
+			   remotedir="${km.ftp.demon.dir}"
+			   userid="${km.ftp.user}"
+			   password="${km.ftp.pass}"
+			   passive="yes"  depends="no"  binary="yes"  verbose="yes">
+			<fileset dir="${project.root}/out/demon">
+				<include name="args.txt"/>
+			</fileset>
+		</ftp>
+		<echo message="KidsMath tomcat to be launched..." />
+	</target>
+	
+	<target name="KM.demon.stop.tomcat" description="notify demon to start tomcat" depends="">
+		<ftp server="${km.ftp.ip}"
+			   remotedir="${km.ftp.demon.dir}"
+			   userid="${km.ftp.user}"
+			   password="${km.ftp.pass}"
+			   passive="yes"
+			   depends="no"
+			   binary="yes"
+		       verbose="yes">
+			<fileset dir="${project.root}/out/demon/stop">
+				<include name="notify.txt"/>
+			</fileset>
+		</ftp>
+		<echo message="KidsMath tomcat to be shutdown..." />
+	</target>
+
+	<!-- Tomcat manager interface -->
+	<target name="tomcat.deploy" description="Install web application" depends="">
+		<deploy url="${url}" username="${username}" password="${password}" path="${path}" war="${dist.dir}/ROOT.war" />
+	</target>
+
+	<target name="tomcat.reload" description="Reload web application" depends="">
+		<reload url="${url}" username="${username}" password="${password}" path="${path}" />
+	</target>
+
+	<target name="tomcat.undeploy" description="Remove web application">
+		<undeploy url="${url}" username="${username}" password="${password}" path="${path}" />
+	</target>
+
+</project>
