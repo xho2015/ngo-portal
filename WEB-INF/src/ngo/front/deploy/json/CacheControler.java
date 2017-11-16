@@ -38,11 +38,11 @@ public class CacheControler {
         		return ResponseEntity.ok(timestamp+"refresh cache key ["+key+"] done.");
         	}
         	else if (action.equalsIgnoreCase("remove"))
-        	{	localCache.removeObject(key);
+        	{	localCache.invalidateObject(key);
         		return ResponseEntity.ok(timestamp+"remove cache key ["+key+"] done.");
         	}
         	else if (action.equalsIgnoreCase("removeAll"))
-        	{	localCache.removeAllObject();
+        	{	localCache.invalidateAllObject();
         		return ResponseEntity.ok(timestamp+"removed All cache key done.");
         	}
         	else if (action.equalsIgnoreCase("state"))

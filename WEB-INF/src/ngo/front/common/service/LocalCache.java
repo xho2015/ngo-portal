@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListenableFutureTask;
@@ -62,10 +64,18 @@ public class LocalCache {
 		logger.info("CacheBuilder refresh interval is :  ["+REFRESH_INTERVAL+"] minutes.");				
 	}
 
-	private LoadingCache<String, Object> cache = CacheBuilder.newBuilder().recordStats().refreshAfterWrite(REFRESH_INTERVAL, TimeUnit.MINUTES)
-			.build(loader);
-
 	
+	private RemovalListener<String, Object> removalListener = new RemovalListener<String, Object>() {
+		  public void onRemoval(RemovalNotification<String, Object> removal) {
+			  int size = removal.getValue().toString().length();
+			  logger.debug("key ["+removal.getKey()+"] to be removed, "+size+" to be retained.");	
+			  SIZE_MAP.remove(removal.getKey());
+		  }
+		};
+	
+	private LoadingCache<String, Object> cache = CacheBuilder.newBuilder().recordStats().refreshAfterWrite(REFRESH_INTERVAL, TimeUnit.MINUTES)
+				.removalListener(removalListener).build(loader);
+
 	public void register(String key, CachingLoader loader) {
 		this.registra.put(key, loader);
 	}
@@ -81,8 +91,8 @@ public class LocalCache {
 				RELOAD_MAP.put(kv[0], policy);
 			}
 			long newInterval = Long.parseLong(kv[1]) * 1000;
-			if ((newInterval % (REFRESH_INTERVAL * 60 * 100)) > 0)
-				return "interval invalid for ["+kv[0]+"]";
+			if ((newInterval % (REFRESH_INTERVAL * 60 * 100)) > 0 || newInterval <= (REFRESH_INTERVAL * 60 * 100))
+				return "interval ["+kv[0]+"] not valid";
 			policy.update(Long.parseLong(kv[1]) * 1000); //interval in setting is in second unit
 		}
 		return "Done";
@@ -171,16 +181,14 @@ public class LocalCache {
 		logger.info("key [" +key+"] refreshed");		
 	}
 	
-	public void removeObject(String key) {
+	public void invalidateObject(String key) {
 		cache.invalidate(key);
-		SIZE_MAP.remove(key);
-		logger.info("key [" +key+"] removed");		
+		logger.info("key [" +key+"] invalidated");		
 	}
 	
-	public void removeAllObject() {
+	public void invalidateAllObject() {
 		cache.invalidateAll();
-		SIZE_MAP.clear();
-		logger.info("all keys removed");		
+		logger.info("all keys invalidated");		
 	}
 	
 	private class ReloadPolicy {
@@ -215,10 +223,10 @@ public class LocalCache {
 		}
 		
 		public boolean isExpired() {
-			if (load < 0)
+			long current = System.currentTimeMillis();
+			if (current > nextExecTime)
 				return true;
-			long offset = nextExecTime - System.currentTimeMillis();
-			return Math.abs(offset) < REFRESH_INTERVAL * 60 * 1000;
+			return false;
 		}
 	}
 	
