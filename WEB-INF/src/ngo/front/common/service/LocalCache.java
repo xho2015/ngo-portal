@@ -38,13 +38,13 @@ public class LocalCache {
 	private CacheLoader<String, Object> loader = new CacheLoader<String, Object>() {
 		@Override
 		public Object load(String key) {
-			logger.debug("LocalCache builder load for key ["+key+"]");	
+			logger.debug("load for key ["+key+"]");	
 			return loadObject(key);
 		}
 		
 		@Override
 		public ListenableFuture<Object> reload(String key, Object oldValue){
-			logger.debug("LocalCache builder reload for key ["+key+"]");	
+			logger.debug("reload for key ["+key+"]");	
 			return reloadObject(key, oldValue);
 		}
 	};
@@ -59,7 +59,7 @@ public class LocalCache {
 	@PostConstruct
 	public void init()
 	{
-		logger.info("LocalCache builder refresh interval is :  ["+REFRESH_INTERVAL+"] minutes.");				
+		logger.info("CacheBuilder refresh interval is :  ["+REFRESH_INTERVAL+"] minutes.");				
 	}
 
 	private LoadingCache<String, Object> cache = CacheBuilder.newBuilder().recordStats().refreshAfterWrite(REFRESH_INTERVAL, TimeUnit.MINUTES)
@@ -70,23 +70,26 @@ public class LocalCache {
 		this.registra.put(key, loader);
 	}
 	
-	public void setReloadPolicy(String setting){
-		logger.info("Localcache: set reload policy: "+setting);
+	public String setReloadPolicy(String setting){
+		logger.info("set reload policy: "+setting);
 		String temp[] = setting.split("\\!");
 		for (String p : temp) {
 			String kv[] = p.split(":");
 			ReloadPolicy policy = RELOAD_MAP.get(kv[0]);
-			if (policy == null)
-				RELOAD_MAP.put(kv[0], new ReloadPolicy(Long.parseLong(kv[1]) * 1000, 0));
-			else {
-				policy.interval = Long.parseLong(kv[1]) * 1000; //interval unit is in second
-				policy.nextExecTime += policy.interval;
+			if (policy == null){
+				policy = new ReloadPolicy();
+				RELOAD_MAP.put(kv[0], policy);
 			}
+			long newInterval = Long.parseLong(kv[1]) * 1000;
+			if ((newInterval % (REFRESH_INTERVAL * 60 * 100)) > 0)
+				return "interval invalid for ["+kv[0]+"]";
+			policy.update(Long.parseLong(kv[1]) * 1000); //interval in setting is in second unit
 		}
+		return "Done";
 	}
 	
 	public String getReloadPolicy(){
-		logger.info("Localcache: get reload policy");		
+		logger.info("get reload policy");		
 		StringBuffer policy = new StringBuffer();
 		for (Map.Entry<String,ReloadPolicy> entry : RELOAD_MAP.entrySet()){
 			policy.append(entry.getKey()).append("=").append(entry.getValue().toString()).append(";");
@@ -97,21 +100,19 @@ public class LocalCache {
 	private Object loadObject(String key) {
 		//retrieve the root key
 		String temp[] = key.split("\\.");
-		String root = temp.length > 0 ? temp[0] : "";
+		String root = temp[0];
 		CachingLoader loader = registra.get(root);
 		if (loader==null)
-			logger.error("Localcache: key ["+key+"] don't have a caching loader");			
+			logger.error("key ["+key+"] don't have a caching loader");			
 		else{
-			logger.debug("Localcache: key ["+key+"] to be loaded from database");	
+			logger.info("query from database for key ["+key+"]");	
 			Object newValue =  loader.loadCacheObject(key);
 			//reset size map
 			SIZE_MAP.put(key, newValue.toString().length());
-			//reset reload policy
+			//reset reload status
 			ReloadPolicy policy = RELOAD_MAP.get(root);
-			if (policy == null)
-				RELOAD_MAP.put(root, new ReloadPolicy(REFRESH_INTERVAL * 60 * 1000, System.currentTimeMillis()));
-			else
-				policy.nextExecTime += policy.nextExecTime== 0 ? System.currentTimeMillis()+policy.interval : policy.interval;			
+			if (policy != null)
+				policy.load(System.currentTimeMillis()).update();
 			//return back to new value to cache store
 			return newValue;
 		}
@@ -121,20 +122,14 @@ public class LocalCache {
 	private ListenableFuture<Object> reloadObject(String key, Object oldValue) {
 		//check if immediate value is required based on reload policy
 		String temp[] = key.split("\\.");
-		long next = RELOAD_MAP.get(temp[0]).nextExecTime;
-		boolean isImmediate = System.currentTimeMillis() < next;
-		
-		if (isImmediate) {
-            return Futures.immediateFuture(oldValue);
+		boolean isReload = false;
+		ReloadPolicy policy = RELOAD_MAP.get(temp[0]);
+		if (policy != null)	isReload = policy.isExpired();
+		if (!isReload) {
+			return Futures.immediateFuture(oldValue);
 	    } else {
-	        // asynchronous!
-	        ListenableFutureTask<Object> task = ListenableFutureTask.create(new Callable<Object>() {
-	          public Object call() {
-	            return loadObject(key);
-	          }
-	        });
-	        Executors.newSingleThreadExecutor().execute(task);
-	        return task;
+	        Object newValue =  loadObject(key);
+	        return Futures.immediateFuture(newValue);
 	    }
 	}
 	
@@ -143,18 +138,18 @@ public class LocalCache {
 			return cache.get(key);
 		} catch (ExecutionException e) {
 			e.printStackTrace();
-			logger.info("Localcache: getObject error :" + e.getMessage());	
+			logger.info("getObject error :" + e.getMessage());	
 			return null;
 		}
 	}
 	
 	public String cacheState() {
-		logger.info("Localcache: cache states");		
+		logger.info("cache states");		
 		return cache.stats().toString();
 	}
 	
 	public String getCacheSize() {
-		logger.info("Localcache: cache size");		
+		logger.info("cache size");		
 		int size = 0;
 		for (Map.Entry<String,Integer> entry : SIZE_MAP.entrySet()){
 		    size+=entry.getValue();
@@ -163,7 +158,7 @@ public class LocalCache {
 	}
 	
 	public String dmpCacheEntries() {
-		logger.info("Localcache: dump entries");		
+		logger.info("dump entries");		
 		StringBuffer dump = new StringBuffer();
 		for (Map.Entry<String,Integer> entry : SIZE_MAP.entrySet()){
 			dump.append(entry.getKey()).append("=").append(entry.getValue()).append(";");
@@ -173,31 +168,57 @@ public class LocalCache {
 
 	public void refreshObject(String key) {
 		cache.refresh(key);
-		logger.info("Localcache: key [" +key+"] refreshed");		
+		logger.info("key [" +key+"] refreshed");		
 	}
 	
 	public void removeObject(String key) {
 		cache.invalidate(key);
 		SIZE_MAP.remove(key);
-		logger.info("Localcache: key [" +key+"] removed");		
+		logger.info("key [" +key+"] removed");		
 	}
 	
 	public void removeAllObject() {
 		cache.invalidateAll();
 		SIZE_MAP.clear();
-		logger.info("Localcache: all keys removed");		
+		logger.info("all keys removed");		
 	}
 	
 	private class ReloadPolicy {
-		long interval = REFRESH_INTERVAL * 60 * 1000; 
-		long nextExecTime = 0;
-		ReloadPolicy(long interval, long next){
-			this.interval = interval;
-			this.nextExecTime = next;
+		long load = -1;
+		long interval = -1; 
+		long nextExecTime = -1;
+		
+		ReloadPolicy(){
 		}
 		@Override
 		public String toString(){
 			return interval+","+new java.util.Date(nextExecTime).toString();
+		}
+		
+		public ReloadPolicy load(long timestamp)
+		{
+			this.load = timestamp;
+			return this;
+		}
+		
+		public ReloadPolicy update(long newInterval)
+		{
+			interval = newInterval;
+			return this;
+		}
+		
+		public ReloadPolicy update() {
+			if (interval > 0 && load > 0) {
+				nextExecTime = load + interval;
+			}
+			return this;
+		}
+		
+		public boolean isExpired() {
+			if (load < 0)
+				return true;
+			long offset = nextExecTime - System.currentTimeMillis();
+			return Math.abs(offset) < REFRESH_INTERVAL * 60 * 1000;
 		}
 	}
 	
