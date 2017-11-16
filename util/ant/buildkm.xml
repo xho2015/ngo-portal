@@ -151,6 +151,10 @@
 		<get src="${km.jmx.wrr.size}" dest="${project.root}/out/log/km.jmx.wrr.size.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
 		<loadfile property="km.jmx.size.output" srcFile="${project.root}/out/log/km.jmx.wrr.size.log"/>
 		<echo message="KidsMath JMX WebResourceRoot size (KB) : ${km.jmx.size.output}" />
+	
+		<get src="${km.localcache.size}" dest="${project.root}/out/log/km.localcache.size.log" username="${km.base.user}" password="${km.base.pass}"/>
+		<loadfile property="km.localcache.size.output" srcFile="${project.root}/out/log/km.localcache.size.log"/>
+		<echo message="KidsMath LocalCache size (char) : ${km.localcache.size.output}" />
 	</target>
 	
 	<target name="KM.ftp.app" description="upload client pack to web server" depends="">
