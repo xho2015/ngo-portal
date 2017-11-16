@@ -1,2 +1,2 @@
-ga1|�?年级|�?年级描述
+ga1|grade level1�?|some desc of level grade 1�?
 ga2|二年�?|二年级描�?
