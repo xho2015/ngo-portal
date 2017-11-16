@@ -1,4 +1,4 @@
-<project name="DEV Ant Deployer" default="ngo.echo" basedir=".">
+<project name="DEV Ant Deployer" default="DEV.app.deploy" basedir=".">
 
 	<property file="build.properties" />
 

@@ -1,4 +1,4 @@
-<project name="KidsMath Ant Deployer" default="ngo.echo" basedir=".">
+<project name="KidsMath Ant Deployer" default="KM.app.deploy" basedir=".">
 
 	<property file="buildkm.properties" />
 
@@ -135,8 +135,8 @@
 		<echo message="${km.verquery.output}" />
 	</target>
 	
-	<target name="KM.localcache.refresh" description="" depends="">
-			<get src="${km.cache.url}" dest="${project.root}/out/log/km.cache.log" username="${km.base.user}" password="${km.base.pass}"/>
+	<target name="KM.localcache.removeAll" description="" depends="">
+			<get src="${km.localcache.removeAll}" dest="${project.root}/out/log/km.cache.log" username="${km.base.user}" password="${km.base.pass}"/>
 			<loadfile property="km.cache.output" srcFile="${project.root}/out/log/km.cache.log"/>
 			<echo message="KidsMath ${km.cache.output}" />
 	</target>
@@ -243,7 +243,7 @@
 		<antcall target="KM.domgen"/>	
 		<antcall target="KM.ftp.ngdom"/>			
 		<antcall target="KM.WebResource.clear"/>
-		<antcall target="KM.localcache.refresh"/>
+		<antcall target="KM.localcache.removeAll"/>
 	</target>
 	
 	<target name="KM.stop.ROOT" description="" depends="">
