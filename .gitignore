@@ -1,6 +1,7 @@
 /WEB-INF/spring/applicationContext.xml
 /META-INF/context.xml
 /util/ant/build.properties
+/util/ant/buildkm.properties
 /out/*.*
 *.ngjs
 *.ngpng
