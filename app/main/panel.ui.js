@@ -2,7 +2,7 @@
  * NGO main panel user interface. ver6 houxuyong@hotmail.com
  */
 var PANEL = (function(my) {
-	my.name = 'NGO Panel GUI';
+	my.name = 'NGO Panel GUI v8';
 	
 	//background
 	my.bgcontainer = $('#background_screen');
@@ -30,7 +30,7 @@ var PANEL = (function(my) {
     //panel dimensions
     my.dimension = {
     	width: 0,  	height: 0, 
-    	nwidth:0,  	nheight: 0,
+    	hwidth:0,  	hheight: 0,
     	swidth: 0, 	sheight: 0,
     	awidth: 0, 	aheight: 0
     };
@@ -143,6 +143,8 @@ PANEL.header = (function() {
 		PADDING: 16
 	};
 	var my = {};
+	
+	my.hoverIdx = -1;
 	my.container = new createjs.Container();
 	my.square = new createjs.Shape();
 	my.container.addChild(my.square);
@@ -150,7 +152,9 @@ PANEL.header = (function() {
 	my.Label1.shadow = new createjs.Shadow("#090909", 1, 1, 6);
 	my.container.addChild(my.Label1);
 
-	
+	my.hover = new createjs.Shape();
+	my.container.addChild(my.hover);
+
 	my.enlarge = new createjs.Bitmap(MAINAPP.resource.get("app.res.km-icons-3-36x36-ngpng"));
 	my.enlarge.shadow = new createjs.Shadow("#090909", 1, 1, 1);
 	my.container.addChild(my.enlarge);
@@ -165,17 +169,32 @@ PANEL.header = (function() {
 	
 	my.stage = new createjs.Stage(PANEL.panelId);
 	my.stage.addChild(my.container);
-	my.stage.alpha = 1;
+	
+	
+	function showHover(x, y)	{
+		var idx2 = my.container.getChildIndex(my.hover);
+		my.container.removeChild(my.hover);
+		my.hover = new createjs.Shape();
+		my.container.addChildAt(my.hover, idx2);
+		my.hover.graphics.beginFill("#5e5e5e").drawRect(x - style.PADDING/2, 0, 40+style.PADDING, PANEL.dimension.hheight);
+		my.stage.update();
+	};
+	
+	my.property.on("click", function(evt) {
+		PANEL.property.hide();
+		showHover(this.x, this.y);
+	});
 	
 	my.enlarge.on("click", function(evt) {
 		if (PANEL.isFullscreen())
 			PANEL.exitFullScreen();
 		else
 			PANEL.fullScreen();
+		showHover(this.x, this.y);
 	});
 	
-	my.property.on("click", function(evt) {
-		PANEL.property.hide();
+	my.profile.on("click", function(evt) {
+		showHover(this.x, this.y);
 	});
 	
 	my.resize = function(x, y, w, h) {
@@ -185,6 +204,7 @@ PANEL.header = (function() {
 		my.container.addChildAt(my.square, idx);
 		my.square.x = 0; my.square.y = 0;
 		my.square.graphics.beginFill("#1999d8").drawRect(x, y, w, h);
+		
 		my.Label1.x = 10; my.Label1.y = (h - 16) / 2;
 		my.Label1.text="NGO KidsMath " + PANEL.dimension.width+"X"+PANEL.dimension.height+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
 		my.property.x = (w - my.property.image.width - style.PADDING);
@@ -203,7 +223,6 @@ PANEL.header = (function() {
 		my.profile.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
          
 		my.stage.drawRect = new createjs.Rectangle(x, y, w, h);
-		my.stage.alpha = 0.9;
 		my.stage.update();
 	};
 	return my;
