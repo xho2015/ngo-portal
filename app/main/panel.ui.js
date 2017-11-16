@@ -2,7 +2,7 @@
  * NGO main panel user interface. ver6 houxuyong@hotmail.com
  */
 var PANEL = (function(my) {
-	my.name = 'NGO Panel GUI v8';
+	my.name = 'NGO Panel GUI v10';
 	
 	//background
 	my.bgcontainer = $('#background_screen');
@@ -207,7 +207,7 @@ PANEL.header = (function() {
 		
 		my.Label1.x = 10; my.Label1.y = (h - 16) / 2;
 		my.Label1.text="NGO KidsMath " + PANEL.dimension.width+"X"+PANEL.dimension.height+","+PANEL.dimension.hheight+","+PANEL.dimension.awidth+"X"+PANEL.dimension.aheight;
-		my.property.x = (w - my.property.image.width - style.PADDING);
+		my.property.x = (w - PANEL.dimension.hheight - style.PADDING/2);
 		my.property.y = (h - my.property.image.height) / 2;
 		my.property.hitArea  = new createjs.Shape();
 		my.property.hitArea.graphics.beginFill("#FFF000").drawRect(0,0,40,40);
