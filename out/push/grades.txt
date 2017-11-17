@@ -1,2 +1,2 @@
-ga1|grade level1çº?|some desc of level grade 1è¿?
-ga2|äºŒå¹´çº?|äºŒå¹´çº§æè¿?
+ga1|grade level1|description of level grade 1
+ga2|Level grade 2|the description of level grade2

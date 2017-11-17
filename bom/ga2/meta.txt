@@ -1,4 +1,4 @@
 type=G
 id=ga2
-name=二年级
-desc=二年级描述
+name=Level grade 2
+desc=the description of level grade2

@@ -1,4 +1,4 @@
 type=G
 id=ga1
-name=grade level1级
-desc=some desc of level grade 1述
+name=grade level1
+desc=description of level grade 1
