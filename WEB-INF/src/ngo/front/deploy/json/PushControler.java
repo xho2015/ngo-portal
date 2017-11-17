@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import ngo.front.deploy.service.PushService;
 import ngo.front.storage.entity.Bom;
+import ngo.front.storage.entity.Grade;
 import ngo.front.storage.entity.Module;
 import ngo.front.web.service.BomService;
  
@@ -44,23 +45,20 @@ public class PushControler {
     
     @RequestMapping(value = "/ants/push", method = RequestMethod.GET)
     public ResponseEntity<String> deploy(@RequestParam("type") String type, @RequestParam("path") String outFilePath, @RequestParam("token") String token) {
-    	
-    	//TODO: validate token here
-    	
+    	//TODO: validate token here   	
     	if (type.equals("bom"))
     		return handleBom(outFilePath);
     	else if (type.equals("module"))
     		return handleModule(outFilePath);
-    		
+    	else if (type.equals("grade"))
+    		return handleGrade(outFilePath);  		
     	return ResponseEntity.ok("NA");    	
     }
 
-    private ResponseEntity<String> handleBom(String path)
-    {
-    	// close this will also close wrapped file reader 
+    private ResponseEntity<String> handleBom(String path) {
+    	//close this will also close wrapped file reader 
     	//https://stackoverflow.com/questions/9541614/how-does-this-filereader-get-closed
     	BufferedReader br = null;
-
         try {     	     	
         	//0 - helpers
         	Map<String, Bom> uploadedBoms = new HashMap<String, Bom>();
@@ -68,7 +66,7 @@ public class PushControler {
         	Map<String, Bom> toBeInsertBoms = new HashMap<String, Bom>();
         	Map<String, Bom> toBeUpdateBoms = new HashMap<String, Bom>();
         	
-        	//1. load the bom file from webapp folder
+        	//1. load the bom file from designated path
         	String filePath = servletContext.getRealPath(path);
         	FileReader fr = new FileReader(filePath);
         	br = new BufferedReader(fr);
@@ -151,12 +149,8 @@ public class PushControler {
         }
     }
     
-    private ResponseEntity<String> handleModule(String path)
-    {
-    	// close this will also close wrapped file reader 
-    	//https://stackoverflow.com/questions/9541614/how-does-this-filereader-get-closed
+    private ResponseEntity<String> handleModule(String path) {
     	BufferedReader br = null;
-
         try {     	     	
         	//0 - helpers
         	Map<String, Module> uploadedModules = new HashMap<String, Module>();
@@ -164,7 +158,7 @@ public class PushControler {
         	Map<String, Module> toBeInsertModules = new HashMap<String, Module>();
         	Map<String, Module> toBeUpdateModules = new HashMap<String, Module>();
         	
-        	//1. load the bom file from webapp root/bom folder
+        	//1. load the module file from designated path
         	String filePath = servletContext.getRealPath(path);
         	FileReader fr = new FileReader(filePath);
         	br = new BufferedReader(fr);
@@ -218,6 +212,78 @@ public class PushControler {
         	}
         	
         	return ResponseEntity.ok("["+new java.util.Date()+"] Module entry pushed, Inserted:"+countInserted+", Updated:"+countUpdated);
+        } catch (Exception e) {
+        	logger.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Push error: "+e.getMessage());
+        } finally {
+        	try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    private ResponseEntity<String> handleGrade(String path) {
+    	BufferedReader br = null;
+        try {     	     	
+        	//0 - helpers
+        	Map<String, Grade> uploadedGrades = new HashMap<String, Grade>();
+        	Map<String, Grade> storedGrades = new HashMap<String, Grade>();
+        	Map<String, Grade> toBeInsertGrades = new HashMap<String, Grade>();
+        	Map<String, Grade> toBeUpdateGrades = new HashMap<String, Grade>();
+        	
+        	//1. load the grades file from designated path
+        	String filePath = servletContext.getRealPath(path);
+        	FileReader fr = new FileReader(filePath);
+        	br = new BufferedReader(fr);
+        	String line, row[], name, gid, description;
+        	line = br.readLine();
+            while (line!=null && line.length() > 0) {
+        		row = line.split("\\|");
+        		gid = row[0];
+        		name = row[1];
+        		description = row[2];      	
+        		uploadedGrades.put(gid, new Grade(gid, name, description));
+            	line = br.readLine();
+            } 
+            
+        	//2. load the module info from db
+        	List<Grade> dbGrades = pushService.getAllGradeObjects();
+        	for (Grade g : dbGrades)
+        		storedGrades.put(g.getGid(), g);
+        	
+        	//3. find module to be inserted or updated
+        	uploadedGrades.entrySet().stream().forEach(s -> {
+        		Grade entry = storedGrades.get(s.getKey());
+        		if (entry == null) {
+        			toBeInsertGrades.put(s.getKey(), s.getValue());
+        		}
+        		else 
+        		{
+        			Grade m = s.getValue();
+        			boolean isName = m.getName().equals(entry.getName());
+        			boolean isDesc = m.getDescription().equals(entry.getDescription());
+        			if (!isName || !isDesc)
+        			{
+        				//update version by increase 1
+            			entry.setName(m.getName());
+            			entry.setDescription(m.getDescription());		
+            			toBeUpdateGrades.put(s.getKey(), entry);	
+        			}
+        		}
+        	});
+        	
+        	//4. do insertion and updating
+        	int countUpdated = 0, countInserted = 0;
+        	for (Map.Entry<String,Grade> m : toBeUpdateGrades.entrySet()){
+        		countUpdated+=pushService.updateGradeObject(m.getValue());
+        	}    	
+        	for (Map.Entry<String,Grade> m : toBeInsertGrades.entrySet()){
+        		countInserted+=pushService.addModuleObject(m.getValue());
+        	}
+        	
+        	return ResponseEntity.ok("["+new java.util.Date()+"] Grade entry pushed, Inserted:"+countInserted+", Updated:"+countUpdated);
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Push error: "+e.getMessage());

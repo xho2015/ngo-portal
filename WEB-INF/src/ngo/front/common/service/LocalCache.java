@@ -132,9 +132,10 @@ public class LocalCache {
 	private ListenableFuture<Object> reloadObject(String key, Object oldValue) {
 		//check if immediate value is required based on reload policy
 		String temp[] = key.split("\\.");
-		boolean isReload = false;
+		boolean isReload = true;
 		ReloadPolicy policy = RELOAD_MAP.get(temp[0]);
-		if (policy != null)	isReload = policy.isExpired();
+		if (policy != null)	
+			isReload = policy.isExpired();
 		if (!isReload) {
 			return Futures.immediateFuture(oldValue);
 	    } else {
@@ -196,21 +197,19 @@ public class LocalCache {
 		long interval = -1; 
 		long nextExecTime = -1;
 		
-		ReloadPolicy(){
-		}
+		ReloadPolicy(){}
+		
 		@Override
 		public String toString(){
 			return interval+","+new java.util.Date(nextExecTime).toString();
 		}
 		
-		public ReloadPolicy load(long timestamp)
-		{
+		public ReloadPolicy load(long timestamp) {
 			this.load = timestamp;
 			return this;
 		}
 		
-		public ReloadPolicy update(long newInterval)
-		{
+		public ReloadPolicy update(long newInterval) {
 			interval = newInterval;
 			return this;
 		}
