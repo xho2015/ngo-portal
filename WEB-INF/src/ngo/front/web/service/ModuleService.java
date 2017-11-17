@@ -49,7 +49,7 @@ public class ModuleService implements LocalCache.CachingLoader{
 
 	@Override
 	public Object loadCacheObject(String key)  {
-		if (key.startsWith(CACHE_KEY))
+		if (key.startsWith(CACHE_KEY+"."))
 		{
 			String [] keys = key.split("\\.");
 			if (keys[1].equals(SUBKEY_GRADE))
