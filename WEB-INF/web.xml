@@ -22,8 +22,7 @@
 	<welcome-file-list>
 		<welcome-file>index.htm</welcome-file>
 	</welcome-file-list>
-  
-  
+
    	<context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/spring/applicationContext.xml</param-value>
@@ -34,8 +33,7 @@
     <listener>
     	<listener-class>net.bull.javamelody.SessionListener</listener-class>
   	</listener>
-  
-     
+   
 	<filter>
 		<filter-name>javamelody</filter-name>
 		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
@@ -67,6 +65,10 @@
 			<param-value>access plus 30 days</param-value>
 		</init-param>
 		<init-param>
+			<param-name>ExpiresByType text/base64</param-name>
+			<param-value>access plus 30 days</param-value>
+		</init-param>
+		<init-param>
 			<param-name>ExpiresByType text/html</param-name>
 			<param-value>access plus 0 second</param-value>
 		</init-param>
@@ -95,9 +97,7 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ASYNC</dispatcher>
 	</filter-mapping>
-  
-  
-  
+
 	<servlet>
 		<servlet-name>spring-dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -184,6 +184,6 @@
   </mime-mapping>
   <mime-mapping>
     <extension>ngpng</extension>
-    <mime-type>text/plain</mime-type>
+    <mime-type>text/base64</mime-type>
   </mime-mapping>
 </web-app>
