@@ -54,7 +54,7 @@ public class ModuleService implements LocalCache.CachingLoader{
 			String [] keys = key.split("\\.");
 			if (keys[1].equals(SUBKEY_GRADE))
 			{
-				List<Module> modules = moduleDAO.getByGrade(keys[2]);			
+				List<Module> modules = keys[2].equals("all") ? moduleDAO.getAll() : moduleDAO.getByGrade(keys[2]);			
 				String json = jsonService.toJson(modules);			
 				logger.info("Localcache: Grade key ["+key+"] loaded from database");			
 				return (Object)json;	
@@ -73,5 +73,9 @@ public class ModuleService implements LocalCache.CachingLoader{
 		if (module == null)
 			throw new IllegalStateException("module can not be null for adding");
 		return moduleDAO.insert(module);
+	}
+
+	public String getAll() {
+		return (String)localCache.getObject(CACHE_KEY+"."+ SUBKEY_GRADE + ".all");
 	}
 }

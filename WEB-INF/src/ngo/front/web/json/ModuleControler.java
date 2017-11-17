@@ -29,8 +29,10 @@ public class ModuleControler {
     @RequestMapping(value = "/json/module", method = RequestMethod.GET)
     public ResponseEntity<String> bom(@RequestParam("grade") String gradeId, @RequestParam("token") String token) {
         try {
-        	String json = moduleService.getByGrade(gradeId);
-        	return ResponseEntity.ok(json);
+        	if (gradeId.equals("all"))
+        		return ResponseEntity.ok(moduleService.getAll());
+        	else
+        		return ResponseEntity.ok(moduleService.getByGrade(gradeId));
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
