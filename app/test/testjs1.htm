@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>Tile icon by canvas</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<style>
+html, body {
+	width: 100%;
+	height: 100%;
+	font-family: Monospace;
+	background-color: #f0f0f0;
+	margin: 0px;
+	overflow: hidden;
+}
+
+#panel {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 40px;
+	height: 40px;
+}
+</style>
+<script src="/app/lib/taffy.min.ngjs" type="text/javascript"></script>
+
+</head>
+<body>
+	<script type="text/javascript">
+	
+		// Create DB and fill it with records
+		var friends = TAFFY([
+			{"id":1,"gender":"M","first":"John","last":"Smith","city":"Seattle, WA","status":"Active"},
+			{"id":2,"gender":"F","first":"Kelly","last":"Ruth","city":"Dallas, TX","status":"Active"},
+			{"id":3,"gender":"M","first":"Jeff","last":"Stevenson","city":"Washington, D.C.","status":"Active"},
+			{"id":4,"gender":"F","first":"Jennifer","last":"Gill","city":"Seattle, WA","status":"Active"}	
+		]);
+		
+		// Kelly's record
+		var kelly = friends({id:2}).first();
+
+		// Kelly's last name
+		var kellyslastname = kelly.last;
+
+		// Get an array of record ids
+		var cities = friends().select("id");
+
+		// Get an array of distinct cities
+		var cities = friends().distinct("city");
+
+		// Apply a function to all the male friends
+		friends({gender:"M"}).each(function (r) {
+		   alert(r.first + "!");
+		});
+
+	</script>
+</body>
+</html>
