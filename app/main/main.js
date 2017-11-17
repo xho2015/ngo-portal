@@ -12,7 +12,7 @@ var MAINAPP = $.ngoModule(function() {
 	};
 
 	var fail = function(url) {
-		alert("load script ("+url+") failed");
+		alert("load script ("+url+") failed, please refresh and try again");
 	};
 
 	function init() {
