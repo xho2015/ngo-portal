@@ -68,8 +68,7 @@ public class LocalCache {
 	private RemovalListener<String, Object> removalListener = new RemovalListener<String, Object>() {
 		  public void onRemoval(RemovalNotification<String, Object> removal) {
 			  int size = removal.getValue().toString().length();
-			  logger.debug("key ["+removal.getKey()+"] to be removed, "+size+" to be retained.");	
-			  SIZE_MAP.remove(removal.getKey());
+			  logger.debug("key ["+removal.getKey()+"] is removed, "+size+" released.");	
 		  }
 		};
 	
@@ -184,11 +183,13 @@ public class LocalCache {
 	
 	public void invalidateObject(String key) {
 		cache.invalidate(key);
+		SIZE_MAP.remove(key);
 		logger.info("key [" +key+"] invalidated");		
 	}
 	
 	public void invalidateAllObject() {
 		cache.invalidateAll();
+		SIZE_MAP.clear();
 		logger.info("all keys invalidated");		
 	}
 	
