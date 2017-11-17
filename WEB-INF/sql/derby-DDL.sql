@@ -24,6 +24,16 @@ description  VARCHAR(250),
 CONSTRAINT PK_MODULE_MID PRIMARY KEY (mid)
 );
 
+
+DROP TABLE APP.Grade;
+CREATE TABLE APP.Grade
+(
+gid VARCHAR(20) NOT NULL,
+name VARCHAR(45),
+description  VARCHAR(250),
+CONSTRAINT PK_MODULE_GID PRIMARY KEY (gid)
+);
+
 --sample for alert table
 /*
 ALTER TABLE APP.Bom ADD md5 VARCHAR(40)
