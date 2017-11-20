@@ -61,7 +61,18 @@
 				<exclude name="WEB-INF/src/**"/>
 				<exclude name="WEB-INF/sql/**"/>
 				<exclude name="**/*.js" />
+				<exclude name="**/*.css" />
+				<exclude name="**/*.png" />
+				<exclude name="**/*.mp3" />
+				<exclude name="**/*.b64" />
+				<exclude name="**/*.htm" />
+				<exclude name="**/*.txt" />
+				<exclude name="app/test/**" />
 				<exclude name="ref/**" />
+				<exclude name="doc/**" />
+				<exclude name="out/demon/**" />
+				<exclude name="out/log/**" />
+				<exclude name="out/ver/**" />
 				<exclude name="util/**" />
 			</fileset>
 		</war>
@@ -155,6 +166,12 @@
 		<echo message="${cache.policy.output}" />
 	</target>
 	
+	<target name="DEV.localcache.preload" description="" depends="">
+		<get src="${dev.localcache.preload}" dest="${project.root}/out/log/dev.cache.preload.log" username="${dev.base.user}" password="${dev.base.pass}"/>
+		<loadfile property="dev.cache.preload.out" srcFile="${project.root}/out/log/dev.cache.preload.log"/>
+		<echo message="${dev.cache.preload.out}" />
+	</target>
+	
 	<target name="DEV.localcache.getPolicy" description="" depends="">
 		<get src="${dev.localcache.getPolicy}" dest="${project.root}/out/log/dev.cache.policy1.log" username="${dev.base.user}" password="${dev.base.pass}"/>
 		<loadfile property="cache.policy.output" srcFile="${project.root}/out/log/dev.cache.policy1.log"/>
@@ -179,6 +196,7 @@
 		<antcall target="DEV.domgen"/>						
 		<antcall target="DEV.Resource.clear"/>
 		<antcall target="DEV.localcache.removeAll"/>
+		<antcall target="DEV.localcache.preload"/>
 	</target>
 	
 	<target name="DEV.stop.ROOT" description="" depends="">
