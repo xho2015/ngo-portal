@@ -302,6 +302,52 @@ var JSONG = (function() {
 })();
 
 
+var CACHE = (function() {
+	var my = {};
+	var removeRes = null;
+	
+	my.refresh = function (){
+		removeRes = TAFFY(JSONG.load("/json/resource?key="));	
+	}
+	
+	my.load = function (resId) {
+		var remoteVer = removeRes({name:resId}).first().ver;
+		var localRes = my.loadStorage(resId);
+		var isReload = false;
+		if (localRes == null) {
+			isReload = true;
+		} else {
+			var localVer = localRes({name:resId}).first().ver;
+			if (remoteVer != localVer)
+				isReload = true;
+		}	
+		if (isReload) {
+			var rs = JSONG.load("/json/resource?key="+resId);
+			saveStorage(resId, rs);
+			return rs;
+		} else
+			return localRes.payload;
+	};
+	
+	my.loadStorage = function (resId) {
+		if (typeof(Storage) !== "undefined") {
+			return localStorage.getItem(resId);
+		} else {
+		    // Sorry! No Web Storage support.
+			return null;
+		}
+	};
+	
+	my.saveStorage = function (resId, data) {
+		if (typeof(Storage) !== "undefined") {
+			localStorage.setItem(resId, data);
+		} 
+	};
+
+	return my;
+})();
+
+
 var BOOTSTRAP = $.ngoModule(function() {
 	function init() {
 		LIBRARY.loadScript(AppSettings.main);

@@ -16,7 +16,9 @@ var MAINAPP = $.ngoModule(function() {
 	};
 
 	function init() {
-		lib = JSONG.require("lib1");
+		CACHE.refresh();
+		
+		lib = JSONG.require("bom.module.lib1");
 		LIBRARY.loadRetry(lib.payload, ready, fail, resource);
 	};
 
