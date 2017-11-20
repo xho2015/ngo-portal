@@ -1,4 +1,4 @@
 type=M
 id=ga1/ga1ma2
-name=减法基础
-desc=减法基础描述
+name=Minus basic
+desc=description of Minus basic

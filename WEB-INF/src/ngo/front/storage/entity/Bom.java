@@ -39,9 +39,7 @@ public class Bom {
 		this.lorder = lorder;
 		this.category = category;
 	}
-	
-	
-	
+		
 	public int getLorder() {
 		return lorder;
 	}

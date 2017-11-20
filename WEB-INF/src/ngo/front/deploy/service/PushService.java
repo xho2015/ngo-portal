@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import ngo.front.common.service.JSonService;
 import ngo.front.common.service.LocalCache;
 import ngo.front.storage.entity.Bom;
+import ngo.front.storage.entity.Grade;
 import ngo.front.storage.entity.Module;
 import ngo.front.storage.entity.Resource;
 import ngo.front.storage.orm.BomDAO;
+import ngo.front.storage.orm.GradeDAO;
 import ngo.front.storage.orm.ModuleDAO;
 
 import java.util.List;
@@ -27,6 +29,9 @@ public class PushService {
 	
 	@Autowired
 	private ModuleDAO moduleDAO;
+	
+	@Autowired
+	private GradeDAO gradeDAO;
 	
 	public List<Bom> getAllBomObjects()
 	{
@@ -51,5 +56,17 @@ public class PushService {
 
 	public int addModuleObject(Module module) {
 		return moduleDAO.insert(module);
+	}
+
+	public List<Grade> getAllGradeObjects() {
+		return gradeDAO.getAll();
+	}
+
+	public int updateGradeObject(Grade grade) {
+		return gradeDAO.update(grade);
+	}
+
+	public int addModuleObject(Grade grade) {
+		return gradeDAO.insert(grade);
 	}
 }

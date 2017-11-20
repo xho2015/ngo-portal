@@ -46,7 +46,7 @@ public class CacheControler {
         		return ResponseEntity.ok(timestamp+"removed All cache key done.");
         	}
         	else if (action.equalsIgnoreCase("state"))
-        	{	String state = localCache.cacheState();
+        	{	String state = localCache.getCacheState();
         		return ResponseEntity.ok(timestamp+state);
         	}
         	else if (action.equalsIgnoreCase("size"))
@@ -54,7 +54,7 @@ public class CacheControler {
         		return ResponseEntity.ok(timestamp+size);
         	}
         	else if (action.equalsIgnoreCase("dump"))
-        	{	String dump = localCache.dmpCacheEntries();
+        	{	String dump = localCache.dumpCacheEntries();
     			return ResponseEntity.ok(timestamp+dump);
         	}
         	else if (action.equalsIgnoreCase("setPolicy"))

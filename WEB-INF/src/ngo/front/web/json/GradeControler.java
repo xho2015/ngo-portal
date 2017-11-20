@@ -12,27 +12,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sun.xml.internal.bind.v2.model.core.ID;
+
 import ngo.front.web.service.BomService;
+import ngo.front.web.service.GradeService;
 import ngo.front.web.service.ModuleService;
  
 /*
 		 
  **/
 @Controller
-public class ModuleControler {
+public class GradeControler {
  
 	@Autowired
-    private ModuleService moduleService;
+    private GradeService gradeService;
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
     
-    @RequestMapping(value = "/json/module", method = RequestMethod.GET)
-    public ResponseEntity<String> bom(@RequestParam("grade") String gradeId, @RequestParam("token") String token) {
+    @RequestMapping(value = "/json/grade", method = RequestMethod.GET)
+    public ResponseEntity<String> bom(@RequestParam("id") String id, @RequestParam("token") String token) {
         try {
-        	if (gradeId.equals("all"))
-        		return ResponseEntity.ok(moduleService.getAll());
+        	if (id.equals("all"))	
+        		return ResponseEntity.ok(gradeService.getAll());
         	else
-        		return ResponseEntity.ok(moduleService.getByGrade(gradeId));
+        		return ResponseEntity.ok(gradeService.getById(id));      	
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

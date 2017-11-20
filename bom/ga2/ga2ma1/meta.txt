@@ -1,4 +1,4 @@
 type=M
 id=ga2/ga2ma1
-name=乘法基础
-desc=乘法基础描述
+name=Mulitple basic
+desc=The description of Mulitplie basic

@@ -1,6 +1,7 @@
 package ngo.front.storage.entity;
 
 import org.codehaus.jackson.map.annotate.JsonView;
+import org.apache.commons.codec.digest.DigestUtils;
 
 
 
@@ -15,10 +16,15 @@ public class Resource {
 	private Object payload;
 
 	@JsonView(Resource.Version.class)
-	private int version;
+	private String version;
 	
 	@JsonView(Resource.Expire.class)
 	private int expire;
+
+	public Resource(Object object) {
+		this.setPayload(object);
+		this.setVersion(DigestUtils.md2Hex(object.toString()));
+	}
 
 	public Object getPayload() {
 		return payload;
@@ -28,11 +34,11 @@ public class Resource {
 		this.payload = content;
 	}
 
-	public int getVersion() {
+	public String getVersion() {
 		return version;
 	}
 
-	public void setVersion(int version) {
+	public void setVersion(String version) {
 		this.version = version;
 	}
 

@@ -12,11 +12,13 @@ var MAINAPP = $.ngoModule(function() {
 	};
 
 	var fail = function(url) {
-		alert("load script ("+url+") failed");
+		alert("load script ("+url+") failed, please refresh and try again");
 	};
 
 	function init() {
-		lib = JSONG.require("lib1");
+		CACHE.refresh();
+		
+		lib = JSONG.require("bom.module.lib1");
 		LIBRARY.loadRetry(lib.payload, ready, fail, resource);
 	};
 

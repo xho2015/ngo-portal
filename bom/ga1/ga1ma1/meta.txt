@@ -1,4 +1,4 @@
 type=M
 id=ga1/ga1ma1
-name=module ma1 name础
-desc=desc of ma1述
+name=module ma1 name
+desc=desc of ma1

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ngo.front.storage.orm.GradeMapper">
+	
+	<select id="getAll" resultType="ngo.front.storage.entity.Grade">
+		select gid,name,description from grade
+	</select>
+	
+	<select id="getById" parameterType="String" resultType="ngo.front.storage.entity.Grade">
+		select gid,name,description from grade where gid=#{gid}
+	</select>
+	
+	
+	<update id="update" parameterType="ngo.front.storage.entity.Grade">
+        update grade set name=#{name},description=#{description} where gid=#{gid}
+    </update>
+    
+    <insert id="insert" parameterType="ngo.front.storage.entity.Grade">
+        insert into grade(gid,name,description) values(#{gid},#{name},#{description})
+    </insert>
+</mapper>

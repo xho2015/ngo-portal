@@ -12,27 +12,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ngo.front.common.service.LocalCache;
 import ngo.front.web.service.BomService;
-import ngo.front.web.service.ModuleService;
  
 /*
 		 
  **/
 @Controller
-public class ModuleControler {
+public class ResourceControler {
  
 	@Autowired
-    private ModuleService moduleService;
+    private LocalCache localCache;
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
     
-    @RequestMapping(value = "/json/module", method = RequestMethod.GET)
-    public ResponseEntity<String> bom(@RequestParam("grade") String gradeId, @RequestParam("token") String token) {
+    @RequestMapping(value = "/json/resource", method = RequestMethod.GET)
+    public ResponseEntity<String> resource(@RequestParam("key") String moduleId, @RequestParam("token") String token) {
         try {
-        	if (gradeId.equals("all"))
-        		return ResponseEntity.ok(moduleService.getAll());
-        	else
-        		return ResponseEntity.ok(moduleService.getByGrade(gradeId));
+        	//validate token here
+        	String json = localCache.dumpCacheEntries();
+        	return ResponseEntity.ok(json);
         } catch (Exception e) {
         	logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
