@@ -5,9 +5,8 @@ var MAINAPP = $.ngoModule(function() {
 	var DEBUGINFO = new AppCommon.Map();
 	
 	var ready = function() {
-		var temp = new AppCommon.Map();
-		temp.putJson(lib.payload, "name", "ver");
-		DEBUGINFO.put("app.main.panel-ui-min-ngjs",temp.get("app.main.panel-ui-min-ngjs"));
+		var temp = TAFFY(lib);
+		DEBUGINFO.put("app.main.panel-ui-min-ngjs", temp({name:'app.main.panel-ui-min-ngjs'}).first().ver);
 		MAIMUI.init();
 	};
 
@@ -16,10 +15,8 @@ var MAINAPP = $.ngoModule(function() {
 	};
 
 	function init() {
-		CACHE.refresh();
-		
-		lib = JSONG.require("bom.module.lib1");
-		LIBRARY.loadRetry(lib.payload, ready, fail, resource);
+		lib = CACHE.refresh().load("bom.module.lib1");
+		LIBRARY.loadRetry(lib, ready, fail, resource);
 	};
 
 	return {
