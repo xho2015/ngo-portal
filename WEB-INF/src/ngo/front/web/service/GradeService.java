@@ -45,17 +45,18 @@ public class GradeService implements LocalCache.CachingLoader{
 	
 	public String getById(String gradeId)
 	{
-    	return (String)localCache.getObject(CACHE_KEY+"."+ gradeId);	
+    	return (String)localCache.getObject(gradeId);	
 	}	
 
 	@Override
 	public Object loadCacheObject(String key)  {
-		if (key.startsWith(CACHE_KEY+"."))
-		{
+		if (key.startsWith(CACHE_KEY+".")) {
 			String [] keys = key.split("\\.");			
-			List<Grade> grades = keys[1].equals("all") ? gradeDAO.getAll() : gradeDAO.getById(keys[1]);			
-			String json = jsonService.toJson(grades);			
-			logger.info("Localcache: Grade key ["+key+"] loaded from database");			
+			List<Grade> grades = keys[1].equals("all") ? gradeDAO.getAll() : gradeDAO.getById(keys[1]);					
+			Resource resource = new Resource(grades);
+			localCache.entryVerUp(key, resource.getVersion());
+			String json = jsonService.toJson(resource);			
+			logger.info("Grade key ["+key+"] loaded from database");			
 			return (Object)json;	 
 		}
 		return null;

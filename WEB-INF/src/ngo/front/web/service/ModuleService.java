@@ -44,7 +44,7 @@ public class ModuleService implements LocalCache.CachingLoader{
 	
 	public String getByGrade(String gradeId)
 	{
-    	return (String)localCache.getObject(CACHE_KEY+"."+ SUBKEY_GRADE + "."+ gradeId);	
+    	return (String)localCache.getObject(gradeId);	
 	}	
 
 	@Override
@@ -52,11 +52,12 @@ public class ModuleService implements LocalCache.CachingLoader{
 		if (key.startsWith(CACHE_KEY+"."))
 		{
 			String [] keys = key.split("\\.");
-			if (keys[1].equals(SUBKEY_GRADE))
-			{
-				List<Module> modules = keys[2].equals("all") ? moduleDAO.getAll() : moduleDAO.getByGrade(keys[2]);			
-				String json = jsonService.toJson(modules);			
-				logger.info("Localcache: Grade key ["+key+"] loaded from database");			
+			if (keys[1].equals(SUBKEY_GRADE)){
+				List<Module> modules = keys[2].equals("all") ? moduleDAO.getAll() : moduleDAO.getByGrade(keys[2]);						
+				Resource resource = new Resource(modules);
+				localCache.entryVerUp(key, resource.getVersion());
+				String json = jsonService.toJson(resource);			
+				logger.info("Grade key ["+key+"] loaded from database");			
 				return (Object)json;	
 			} 
 		}

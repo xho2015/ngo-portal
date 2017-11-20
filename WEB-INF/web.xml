@@ -113,6 +113,7 @@
 		<url-pattern>/json/bom</url-pattern>
 		<url-pattern>/json/module</url-pattern>
 		<url-pattern>/json/grade</url-pattern>
+		<url-pattern>/json/resource</url-pattern>	
 		<url-pattern>/ants/cache</url-pattern>
 		<url-pattern>/ants/query</url-pattern>
 		<url-pattern>/ants/push</url-pattern>
@@ -128,7 +129,6 @@
 		<url-pattern>/monitoring</url-pattern> 
 	</servlet-mapping>
   
- 
 	<security-constraint>
 	   <web-resource-collection>
 	     <web-resource-name>NGO Text Script Manager interface</web-resource-name>

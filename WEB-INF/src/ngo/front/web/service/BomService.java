@@ -22,8 +22,7 @@ public class BomService implements LocalCache.CachingLoader{
 	private final Logger logger = Logger.getLogger(this.getClass());
 	
 	private static final String CACHE_KEY = "bom";
-	private static final String SUB_KEY_MODULE = "module";
-
+	private static final String SUBKEY_MODULE = "module";
 	
 	@Autowired
 	private LocalCache localCache;
@@ -41,9 +40,9 @@ public class BomService implements LocalCache.CachingLoader{
 		logger.info("BomService registered as caching loader for ["+CACHE_KEY+"]");				
 	}
 	
-	public String getModuleBom(String moduleId, String token)
+	public String getModuleBom(String module, String token)
 	{
-    	return (String)localCache.getObject(CACHE_KEY+"."+ SUB_KEY_MODULE + "."+ moduleId);	
+    	return (String)localCache.getObject(module);	
 	}
 	
 	/**
@@ -59,15 +58,14 @@ public class BomService implements LocalCache.CachingLoader{
 
 	@Override
 	public Object loadCacheObject(String key)  {
-		if (key.startsWith(CACHE_KEY))
+		if (key.startsWith(CACHE_KEY+"."))
 		{
 			String [] keys = key.split("\\.");
-			if (keys[1].equals(SUB_KEY_MODULE))
-			{
-				Resource resource = new Resource();
-				resource.setPayload(bomDAO.getByModule(keys[2]));			
-				String json = jsonService.toJson(resource, Resource.Dafault.class);			
-				logger.info("Localcache: Module key ["+key+"] loaded from database");			
+			if (keys[1].equals(SUBKEY_MODULE)) {
+				Resource resource = new Resource(bomDAO.getByModule(keys[2]));
+				localCache.entryVerUp(key, resource.getVersion());
+				String json = jsonService.toJson(resource, Resource.Version.class);			
+				logger.info("key ["+key+"] loaded from database");			
 				return (Object)json;	
 			} 
 		}
