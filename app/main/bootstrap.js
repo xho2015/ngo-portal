@@ -253,41 +253,21 @@ var LIBRARY = (function() {
 
 var JSONG = (function() {
 	var my = {};
-	
-	/**
-	 * load required urls for designated module in synchronized mode
-	 */
-	my.require = function (module, ok, fail){
-		return my.load("/json/bom"+"?module="+module, ok, fail);
-	};
-	
-	/**
-	 * load required urls for designated module in asynchronized mode
-	 * TODO: resolve token here
-	 */
-	my.requireAsync = function (module, ok) {
-		var api = "/json/bom"+ "?token=t1&module="+module;
-		$.ajaxSetup({ cache : false});
-	    $.getJSON(api, {
-	    	format: "json"
-		}).done(function(data){
-			  if (ok) ok(data);
-		});
-	};
+	var uri = "/json/resource";
 	
 	/**
 	 * load json data from specified location in synchronized mode
 	 * TODO: resolve token here
 	 */
-	my.load = function (location, ok, fail, storage){
+	my.load = function (resKey, ok, fail, storage){
 		var data;
 		$.ajax({
 			type : "GET", 
 			async : false,	
 			cache : false,
 			dataType : "json",	
-			url : location,
-			data : {token : "ses001"},
+			url : uri,
+			data : {token : "ses001", key: resKey},
 			success : function(json) {
 				data = json;
 			},
@@ -304,34 +284,30 @@ var JSONG = (function() {
 
 var CACHE = (function() {
 	var my = {};
-	var removeRes = null;
+	var removeDump = null;
 	
 	my.refresh = function (){
-		removeRes = TAFFY(JSONG.load("/json/resource?key="));	
+		removeDump = TAFFY(JSONG.load("dump"));
+		return this;
 	}
 	
 	my.load = function (resId) {
-		var remoteVer = removeRes({name:resId}).first().ver;
+		var remoteVer = removeDump({name:resId}).first().ver;
 		var localRes = my.loadStorage(resId);
 		var isReload = false;
-		if (localRes == null) {
+		if (localRes == null || remoteVer != localRes.version)
 			isReload = true;
-		} else {
-			var localVer = localRes({name:resId}).first().ver;
-			if (remoteVer != localVer)
-				isReload = true;
-		}	
 		if (isReload) {
-			var rs = JSONG.load("/json/resource?key="+resId);
-			saveStorage(resId, rs);
-			return rs;
+			var rs = JSONG.load(resId);
+			my.saveStorage(resId, rs);
+			return rs.payload;
 		} else
 			return localRes.payload;
 	};
 	
 	my.loadStorage = function (resId) {
 		if (typeof(Storage) !== "undefined") {
-			return localStorage.getItem(resId);
+			return JSON.parse(localStorage.getItem(resId));
 		} else {
 		    // Sorry! No Web Storage support.
 			return null;
@@ -340,7 +316,7 @@ var CACHE = (function() {
 	
 	my.saveStorage = function (resId, data) {
 		if (typeof(Storage) !== "undefined") {
-			localStorage.setItem(resId, data);
+			localStorage.setItem(resId, JSON.stringify(data));
 		} 
 	};
 

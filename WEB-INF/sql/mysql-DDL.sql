@@ -18,3 +18,10 @@ CREATE TABLE `module` (
   `description`  VARCHAR(250),
   PRIMARY KEY (`mid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='NGO resource module';
+
+CREATE TABLE `grade` (
+  `gid` varchar(20),
+  `name` VARCHAR(45),
+  `description`  VARCHAR(250),
+  PRIMARY KEY (`gid`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='NGO resource grade';

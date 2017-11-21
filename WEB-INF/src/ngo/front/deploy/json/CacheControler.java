@@ -32,8 +32,7 @@ public class CacheControler {
         	
         	String timestamp = "["+new java.util.Date().toString()+"] ";
         	
-        	if (action.equalsIgnoreCase("refresh"))
-        	{	
+        	if (action.equalsIgnoreCase("refresh"))	{	
         		localCache.refreshObject(key);
         		return ResponseEntity.ok(timestamp+"refresh cache key ["+key+"] done.");
         	}
@@ -65,7 +64,12 @@ public class CacheControler {
         	{	String policy = localCache.getReloadPolicy();
     			return ResponseEntity.ok(timestamp+policy);
         	}
-        	
+        	else if (action.equalsIgnoreCase("preload"))
+        	{	String keys[] = key.split("!");
+        		for(String k : keys)
+        			localCache.getObject(k);
+    			return ResponseEntity.ok(timestamp+" local cache preload done.");
+        	}
         	return ResponseEntity.ok("N/A");
         } catch (Exception e) {
         	logger.error(e.getMessage());

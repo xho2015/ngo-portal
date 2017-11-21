@@ -127,6 +127,12 @@
 		<get src="${km.push.url}" dest="${project.root}/out/log/km.push.log" username="${km.base.user}" password="${km.base.pass}"/>
 		<loadfile property="km.push.output" srcFile="${project.root}/out/log/km.push.log"/>
 		<echo message="KisMath push: ${km.push.output}" />
+		<get src="${km.push.url2}" dest="${project.root}/out/log/km.push.log" username="${km.base.user}" password="${km.base.pass}"/>
+		<loadfile property="km.push.output2" srcFile="${project.root}/out/log/km.push.log"/>
+		<echo message="KisMath push2: ${km.push.output2}" />
+		<get src="${km.push.url3}" dest="${project.root}/out/log/km.push.log" username="${km.base.user}" password="${km.base.pass}"/>
+		<loadfile property="km.push.output3" srcFile="${project.root}/out/log/km.push.log"/>
+		<echo message="KisMath push3: ${km.push.output3}" />
 	</target>
 	
 	<target name="KM.version.query" description="query ngresource version" depends="">
@@ -139,6 +145,12 @@
 			<get src="${km.localcache.removeAll}" dest="${project.root}/out/log/km.cache.log" username="${km.base.user}" password="${km.base.pass}"/>
 			<loadfile property="km.cache.output" srcFile="${project.root}/out/log/km.cache.log"/>
 			<echo message="KidsMath ${km.cache.output}" />
+	</target>
+	
+	<target name="KM.localcache.preload" description="" depends="">
+		<get src="${km.localcache.preload}" dest="${project.root}/out/log/km.cache.preload.log" username="${km.base.user}" password="${km.base.pass}"/>
+		<loadfile property="km.cache.preload.out" srcFile="${project.root}/out/log/km.cache.preload.log"/>
+		<echo message="${km.cache.preload.out}" />
 	</target>
 	
 	<target name="KM.WebResource.clear" description="" depends="">
@@ -210,7 +222,22 @@
 		</ftp>
 	</target>
 	
-	<target name="KM.ftp.java" description="upload server pack to web server" depends="">
+	<target name="KM.ftp.deleteJava" description="upload server pack to web server" depends="">
+	<ftp action="del" 
+	       server="${km.ftp.ip}"
+			remotedir="${km.ftp.dir}"
+	       userid="${km.ftp.user}"
+	       password="${km.ftp.pass}"  passive="yes"  depends="no"  binary="yes" verbose="yes">
+	    <fileset>
+	      <include name="**/*.class"/>
+	      <include name="**/*.xml"/>
+	      <include name="**/*.properties"/>
+	      <include name="**/*.jar"/>
+	    </fileset>
+	  </ftp>
+	</target>
+		
+	<target name="KM.ftp.java" description="upload server pack to web server" depends="KM.ftp.deleteJava">
 		<ftp server="${km.ftp.ip}"
 			   remotedir="${km.ftp.dir}"
 			   userid="${km.ftp.user}"
@@ -244,6 +271,7 @@
 		<antcall target="KM.ftp.ngdom"/>			
 		<antcall target="KM.WebResource.clear"/>
 		<antcall target="KM.localcache.removeAll"/>
+		<antcall target="KM.localcache.preload"/>
 	</target>
 	
 	<target name="KM.stop.ROOT" description="" depends="">
