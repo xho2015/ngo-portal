@@ -15,14 +15,14 @@ var MAINAPP = $.ngoModule(function() {
 	};
 
 	function init() {
-		lib = CACHE.refresh().load("bom.module.lib1");
+		CACHE.refresh(); //this is the only place to refresh dump cache
+		lib = CACHE.load("bom.module.lib1");
 		LIBRARY.loadRetry(lib, ready, fail, resource);
 	};
 
 	return {
 		init : init,
 		resource : resource,
-		lib : lib,
 		DEBUGINFO : DEBUGINFO 
 	};
 }());

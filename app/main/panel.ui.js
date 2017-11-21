@@ -2,7 +2,7 @@
  * NGO main panel user interface. ver6 houxuyong@hotmail.com
  */
 var PANEL = (function(my) {
-	my.name = 'NGO Panel GUI v10';
+	my.name = 'NGO Panel GUI ver.8';
 	
 	//background
 	my.bgcontainer = $('#background_screen');
@@ -169,9 +169,8 @@ PANEL.header = (function() {
 	
 	my.stage = new createjs.Stage(PANEL.panelId);
 	my.stage.addChild(my.container);
-	
-	
-	function showHover(x, y)	{
+
+	function selectEffect(x, y)	{
 		var idx2 = my.container.getChildIndex(my.hover);
 		my.container.removeChild(my.hover);
 		my.hover = new createjs.Shape();
@@ -182,7 +181,7 @@ PANEL.header = (function() {
 	
 	my.property.on("click", function(evt) {
 		PANEL.property.hide();
-		showHover(this.x, this.y);
+		selectEffect(this.x, this.y);
 	});
 	
 	my.enlarge.on("click", function(evt) {
@@ -190,11 +189,11 @@ PANEL.header = (function() {
 			PANEL.exitFullScreen();
 		else
 			PANEL.fullScreen();
-		showHover(this.x, this.y);
+		selectEffect(this.x, this.y);
 	});
 	
 	my.profile.on("click", function(evt) {
-		showHover(this.x, this.y);
+		selectEffect(this.x, this.y);
 	});
 	
 	my.resize = function(x, y, w, h) {
@@ -323,9 +322,8 @@ var MAIMUI = (function() {
 		}
 	}
 
-
 	/*
-	 * init will be invoked when this module loaded
+	 * will be invoked when this module loaded
 	 */
 	function init() {
 		window.addEventListener('resize', onWindowResize, false);

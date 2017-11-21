@@ -298,9 +298,9 @@ var CACHE = (function() {
 		if (localRes == null || remoteVer != localRes.version)
 			isReload = true;
 		if (isReload) {
-			var rs = JSONG.load(resId);
-			my.saveStorage(resId, rs);
-			return rs.payload;
+			var loaded = JSONG.load(resId);
+			my.saveStorage(resId, loaded);
+			return loaded.payload;
 		} else
 			return localRes.payload;
 	};
@@ -308,9 +308,8 @@ var CACHE = (function() {
 	my.loadStorage = function (resId) {
 		if (typeof(Storage) !== "undefined") {
 			return JSON.parse(localStorage.getItem(resId));
-		} else {
-		    // Sorry! No Web Storage support.
-			return null;
+		} else {		    
+			return null; // Sorry! No Web Storage support.
 		}
 	};
 	
