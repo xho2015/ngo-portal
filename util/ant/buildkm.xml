@@ -233,6 +233,7 @@
 	      <include name="**/*.xml"/>
 	      <include name="**/*.properties"/>
 	      <include name="**/*.jar"/>
+	      <include name="**/*.jsp"/>
 	    </fileset>
 	  </ftp>
 	</target>
