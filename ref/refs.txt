@@ -50,6 +50,11 @@
 . createjs issue
 	https://github.com/CreateJS/EaselJS/issues/178
 
+
+. C# console app
+	https://stackoverflow.com/questions/186084/how-do-you-add-a-timer-to-a-c-sharp-console-application
+	
+	
 	
 [T?] Enable both HTTP and HTTPS in Tomcat 
 	https://stackoverflow.com/questions/41819962/how-to-enable-both-http-and-https-in-tomcat-without-redirect
