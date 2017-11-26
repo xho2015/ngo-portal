@@ -108,7 +108,7 @@
 	</target>
 	
 	<!--new NG resouce needs to be registered in include-->
-	<target name="KM.bom" description="local bom action for all ng resources" depends="">
+	<target name="KM.bom" description="local bom for all ng resources" depends="">
 		<ngbom validate="true" include=".*\.ng(js|css|png)" exclude="__NOMATCH__" 
 			categoryMapping="ngjs=J#ngpng=I#ngcss=S"
 			bomRoot="/bom/" 
@@ -123,7 +123,7 @@
 			spliter="|"/>
 	</target>
 
-	<target name="KM.push" description="" depends="push all meta info of ng resources to their repository">
+	<target name="KM.push" description="push ng resources meta info to repository" depends="">
 		<get src="${km.push.url}" dest="${project.root}/out/log/km.push.log" username="${km.base.user}" password="${km.base.pass}"/>
 		<loadfile property="km.push.output" srcFile="${project.root}/out/log/km.push.log"/>
 		<echo message="KisMath push: ${km.push.output}" />
@@ -135,7 +135,7 @@
 		<echo message="KisMath push3: ${km.push.output3}" />
 	</target>
 	
-	<target name="KM.version.query" description="query version of all ng resources from their repository" depends="">
+	<target name="KM.version.query" description="query version of ng resources from repository" depends="">
 		<get src="${km.version.query.url}" dest="${project.root}/${km.bomver.file}" username="${km.base.user}" password="${km.base.pass}"/>
 		<loadfile property="km.verquery.output" srcFile="${project.root}/${km.bomver.file}"/>
 		<echo message="${km.verquery.output}" />
@@ -147,13 +147,13 @@
 			<echo message="KidsMath ${km.cache.output}" />
 	</target>
 	
-	<target name="KM.localcache.preload" description="preload designated cache entries from web server" depends="">
+	<target name="KM.localcache.preload" description="preload cache entries from web server" depends="">
 		<get src="${km.localcache.preload}" dest="${project.root}/out/log/km.cache.preload.log" username="${km.base.user}" password="${km.base.pass}"/>
 		<loadfile property="km.cache.preload.out" srcFile="${project.root}/out/log/km.cache.preload.log"/>
 		<echo message="${km.cache.preload.out}" />
 	</target>
 	
-	<target name="KM.WebResource.clear" description="clear WebRootResource via jmx interface from web server" depends="">
+	<target name="KM.WebResource.clear" description="clear WebRootResource from web server" depends="">
 			<get src="${km.jmx.wrr.clear}" dest="${project.root}/out/log/km.jmx.wrr.clear.log" username="${km.jmx.user}" password="${km.jmx.pass}"/>
 			<loadfile property="km.jmx.clear.output" srcFile="${project.root}/out/log/km.jmx.wrr.clear.log"/>
 			<echo message="KidsMath WebResourceRoot clear via JMX: ${km.jmx.clear.output}" />
@@ -275,13 +275,13 @@
 		<antcall target="KM.localcache.preload"/>
 	</target>
 	
-	<target name="KM.stop.ROOT" description="stop ROOT application via text interface from web server" depends="">
+	<target name="KM.stop.ROOT" description="stop ROOT application from web server" depends="">
 		<get src="${km.text.stop.url}" dest="${project.root}/out/log/km.stop.root.log" username="${km.script.user}" password="${km.script.pass}"/>
 		<loadfile property="km.stop.output" srcFile="${project.root}/out/log/km.stop.root.log"/>
 		<echo message="KidsMath stop ROOT : ${km.stop.output}" />
 	</target>
 	
-	<target name="KM.start.ROOT" description="start ROOT application via text interface from web server" depends="">
+	<target name="KM.start.ROOT" description="start ROOT application from web server" depends="">
 		<get src="${km.text.start.url}" dest="${project.root}/out/log/km.start.root.log" username="${km.script.user}" password="${km.script.pass}"/>
 		<loadfile property="km.start.output" srcFile="${project.root}/out/log/km.start.root.log"/>
 		<echo message="KidsMath start ROOT : ${km.start.output}" />
@@ -309,7 +309,7 @@
 		<echo message="KidsMath tomcat to be launched with args..." />
 	</target>
 	
-	<target name="KM.demon.stop.tomcat" description="notify demon to start tomcat" depends="">
+	<target name="KM.demon.stop.tomcat" description="notify demon to stop tomcat" depends="">
 		<ftp server="${km.ftp.ip}"
 			   remotedir="${km.ftp.demon.dir}"
 			   userid="${km.ftp.user}"
