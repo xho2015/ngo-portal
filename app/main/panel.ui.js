@@ -41,14 +41,14 @@ var PANEL = (function(my) {
 		[ 600, 340 ], [ 340, 240 ] ];
 
     //header resolution matrix
-    var hmatrix = [[ 1600, 80 ], [ 1440, 80 ], [ 1280, 80 ],
+    var hmatrix = new AppCommon.Map().putArray([[ 1600, 80 ], [ 1440, 80 ], [ 1280, 80 ],
 		[ 1120, 60 ], [ 960, 60 ], [ 800, 40 ], [ 640, 40 ],
-		[ 600, 40 ], [ 340, 40 ] ];
+		[ 600, 40 ], [ 340, 40 ]]);
     
     //property resolution matrix
-    var amatrix = [[1600, '320,820' ], [ 1440, '320,730' ], [ 1280, '320,640' ],
+    var amatrix = new AppCommon.Map().putArray([[1600, '320,820' ], [ 1440, '320,730' ], [ 1280, '320,640' ],
 		[ 1120, '240,570' ], [ 960, '240,480' ], [ 800, '180,410' ], [ 640, '180,320' ],
-		[ 600, '180,300' ], [ 340, '0,0' ]];
+		[ 600, '180,300' ], [ 340, '0,0' ]]);
     
     //full screen checker
     my.isFullscreen = function () {
@@ -115,11 +115,8 @@ var PANEL = (function(my) {
 		my.dimension.width = w;
 		my.dimension.height = h;
 		my.dimension.hwidth = w;
-		for (var h in hmatrix)
-		{ if (hmatrix[h][0] == w) {my.dimension.hheight = hmatrix[h][1];break;}}
-		var adim;
-		for (var a in amatrix)
-		{ if (amatrix[a][0] == w) {adim = amatrix[a][1].split(',');break;}}
+		my.dimension.hheight = hmatrix.get(w);
+		var adim = amatrix.get(w).split(',');
 		my.dimension.awidth = parseInt(adim[0]);
 		my.dimension.aheight = parseInt(adim[1]);
 		my.dimension.swdith = w;
@@ -318,6 +315,8 @@ var MAIMUI = (function() {
 			alert('当前为竖屏，请切换为横屏以获得更好的显示效果！');
 		}
 		if (window.orientation === 90 || window.orientation === -90) {
+			//try trigger fullscreen won't work for security reason
+			//https://stackoverflow.com/questions/24878297/javascript-trigger-fullscreen
 			PANEL.screenStatus.orientation = 0;
 		}
 	}

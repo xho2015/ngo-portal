@@ -15,12 +15,25 @@ var AppCommon = (function() {
 	        }
 	    };
 	    
+	    Map.prototype.putArray = function(arrayObj) {
+	        try {
+	            if (arrayObj != null )
+	            	for (e in arrayObj)	{
+	            		this.put(arrayObj[e][0], arrayObj[e][1]);
+	            	}
+	            return this;
+	        } catch (e) {
+	            return e;
+	        }
+	    };
+	    
 	    Map.prototype.putJson = function(json, key, value) {
 	        try {
 	            if (json != null && key != "" && key !=null && value!="" & value!=null)
 	            	for (e in json)	{
 	            		this.put(json[e][key], json[e][value]);
-	            	}	
+	            	}
+	            return this;
 	        } catch (e) {
 	            return e;
 	        }
@@ -138,6 +151,7 @@ var AppCommon = (function() {
 	        }
 	        return result;
 	    }
+	    return this;
 	};
 	
 	/**
