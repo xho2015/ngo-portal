@@ -1,4 +1,0 @@
-type=G
-id=ga2
-name=Level grade 2
-desc=the description of level grade2

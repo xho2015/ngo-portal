@@ -1,3 +1,0 @@
-ga1|ga1ma1|module ma1 name|desc of ma1
-ga1|ga1ma2|Minus basic|description of Minus basic
-ga2|ga2ma1|Mulitple basic|The description of Mulitplie basic

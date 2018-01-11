@@ -1,2 +1,0 @@
-ga1|grade level1|description of level grade 1
-ga2|Level grade 2|the description of level grade2

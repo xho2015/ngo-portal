@@ -1,4 +1,0 @@
-type=M
-id=ga2/ga2ma1
-name=Mulitple basic
-desc=The description of Mulitplie basic
