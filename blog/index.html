@@ -34,7 +34,6 @@
       <div class="container">
         <nav class="blog-nav">
           <a class="blog-nav-item active" href="/">主页</a>
-          <a class="blog-nav-item" href="#">New features</a>
           <a class="blog-nav-item" href="#">Press</a>
           <a class="blog-nav-item" href="#">About</a>
         </nav>
@@ -44,7 +43,7 @@
     <div class="container">
 
       <div class="blog-header">
-        <h1 class="blog-title">爸爸的心路历程</h1>
+        <h1 class="blog-title">心路历程</h1>
         <p class="lead blog-description">从年少到年长, 从独闯天涯到为人父母,从懵懂到开眼看世界,心路历程娓娓道来...</p>
       </div>
 
@@ -53,63 +52,35 @@
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Sample blog post</h2>
-            <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
+            <h2 class="blog-post-title">NGO教育平台已经起航</h2>
+            <p class="blog-post-meta">Mar 27, 2018 by <a href="mailto:houxuyong@hotmail.com">HouXuyong</a></p>
 
-            <p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>
+            <p>这似乎是一项不可能完成的任务，一个人设计并实现一个集成的软件开发教育平台，目标是在前端CS应用中实现基于以javascript语言为范本的代码编写，语法分析，虚拟运行时，代码调试等基本功能，同时基于图形化的方式演示代码运行机制。</p>
             <hr>
-            <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
+            <p>这个目标似乎太过于“宏大”， 而且远远超出了一个人能力 - 同时肩负Architect + Programmer + Tester，单就实现一个满足 低版本ECMAScript标准的运行时， 已经似乎是遥不可及。目前一个更理性的思路是将一个简版的ECMAScript运行时实现出来，只要能满足软件编码基本教学需要 - 如演示程序逻辑，算法等基本可以满足需要.</p>
             <blockquote>
-              <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              <p>万事开头难. <strong>而且一切都要从底层搭建</strong>目前 CS端是开发的重点和难点，因为从逻辑上来讲，以上的需求涉及到了软件开发工具的核心功能，所以与其说是个教育平台，其实这就类似实现一个最简版的Visual Studio + PowerPoint。</p>
+              <p>其实难与不难，心态很重要，积累了将近20年开发经验，不为其他，源自大家，回馈大家。不为名利，但求磨练心性</p>
             </blockquote>
-            <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-            <h2>Heading</h2>
-            <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-            <h3>Sub-heading</h3>
-            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-            <pre><code>Example code block</code></pre>
-            <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
-            <h3>Sub-heading</h3>
-            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <ul>
-              <li>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</li>
-              <li>Donec id elit non mi porta gravida at eget metus.</li>
-              <li>Nulla vitae elit libero, a pharetra augue.</li>
-            </ul>
-            <p>Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.</p>
-            <ol>
-              <li>Vestibulum id ligula porta felis euismod semper.</li>
-              <li>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</li>
-              <li>Maecenas sed diam eget risus varius blandit sit amet non magna.</li>
-            </ol>
-            <p>Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.</p>
+            <p>整个CS平台采用的是微软的.net winform应用框架，基于C#语言编写核心组件，这个选择主要是考虑分发软件微软windows平台能提供良好的兼容性，同时c#的易用性可使开发周期大大缩减，其广泛的第三方组件库也是考虑的重要方面之一。</p>
+            <h2>第一个组件</h2>
+            <p>目前正在实施的一个基础组件，是一个从底层定制的文本编辑器,实施过程大致包括keyboard+repaint事件处理,文本内容的数据结构及其渲染算法。 之所以不能选用.net的基础组件是因为他不能满足很多教学需要的特性 - 如语法高亮，特殊符号，教学场景演示 （如标记代码），及其他一些特性.</p>
+            <h3>项目代码提交在我的github代码库</h3>
+            <p>https://github.com/xho2015/ngo-client.git.</p>
+            <pre><code>Text.Control 是该基础组件的工程， Editor是演示程序</code></pre>
+            
           </div><!-- /.blog-post -->
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Another blog post</h2>
-            <p class="blog-post-meta">December 23, 2013 by <a href="#">Jacob</a></p>
+            <h2 class="blog-post-title">小坐闲窗读周易，不知春秋已多年</h2>
+            <p class="blog-post-meta">Mar 27, 2018 by <a href="#">Xuyong Hou</a></p>
 
-            <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
+            <p>"洁净精微",古人读周易是这样， 编写代码其实也一样。小坐闲窗，心思宁静，思虑清晰，从而悟入并体味一阴一阳交织出的编程世界的和谐与美感</p>
             <blockquote>
-              <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              <p>软件世界到处遍布和谐与美，我们能发现他吗？</p>
             </blockquote>
-            <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-            <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
           </div><!-- /.blog-post -->
 
-          <div class="blog-post">
-            <h2 class="blog-post-title">New feature</h2>
-            <p class="blog-post-meta">December 14, 2013 by <a href="#">Chris</a></p>
-
-            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <ul>
-              <li>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</li>
-              <li>Donec id elit non mi porta gravida at eget metus.</li>
-              <li>Nulla vitae elit libero, a pharetra augue.</li>
-            </ul>
-            <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-            <p>Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.</p>
-          </div><!-- /.blog-post -->
 
           <nav>
             <ul class="pager">
@@ -129,16 +100,6 @@
             <h4>Archives</h4>
             <ol class="list-unstyled">
               <li><a href="#">March 2018</a></li>
-              <li><a href="#">February 2018</a></li>
-              <li><a href="#">January 2018</a></li>
-              <li><a href="#">December 2018</a></li>
-              <li><a href="#">November 2018</a></li>
-              <li><a href="#">October 2018</a></li>
-              <li><a href="#">September 2018</a></li>
-              <li><a href="#">August 2018</a></li>
-              <li><a href="#">July 2018</a></li>
-              <li><a href="#">June 2018</a></li>
-              <li><a href="#">May 2018</a></li>
               <li><a href="#">April 2018</a></li>
             </ol>
           </div>
